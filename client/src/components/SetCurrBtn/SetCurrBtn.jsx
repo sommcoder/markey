@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import setCurrMarquee from "../../functions/setCurrMarquee";
-import { Button } from "../../styles/Button.styled";
 
 export default function SetCurrBtn({ dispRowState, keysArr, formName }) {
   function submitMarquee(ev) {
@@ -22,9 +21,9 @@ export default function SetCurrBtn({ dispRowState, keysArr, formName }) {
       onClick={submitMarquee}
       title="Sets the current marquee"
     >
-      Set
+      <div className="button-text">Set</div>
     </StyledSetCurrBtn>
   );
 }
 
-const StyledSetCurrBtn = styled(Button)``;
+const StyledSetCurrBtn = styled.button``;

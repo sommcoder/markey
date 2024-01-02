@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+#quick component shell script
+src/components/newReactComponent
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

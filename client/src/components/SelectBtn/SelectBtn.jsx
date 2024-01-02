@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { Button } from "../../styles/Button.styled";
 
 export default function SelectBtn({ marqName }) {
   function toggleDisplay(ev) {
@@ -16,12 +15,12 @@ export default function SelectBtn({ marqName }) {
       data-id={marqName}
       title="Select Marquee(s) to work with"
     >
-      {`${marqName} Marquee`}
+      <div className="button-text">{`${marqName} Marquee`}</div>
     </StyledSelectBtn>
   );
 }
 
-const StyledSelectBtn = styled(Button)`
+const StyledSelectBtn = styled.button`
   display: block;
   position: relative;
   margin: 0 auto;

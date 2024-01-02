@@ -1,5 +1,6 @@
 import styled from "styled-components";
-import { Button } from "../../styles/Button.styled";
+
+import { FiRefreshCcw } from "react-icons/fi";
 
 export default function ResetBtn({
   initMarqRowState,
@@ -24,15 +25,10 @@ export default function ResetBtn({
     });
   }
   return (
-    <StyledResetBtn
-      form={formName}
-      type="reset"
-      onClick={resetRows}
-      title="Resets marquee"
-    >
-      Reset
+    <StyledResetBtn onClick={(ev) => resetRows(ev)}>
+      <FiRefreshCcw />
     </StyledResetBtn>
   );
 }
 
-const StyledResetBtn = styled(Button)``;
+const StyledResetBtn = styled.button``;

@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import setCurrMarquee from "../../functions/setCurrMarquee";
-import { Button } from "../../styles/Button.styled";
 
 export default function CompareBtn({ formName, keysArr, dispRowState }) {
   function compareMarquee(ev) {
@@ -33,9 +32,9 @@ export default function CompareBtn({ formName, keysArr, dispRowState }) {
       onClick={compareMarquee}
       title="Compares to set marquee"
     >
-      Compare
+      <div className="button-text">Compare</div>
     </StyledCompareBtn>
   );
 }
 
-const StyledCompareBtn = styled(Button)``;
+const StyledCompareBtn = styled.button``;
