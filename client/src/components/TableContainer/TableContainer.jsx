@@ -28,6 +28,12 @@ const StyledTableContainer = styled.div`
   /* height: 35vh; // we want this to be scrollable so that the user can always see the keyboard */
   overflow-y: scroll;
   overflow-x: hidden;
+
+  display: grid;
+  grid-template-rows: repeat(2, auto);
+
+  @media (min-width: 1000px) {
+  }
 `;
 
 const StyledMarqueeContainer = styled.div`

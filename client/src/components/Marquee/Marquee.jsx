@@ -41,6 +41,8 @@ export default function Marquee({
     console.log("action.payload.output:", action.payload.output);
     console.log("state:", state);
 
+    // we need to ensure that ALL row# keys remain. Right now it looks like this is being remove from the state
+
     switch (action.type) {
       case "set": {
         // ONLY the output goes to the AppState
@@ -87,10 +89,15 @@ export default function Marquee({
 
   ///////////////////////////////////////////
 
+  console.log("rowState:", rowState);
   // !LEGEND:
   // row = row0, row1, row2
   // row[i] = the index of the letter
-  console.log("rowState.view b4 Marquee:", rowState.view.row0);
+  console.log("rowState.view b4 Marquee 0:", rowState.view.row0);
+  console.log("rowState.view b4 Marquee 1:", rowState.view.row1);
+  console.log("rowState.view b4 Marquee 2:", rowState.view.row2);
+
+  // the unplotted row is return undefined... why is this???
 
   // rows are mapped from keysArr
   // blocks are mapped from rowState.view[row]
@@ -99,14 +106,16 @@ export default function Marquee({
       <SelectBtn marqName={marqName} />
       {keysArr.map((rowName) => (
         <StyledMarqueeRow marqWidth={marqWidth} key={`${marqName}-${rowName}`}>
-          {rowState.view[rowName].map((blockKey, i) => (
-            <Block
-              key={`${marqName}-${rowName}-${i}`}
-              block={blockKey[0]}
-              style={blockKey[1]}
-              delay={i + 1}
-            />
-          ))}
+          {rowState.view[rowName].length > 0
+            ? rowState.view[rowName].map((blockKey, i) => (
+                <Block
+                  key={`${marqName}-${rowName}-${i}`}
+                  block={blockKey[0]}
+                  style={blockKey[1]}
+                  delay={i + 1}
+                />
+              ))
+            : ""}
         </StyledMarqueeRow>
       ))}
       <TextRowForm

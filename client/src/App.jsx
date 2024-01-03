@@ -16,10 +16,17 @@ export default function App() {
 
   // [{ ltr: quantity }]
   const InitAppState = {
-    East: {}, // { ltr: #, ltr: #, etc }
     West: {},
+    East: {}, // { ltr: #, ltr: #, etc }
     South: {},
   };
+
+  /*
+ 
+App should request and cache the character stock from server/API
+ 
+*/
+
   // inside the modal component we will also provide an ALL day count inclusive of ALL of the marquee's that had inputs set and new inputs compared
 
   const reducer = (state, action) => {
@@ -64,9 +71,6 @@ something fucky is happening here, probably just a silly naming conflict but the
 
   // look into creating dark-mode functionality here
   const theme = {
-    colors: {
-      button: "powderblue",
-    },
     dark: {},
     light: {},
   };

@@ -155,13 +155,15 @@ const GlobalStyles = createGlobalStyle`${css`
     color: black;
 
     border-radius: 5px;
-    margin: 0 auto;
-    border-top-color: #969696;
-    border-right-color: lightgrey;
-    border-bottom-color: black;
-    border-left-color: grey;
+    margin: 0.5rem 0.25rem 0rem 0.25rem;
+    /* border-style: solid; // prevents the browsers default black right border */
+    border: none;
 
-    box-shadow: inset 0px 1px lightgrey;
+    box-shadow: 0px -1px 0px 1px rgba(0, 0, 0, 0.8) inset,
+      0px 0px 0px 1px rgba(48, 48, 48, 1) inset,
+      0px 0.5px 0px 1.5px rgba(255, 255, 255, 0.25) inset,
+      0 -1px 0 0 #b5b5b5 inset, 0 0 0 1px rgba(0, 0, 0, 0.1) inset,
+      0 0.5px 0 1.5px #fff inset;
     height: 3.5rem;
     width: 10rem;
     padding: 0.5rem 1rem;
@@ -174,12 +176,31 @@ const GlobalStyles = createGlobalStyle`${css`
     animation: fadeInAnimation ease-in-out 1s;
     animation-iteration-count: 1;
 
+    outline: solid white;
+    outline-style: ridge;
+    outline-offset: -1px;
+
     &:hover {
       filter: brightness(90%);
+      cursor: pointer;
     }
     &:active {
       filter: brightness(80%);
+      box-shadow: 0px -1px 0px 1px rgba(0, 0, 0, 0.8) inset,
+        0px 0px 0px 1px rgba(48, 48, 48, 1) inset,
+        0px 0.5px 0px 1.5px rgba(255, 255, 255, 0.25) inset,
+        0 3px 0 0 rgb(0, 0, 0) inset;
     }
+    &:focus {
+      filter: brightness(90%);
+    }
+
+    /*
+     This is how Shopify does it. They use the data- prop
+    .Button:active,
+.Button[data-state='open'] 
+     
+    */
 
     @keyframes fadeInAnimation {
       start {
@@ -191,14 +212,16 @@ const GlobalStyles = createGlobalStyle`${css`
     }
   }
 
-  .button-style-wrapper {
-    border-radius: ;
-  }
-
   .button-text {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    // what we ACTUALLY want is if the button is active, perform this transformation on the button-text box
     &:active {
       // move text down slightly as if being pushed
-      transform: translateY(2px);
+      transform: translateY(1px);
     }
   }
 `}`;

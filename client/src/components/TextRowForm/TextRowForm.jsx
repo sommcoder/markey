@@ -1,13 +1,16 @@
 import styled from "styled-components";
 import data from "../../data/blockData.json";
+
 import ErrorMsg from "../ErrorMsg/ErrorMsg";
 import SetCurrBtn from "../SetCurrBtn/SetCurrBtn";
 import ResetBtn from "../ResetBtn/ResetBtn";
 import CompareBtn from "../CompareBtn/CompareBtn";
+
 import { useRef } from "react";
 
 export default function TextRowForm({
   appState,
+  rowState,
   dispRowState,
   initMarqRowState,
   keysArr,
@@ -81,6 +84,7 @@ export default function TextRowForm({
     ev.target.value = inputValidationObj[row].values.join("");
     return;
   }
+
   return (
     <>
       <form id={formName}>
@@ -97,11 +101,13 @@ export default function TextRowForm({
         ))}
       </form>
       <SetCurrBtn
+        rowState={rowState}
         formName={formName}
         keysArr={keysArr}
         dispRowState={dispRowState}
       />
       <CompareBtn
+        rowState={rowState}
         formName={formName}
         keysArr={keysArr}
         dispRowState={dispRowState}

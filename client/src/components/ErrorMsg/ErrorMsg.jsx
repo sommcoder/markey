@@ -2,8 +2,9 @@ import styled from "styled-components";
 
 export default function ErrorMsg(props) {
   const errorMessages = {
-    err_size: "The size of your letters are too large for this marquee",
-    err_unknown_input: "This particular symbol was not found in our database",
+    err_size: "The size of your message is too large for this marquee",
+    err_unknown_input:
+      "This particular character/symbol was not found in our database",
     err_missing_input: `There are not enough ____ in inventory`,
   };
 

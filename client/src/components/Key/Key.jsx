@@ -4,8 +4,17 @@ export default function Key(props) {
   const ltr = props.letter;
 
   if (ltr.length <= 1) {
-    return <StyledKey value={ltr}>{ltr}</StyledKey>;
-  } else return <StyledKeySpecial value={ltr}>{ltr}</StyledKeySpecial>;
+    return (
+      <StyledKey value={ltr}>
+        <div className="button-text">{ltr}</div>
+      </StyledKey>
+    );
+  } else
+    return (
+      <StyledKeySpecial value={ltr}>
+        <div className="button-text">{ltr}</div>
+      </StyledKeySpecial>
+    );
 }
 
 const StyledKey = styled.button`
@@ -31,7 +40,7 @@ const StyledKey = styled.button`
 `;
 
 const StyledKeySpecial = styled(StyledKey)`
-  width: 8rem;
+  width: 9.5rem;
   &:hover {
     background-color: rgb(172, 172, 172);
   }

@@ -1,8 +1,11 @@
-# React + Vite
+# MARKEY
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Mar-key is a handy tool for the employees of Paradise Theatre!
 
-Currently, two official plugins are available:
+It has a few use cases:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+1. Determine if the message you want to display will fit on the marquee(s)
+2. Determine if you have enough characters based on current inventory levels and what is already up on display.
+3. Determine which letters you'll need to retrieve based on the marquee's current display and what you would like to change it to.
+
+Mar-key will provide immediate validation BEFORE you submit your entry if your entry will be too long OR if you don't have enough of a particular character.

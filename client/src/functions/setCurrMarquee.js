@@ -3,8 +3,8 @@ import data from "../data/blockData.json";
 export default function setCurrMarquee(ev, keysArr) {
   ev.preventDefault();
   const newMarqObj = {
-    view: {}, // {row0: [[ltr, size],[ltr, size]] }
-    output: {}, // {ltr: count, ltr: count}
+    view: { row0: [], row1: [], row2: [] },
+    output: {},
   };
   let form = ev.target.form; // form Element
 

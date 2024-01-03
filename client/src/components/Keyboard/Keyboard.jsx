@@ -49,6 +49,7 @@ const StyledKeyboardContainer = styled.div`
   display: block;
   /* max-width: 500px; */
   padding-top: 5rem;
+  padding-bottom: 2rem;
   width: 100%;
   -webkit-box-shadow: inset 0px 0px 5px #c1c1c1;
   -moz-box-shadow: inset 0px 0px 5px #c1c1c1;

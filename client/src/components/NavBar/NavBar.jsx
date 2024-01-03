@@ -3,7 +3,7 @@ import styled from "styled-components";
 export default function NavBar(props) {
   return (
     <StyledNavBar>
-      <header>{props.title}</header>
+      <StyledHeader>{props.title}</StyledHeader>
     </StyledNavBar>
   );
 }
@@ -12,7 +12,6 @@ const StyledNavBar = styled.nav`
   position: -webkit-sticky;
   position: sticky;
   top: 0; /* required */
-  right: 0;
   z-index: 4;
   width: 100%;
   font-size: 4rem;
@@ -24,4 +23,9 @@ const StyledNavBar = styled.nav`
   border-bottom: 0.1rem solid lightgrey;
   height: 30px;
   box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.25);
+`;
+
+const StyledHeader = styled.header`
+  text-align: center;
+  line-height: normal; // centers vertically
 `;

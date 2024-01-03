@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
 import { FiRefreshCcw } from "react-icons/fi";
+import { IconContext } from "react-icons/lib";
 
 export default function ResetBtn({
   initMarqRowState,
@@ -24,11 +25,21 @@ export default function ResetBtn({
       payload: updatedRowValuesObj,
     });
   }
+
   return (
     <StyledResetBtn onClick={(ev) => resetRows(ev)}>
-      <FiRefreshCcw />
+      <div className="button-text">
+        <FiRefreshCcw />
+      </div>
     </StyledResetBtn>
   );
 }
 
-const StyledResetBtn = styled.button``;
+const StyledResetBtn = styled.button`
+  border-radius: 20px;
+  margin-top: 0.75rem;
+  margin-left: 1rem;
+  width: 3rem;
+  height: 3rem;
+  position: absolute; //
+`;
