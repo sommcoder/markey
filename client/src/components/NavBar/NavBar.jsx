@@ -1,9 +1,11 @@
 import styled from "styled-components";
+import HamburgerMenu from "../HamburgerMenu/HamburgerMenu";
 
 export default function NavBar(props) {
   return (
     <StyledNavBar>
       <StyledHeader>{props.title}</StyledHeader>
+      <HamburgerMenu />
     </StyledNavBar>
   );
 }
