@@ -1,7 +1,13 @@
 import styled from "styled-components";
 
-export default function SelectBtn({ marqName }) {
+export default function SelectBtn({
+  marqName,
+  selectedMarq,
+  toggleSelectedMarq,
+}) {
   function toggleDisplay(ev) {
+    ev.preventDefault();
+
     /*
      
     the select button toggles WHICH marquee is able to be receive input from the Keyboard component and what the user presses

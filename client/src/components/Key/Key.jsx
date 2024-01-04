@@ -3,6 +3,9 @@ import styled from "styled-components";
 export default function Key(props) {
   const ltr = props.letter;
 
+  // TODO: add the StockTracker component to the key component.
+  // TODO: ensure the StockTracker component is styled nicely and that each stocktracker will display the REMAINING stock of every letter that has been submitted AND also that has currently been entered but NOT submitted.
+
   if (ltr.length <= 1) {
     return (
       <StyledKey value={ltr}>

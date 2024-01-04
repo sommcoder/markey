@@ -1,4 +1,4 @@
-import { useReducer } from "react";
+import { useReducer, useState } from "react";
 import TextRowForm from "../TextRowForm/TextRowForm.jsx";
 import Block from "../Block/Block.jsx";
 import styled, { keyframes } from "styled-components";
@@ -86,7 +86,7 @@ export default function Marquee({
   //! Marquee is the immediate parent of Block & TextRowForm so therefore the rowState is managed here
 
   const [rowState, dispRowState] = useReducer(reducer, initMarqRowState);
-
+  const [selectedMarq, toggleSelectedMarq] = useState(false);
   ///////////////////////////////////////////
 
   console.log("rowState:", rowState);
@@ -98,12 +98,15 @@ export default function Marquee({
   console.log("rowState.view b4 Marquee 2:", rowState.view.row2);
 
   // the unplotted row is return undefined... why is this???
-
   // rows are mapped from keysArr
   // blocks are mapped from rowState.view[row]
   return (
     <StyledMarquee marqName={marqName}>
-      <SelectBtn marqName={marqName} />
+      <SelectBtn
+        marqName={marqName}
+        selectedMarq={selectedMarq}
+        toggleSelectedMarq={toggleSelectedMarq}
+      />
       {keysArr.map((rowName) => (
         <StyledMarqueeRow marqWidth={marqWidth} key={`${marqName}-${rowName}`}>
           {rowState.view[rowName].length > 0
@@ -143,15 +146,20 @@ const fadeInAnimation = keyframes`
 `;
 
 const StyledMarquee = styled.div`
-  padding-top: 1rem;
-  margin: 0 auto 2rem auto;
-  width: 100%;
-  max-width: 1000px;
+  margin: 0 auto 0rem auto;
+  width: ${(props) =>
+    props.marqSize * 1.5 + "rem" ? props.marqSize * 1.5 + "rem" : "350px"};
   align-items: center;
   justify-content: center;
   animation: ${fadeInAnimation} ease-in-out 0.75s;
   animation-iteration-count: 1;
   z-index: 1;
+  padding: 2rem;
+
+  &:active {
+    outline: 1px inset red; // doesn't make transition janky like border does
+    border-radius: 5px;
+  }
 `;
 
 const StyledMarqueeRow = styled.div`

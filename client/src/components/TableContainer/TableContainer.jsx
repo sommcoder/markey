@@ -38,8 +38,9 @@ const StyledTableContainer = styled.div`
 
 const StyledMarqueeContainer = styled.div`
   /* max-width: 700px; */
+  display: grid;
   width: 100%;
-  margin: 0 auto 2rem auto;
+  margin: 0 auto 0rem auto;
   text-align: center;
   border: 1px solid rgba(0, 0, 0, 0);
   // transparent
