@@ -1,54 +1,55 @@
 import Key from "../Key/Key";
 import styled from "styled-components";
+import { letterSet, specialLetterSet } from "./letterSet";
+import { useState } from "react";
 
 export default function Keyboard(props) {
-  // KEYBOARD SETUP:
-  const letterSet = [
-    {
-      rowNum: "row0",
-      letters: ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"],
-    },
-    {
-      rowNum: "row1",
-      letters: ["a", "s", "d", "f", "g", "h", "j", "k", "l"],
-    },
-    {
-      rowNum: "row2",
-      letters: ["ENTER", "z", "x", "c", "v", "b", "n", "m", "<=="],
-    },
-    {
-      rowNum: "row3",
-      letters: [
-        "am",
-        "pm",
-        "presents",
-        "www",
-        "live",
-        "feat",
-        "free",
-        "sold out",
-      ],
-    },
-  ];
+  const [specialKeys, toggleSpecialKeys] = useState(false);
+
+  function handleSpecialKeys(ev) {
+    ev.preventDefault();
+    specialKeys ? toggleSpecialKeys(false) : toggleSpecialKeys(true);
+  }
 
   return (
     <StyledKeyboardContainer>
       {letterSet.map((obj) => (
         <StyledKeyboardRow key={obj.rowNum}>
           {obj.letters.map((ltr) => (
-            <Key letter={ltr} key={`${obj.rowNum}-${ltr}`} />
+            <Key
+              letter={ltr}
+              rowNum={obj.rowNum}
+              key={`${obj.rowNum}-${ltr}`}
+            />
           ))}
         </StyledKeyboardRow>
       ))}
+      <StyledSpecialButton onClick={(ev) => handleSpecialKeys(ev)}>
+        special characters
+      </StyledSpecialButton>
+      {specialKeys
+        ? specialLetterSet.map((obj) => (
+            <StyledKeyboardRow key={obj.rowNum}>
+              {obj.letters.map((ltr) => (
+                <Key
+                  letter={ltr}
+                  rowNum={obj.rowNum}
+                  key={`${obj.rowNum}-${ltr}`}
+                />
+              ))}
+            </StyledKeyboardRow>
+          ))
+        : ""}
     </StyledKeyboardContainer>
   );
 }
 
 const StyledKeyboardContainer = styled.div`
   margin: 0 auto;
-  display: block;
+  position: sticky;
+  display: grid;
   /* max-width: 500px; */
-  padding-top: 5rem;
+  padding-top: 2rem;
   padding-bottom: 2rem;
   width: 100%;
   -webkit-box-shadow: inset 0px 0px 5px #c1c1c1;
@@ -63,5 +64,10 @@ const StyledKeyboardRow = styled.div`
   flex-wrap: nowrap;
   align-items: center;
   justify-content: center;
-  margin-bottom: 8px;
+  margin-bottom: 2px;
+`;
+
+const StyledSpecialButton = styled.button`
+  margin: 1rem auto 1rem auto;
+  width: 20rem;
 `;

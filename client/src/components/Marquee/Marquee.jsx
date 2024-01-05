@@ -101,7 +101,10 @@ export default function Marquee({
   // rows are mapped from keysArr
   // blocks are mapped from rowState.view[row]
   return (
-    <StyledMarquee marqName={marqName}>
+    <StyledMarquee
+      marqName={marqName}
+      data-active={selectedMarq ? "true" : "false"}
+    >
       <SelectBtn
         marqName={marqName}
         selectedMarq={selectedMarq}
@@ -145,21 +148,34 @@ const fadeInAnimation = keyframes`
     }
 `;
 
+const linearGradientMove = keyframes`
+  100% {
+    background-position: 4px 0, -4px 100%, 0 -4px, 100% 4px;
+  }
+`;
+
 const StyledMarquee = styled.div`
   margin: 0 auto 0rem auto;
-  width: ${(props) =>
+  max-width: ${(props) =>
     props.marqSize * 1.5 + "rem" ? props.marqSize * 1.5 + "rem" : "350px"};
   align-items: center;
   justify-content: center;
   animation: ${fadeInAnimation} ease-in-out 0.75s;
   animation-iteration-count: 1;
   z-index: 1;
-  padding: 2rem;
+  padding: 1rem;
 
-  &:active {
-    outline: 1px inset red; // doesn't make transition janky like border does
-    border-radius: 5px;
+  // marquee select. With using the data prop, we cause a FULL rerendering if the marquee component
+  &[data-active="true"] {
+    background: linear-gradient(90deg, #333 50%, transparent 0) repeat-x,
+      linear-gradient(90deg, #333 50%, transparent 0) repeat-x,
+      linear-gradient(0deg, #333 50%, transparent 0) repeat-y,
+      linear-gradient(0deg, #333 50%, transparent 0) repeat-y;
+    background-size: 4px 1px, 4px 1px, 1px 4px, 1px 4px;
+    background-position: 0 0, 0 100%, 0 0, 100% 0;
+    animation: ${linearGradientMove} 0.3s infinite linear;
   }
+  border-radius: 5px;
 `;
 
 const StyledMarqueeRow = styled.div`

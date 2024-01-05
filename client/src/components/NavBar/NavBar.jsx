@@ -19,7 +19,7 @@ const StyledNavBar = styled.nav`
   font-size: 4rem;
   font-weight: 650;
   background-color: white;
-  margin: 0rem auto 5.25rem auto;
+  margin: 0rem auto 1rem auto;
   text-align: center;
   padding-bottom: 3rem;
   border-bottom: 0.1rem solid lightgrey;

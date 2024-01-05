@@ -218,6 +218,8 @@ const GlobalStyles = createGlobalStyle`${css`
     height: 100%;
     justify-content: center;
     align-items: center;
+    text-wrap: wrap; // nmot working..?
+
     // what we ACTUALLY want is if the button is active, perform this transformation on the button-text box
     &:active {
       // move text down slightly as if being pushed

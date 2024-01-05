@@ -7,16 +7,16 @@ export default function SelectBtn({
 }) {
   function toggleDisplay(ev) {
     ev.preventDefault();
-
-    /*
-     
-    the select button toggles WHICH marquee is able to be receive input from the Keyboard component and what the user presses
-
-    -- this will be prodominantly a mobile use case
-    -- but will also be useful if the user wishes to add special symbols to the marquee
-     
-    */
+    selectedMarq ? toggleSelectedMarq(false) : toggleSelectedMarq(true);
   }
+  /*
+   
+  the select button toggles WHICH marquee is able to be receive input from the Keyboard component and what the user presses
+
+  -- this will be prodominantly a mobile use case
+  -- but will also be useful if the user wishes to add special symbols to the marquee
+   
+  */
 
   // TODO: make the selectbtn highlight the table it belongs to. There can only be one selected table
 

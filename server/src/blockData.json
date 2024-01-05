@@ -154,10 +154,16 @@
     "size": "2.39"
   },
 
-  "1": {
+  "0": {
     "blockSymbol": "1",
     "stock": 10,
     "size": "1.75"
+  },
+
+  "1": {
+    "blockSymbol": "1",
+    "stock": 10,
+    "size": "2"
   },
 
   "2": {
@@ -322,7 +328,7 @@
     "size": "3"
   },
 
-  "speech bubble": {
+  "💬": {
     "blockSymbol": "💬",
     "stock": 29,
     "size": "2"
@@ -346,49 +352,49 @@
     "size": "2"
   },
 
-  "heart": {
+  "❤️": {
     "blockSymbol": "❤️",
     "stock": 3,
     "size": "2"
   },
 
-  "fire": {
+  "🔥": {
     "blockSymbol": "🔥",
     "stock": 3,
     "size": "2"
   },
 
-  "paradise www": {
+  "paradiseonbloor.com": {
     "blockSymbol": "paradiseonbloor.com",
     "stock": 3,
     "size": "5.5"
   },
 
-  "rialto www": {
+  "osteriarialto.com": {
     "blockSymbol": "osteriarialto.com",
     "stock": 3,
     "size": "5.5"
   },
 
-  "wine": {
+  "🍾": {
     "blockSymbol": "🍾",
     "stock": 10,
     "size": "2"
   },
 
-  "camera": {
+  "📷": {
     "blockSymbol": "📷",
     "stock": 3,
     "size": "2"
   },
 
-  "film": {
+  "🎥": {
     "blockSymbol": "🎥",
     "stock": 3,
     "size": "2"
   },
 
-  "popcorn": {
+  "🍿": {
     "blockSymbol": "🍿",
     "stock": 3,
     "size": "2"

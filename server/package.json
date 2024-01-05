@@ -3,9 +3,16 @@
   "version": "1.0.0",
   "description": "this is the server for the Mar-Key app",
   "main": "index.js",
+  "type": "commonjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Brian Davies",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@fastify/cors": "^8.5.0",
+    "dotenv": "^16.3.1",
+    "fastify": "^4.25.2",
+    "nodemon": "^3.0.2"
+  }
 }

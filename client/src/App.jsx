@@ -7,6 +7,10 @@ import { useState, useReducer } from "react";
 import styled, { ThemeProvider } from "styled-components";
 import GlobalStyles from "./GlobalStyles";
 /////////////////////////////////////////
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+// Create a client
+const queryClient = new QueryClient();
 
 export default function App() {
   const appTitle = "Mar-Key";
@@ -82,35 +86,37 @@ something fucky is happening here, probably just a silly naming conflict but the
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyles />
-      <StyledAppContainer>
-        {toggleModal ? (
-          <Modal
-            modalState={modalState}
-            toggleModal={toggleModal}
+      <QueryClientProvider client={queryClient}>
+        <StyledAppContainer>
+          {toggleModal ? (
+            <Modal
+              modalState={modalState}
+              toggleModal={toggleModal}
+              appState={appState}
+            />
+          ) : (
+            ""
+          )}
+          <NavBar title={appTitle} />
+          <TableContainer
+            marKeysArr={marKeysArr}
             appState={appState}
+            dispAppState={dispAppState}
+            marqSizes={marqSizes}
           />
-        ) : (
-          ""
-        )}
-        <NavBar title={appTitle} />
-        <TableContainer
-          marKeysArr={marKeysArr}
-          appState={appState}
-          dispAppState={dispAppState}
-          marqSizes={marqSizes}
-        />
-        <Keyboard />
-      </StyledAppContainer>
+          <Keyboard />
+        </StyledAppContainer>
+      </QueryClientProvider>
     </ThemeProvider>
   );
 }
 
 const StyledAppContainer = styled.div`
   margin: 0 auto;
-  display: grid;
-  grid-template-rows: auto auto auto;
+  padding-top: 1rem;
   align-content: center;
   align-items: center;
   max-width: 100%;
-  /* overflow-y: hidden; */
+  height: 100vh;
+  width: 100%;
 `;
