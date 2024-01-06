@@ -1,8 +1,8 @@
-﻿import styled from 'styled-components';
-import Marquee from '../Marquee/Marquee';
-import { useQuery } from '@tanstack/react-query';
+﻿import styled from "styled-components";
+import Marquee from "../Marquee/Marquee";
+import { useQuery } from "@tanstack/react-query";
 
-// import getCharacterStock from "../../api/api";
+import { getCharacterStock } from "../../api/api";
 
 export default function TableContainer({
   marKeysArr,
@@ -10,17 +10,20 @@ export default function TableContainer({
   dispAppState,
   marqSizes,
 }) {
-  // const query = useQuery({
-  //   queryKey: ["get-characters"],
-  //   queryFn: getCharacterStock(),
-  // });
+  const { isLoading, isSuccess, isError, data, error } = useQuery({
+    queryKey: ["get-characters"],
+    queryFn: getCharacterStock, // no parentheses!
+  }); // makes MULTIPLE retry queries automatically if query fails.
+  console.log("data:", data);
+  // fetchOnWindowFocus();
 
   return (
     <StyledTableContainer>
-      {marKeysArr.map(el => (
+      {marKeysArr.map((el) => (
         <StyledMarqueeWrapper marqName={el} key={el}>
           <Marquee
             key={`marq-${el}`}
+            data={data}
             appState={appState}
             dispAppState={dispAppState}
             marqName={el}
@@ -63,7 +66,7 @@ const StyledMarqueeWrapper = styled.div`
 
   // DESKTOP/TABLET:
   @media (min-width: 800px) {
-    grid-column: ${props =>
-      props.marqName === 'South' ? 'span 2' : 'span 1'}; // if South, span 2
+    grid-column: ${(props) =>
+      props.marqName === "South" ? "span 2" : "span 1"}; // if South, span 2
   }
 `;

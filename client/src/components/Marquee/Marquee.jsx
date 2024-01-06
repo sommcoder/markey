@@ -1,10 +1,11 @@
-import { useReducer, useState } from 'react';
-import TextRowForm from '../TextRowForm/TextRowForm.jsx';
-import Block from '../Block/Block.jsx';
-import styled, { keyframes } from 'styled-components';
-import SelectBtn from '../SelectBtn/SelectBtn.jsx';
+import { useReducer, useState } from "react";
+import TextRowForm from "../TextRowForm/TextRowForm.jsx";
+import Block from "../Block/Block.jsx";
+import styled, { keyframes } from "styled-components";
+import SelectBtn from "../SelectBtn/SelectBtn.jsx";
 
 export default function Marquee({
+  data,
   appState,
   dispAppState,
   marqName,
@@ -15,7 +16,7 @@ export default function Marquee({
   - appState tracks LETTERS and QUANTITY for the modal output
   - marqState tracks INPUT and THEIR SIZE for rending the Block components dynamically
   */
-  const marqWidth = marqSize + 'rem';
+  const marqWidth = marqSize + "rem";
 
   // for mapping the Block components:
   const initMarqRowState = {
@@ -31,20 +32,20 @@ export default function Marquee({
   // output is an OBJECT of each ltr and the count of its appearance
 
   const keysArr = Object.keys(initMarqRowState.view);
-  console.log('keysArr:', keysArr);
+  console.log("keysArr:", keysArr);
 
   const reducer = (state, action) => {
     if (!action.payload) return state;
-    console.log('rowREDUCER: action.payload:', action.payload);
+    console.log("rowREDUCER: action.payload:", action.payload);
 
-    console.log('action.payload.view:', action.payload.view);
-    console.log('action.payload.output:', action.payload.output);
-    console.log('state:', state);
+    console.log("action.payload.view:", action.payload.view);
+    console.log("action.payload.output:", action.payload.output);
+    console.log("state:", state);
 
     // we need to ensure that ALL row# keys remain. Right now it looks like this is being remove from the state
 
     switch (action.type) {
-      case 'set': {
+      case "set": {
         // ONLY the output goes to the AppState
         // dispAppState({
         //   type: "set",
@@ -89,13 +90,13 @@ export default function Marquee({
   const [selectedMarq, toggleSelectedMarq] = useState(false);
   ///////////////////////////////////////////
 
-  console.log('rowState:', rowState);
+  console.log("rowState:", rowState);
   // !LEGEND:
   // row = row0, row1, row2
   // row[i] = the index of the letter
-  console.log('rowState.view b4 Marquee 0:', rowState.view.row0);
-  console.log('rowState.view b4 Marquee 1:', rowState.view.row1);
-  console.log('rowState.view b4 Marquee 2:', rowState.view.row2);
+  console.log("rowState.view b4 Marquee 0:", rowState.view.row0);
+  console.log("rowState.view b4 Marquee 1:", rowState.view.row1);
+  console.log("rowState.view b4 Marquee 2:", rowState.view.row2);
 
   // the unplotted row is return undefined... why is this???
   // rows are mapped from keysArr
@@ -103,14 +104,14 @@ export default function Marquee({
   return (
     <StyledMarquee
       marqName={marqName}
-      data-active={selectedMarq ? 'true' : 'false'}
+      data-active={selectedMarq ? "true" : "false"}
     >
       <SelectBtn
         marqName={marqName}
         selectedMarq={selectedMarq}
         toggleSelectedMarq={toggleSelectedMarq}
       />
-      {keysArr.map(rowName => (
+      {keysArr.map((rowName) => (
         <StyledMarqueeRow marqWidth={marqWidth} key={`${marqName}-${rowName}`}>
           {rowState.view[rowName].length > 0
             ? rowState.view[rowName].map((blockKey, i) => (
@@ -121,10 +122,11 @@ export default function Marquee({
                   delay={i + 1}
                 />
               ))
-            : ''}
+            : ""}
         </StyledMarqueeRow>
       ))}
       <TextRowForm
+        data={data}
         formName={`${marqName}-form`}
         appState={appState}
         dispRowState={dispRowState}
@@ -156,8 +158,8 @@ const linearGradientMove = keyframes`
 
 const StyledMarquee = styled.div`
   margin: 0 auto 0rem auto;
-  max-width: ${props =>
-    props.marqSize * 1.5 + 'rem' ? props.marqSize * 1.5 + 'rem' : '350px'};
+  max-width: ${(props) =>
+    props.marqSize * 1.5 + "rem" ? props.marqSize * 1.5 + "rem" : "350px"};
   align-items: center;
   justify-content: center;
   animation: ${fadeInAnimation} ease-in-out 0.75s;
@@ -166,7 +168,7 @@ const StyledMarquee = styled.div`
   padding: 1rem;
 
   // marquee select. With using the data prop, we cause a FULL rerendering if the marquee component
-  &[data-active='true'] {
+  &[data-active="true"] {
     background: linear-gradient(90deg, #333 50%, transparent 0) repeat-x,
       linear-gradient(90deg, #333 50%, transparent 0) repeat-x,
       linear-gradient(0deg, #333 50%, transparent 0) repeat-y,
@@ -180,7 +182,7 @@ const StyledMarquee = styled.div`
 
 const StyledMarqueeRow = styled.div`
   display: flex;
-  width: ${props => (props.marqWidth ? props.marqWidth : '350px')};
+  width: ${(props) => (props.marqWidth ? props.marqWidth : "350px")};
   flex-direction: row;
   justify-content: center;
   background-color: rgb(253, 243, 229);

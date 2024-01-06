@@ -8,8 +8,6 @@ display the current stock based on what has been entered AND set,
 This is to be dynamic validation
 
 
-
-TODO: Maybe we create a special key the enables the "special keys" that will appear below the standard QWERTY/Numbers
  
 */
 

@@ -8,6 +8,7 @@ import styled, { ThemeProvider } from "styled-components";
 import GlobalStyles from "./GlobalStyles";
 /////////////////////////////////////////
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 // Create a client
 const queryClient = new QueryClient();
@@ -87,6 +88,7 @@ something fucky is happening here, probably just a silly naming conflict but the
     <ThemeProvider theme={theme}>
       <GlobalStyles />
       <QueryClientProvider client={queryClient}>
+        <ReactQueryDevtools />
         <StyledAppContainer>
           {toggleModal ? (
             <Modal
