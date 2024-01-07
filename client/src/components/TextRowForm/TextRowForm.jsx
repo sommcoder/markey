@@ -17,18 +17,23 @@ export default function TextRowForm({
   marqName,
   marqSize,
   formName,
+  selectedMarq,
 }) {
   console.log("TEXTFORM - data:", data);
   /*
   #component description:
   - Live input validation
   - Checks Data.json for valid entries
-  - applies error animation
+  - applies error animation in validateEntry()
   */
 
   const inputRefsArr = useRef([]);
   // TODO: looking into forwarding refs to other/multiple components
 
+  // forward each textrow ref UP to the Marquee component.
+  // on state change of selectedMarq, useEffect will apply a focus event on the FIRST text row
+
+  // populates the refArray on render
   const addToRefsArr = (el) => {
     if (el && !inputRefsArr.current.includes(el)) inputRefsArr.current.push(el);
   };
@@ -86,6 +91,13 @@ export default function TextRowForm({
     inputValidationObj[row].values.push(key);
     ev.target.value = inputValidationObj[row].values.join("");
     return;
+  }
+
+  if (selectedMarq) {
+    console.log("inputRefsArr:", inputRefsArr);
+
+    inputRefsArr.current[0].focus();
+    // inputRefsArr.current.focus();
   }
 
   return (

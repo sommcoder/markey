@@ -2,12 +2,19 @@ import styled from "styled-components";
 
 export default function SelectBtn({
   marqName,
-  selectedMarq,
-  toggleSelectedMarq,
+  selectedMarqObj,
+  switchSelectedMarq,
 }) {
+  console.log("selectedMarqObj:", selectedMarqObj);
+
   function toggleDisplay(ev) {
     ev.preventDefault();
-    selectedMarq ? toggleSelectedMarq(false) : toggleSelectedMarq(true);
+    const newMarqObj = selectedMarqObj;
+    // RESET the marq object
+    for (const marq of Object.keys(newMarqObj)) newMarqObj[marq] = false;
+    newMarqObj[marqName] = true;
+    console.log("newMarqObj:", newMarqObj);
+    switchSelectedMarq(newMarqObj);
   }
   /*
    
@@ -19,7 +26,6 @@ export default function SelectBtn({
   */
 
   // TODO: make the selectbtn highlight the table it belongs to. There can only be one selected table
-
   // TODO: While select btn is enabled, it's respective table is what the keyboard will input into!
 
   return (

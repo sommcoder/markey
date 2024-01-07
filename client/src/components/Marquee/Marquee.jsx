@@ -1,4 +1,4 @@
-import { useReducer, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import TextRowForm from "../TextRowForm/TextRowForm.jsx";
 import Block from "../Block/Block.jsx";
 import styled, { keyframes } from "styled-components";
@@ -10,6 +10,8 @@ export default function Marquee({
   dispAppState,
   marqName,
   marqSize,
+  selectedMarqObj,
+  switchSelectedMarq,
 }) {
   /*
   !component description:
@@ -87,7 +89,7 @@ export default function Marquee({
   //! Marquee is the immediate parent of Block & TextRowForm so therefore the rowState is managed here
 
   const [rowState, dispRowState] = useReducer(reducer, initMarqRowState);
-  const [selectedMarq, toggleSelectedMarq] = useState(false);
+
   ///////////////////////////////////////////
 
   console.log("rowState:", rowState);
@@ -101,15 +103,19 @@ export default function Marquee({
   // the unplotted row is return undefined... why is this???
   // rows are mapped from keysArr
   // blocks are mapped from rowState.view[row]
+
+  // the state change is only changing the component where the state belongs
+  console.log("selectedMarqObj[marqName]:", selectedMarqObj[marqName]);
   return (
     <StyledMarquee
       marqName={marqName}
-      data-active={selectedMarq ? "true" : "false"}
+      data-active={selectedMarqObj[marqName] ? "true" : "false"}
     >
       <SelectBtn
+        keysArr={keysArr}
         marqName={marqName}
-        selectedMarq={selectedMarq}
-        toggleSelectedMarq={toggleSelectedMarq}
+        selectedMarqObj={selectedMarqObj}
+        switchSelectedMarq={switchSelectedMarq}
       />
       {keysArr.map((rowName) => (
         <StyledMarqueeRow marqWidth={marqWidth} key={`${marqName}-${rowName}`}>
@@ -136,6 +142,8 @@ export default function Marquee({
         marqSize={marqSize}
         rowState={rowState}
         initMarqRowState={initMarqRowState}
+        selectedMarqObj={selectedMarqObj}
+        switchSelectedMarq={switchSelectedMarq}
       />
     </StyledMarquee>
   );

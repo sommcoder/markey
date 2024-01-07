@@ -9,6 +9,8 @@ export default function TableContainer({
   appState,
   dispAppState,
   marqSizes,
+  selectedMarqObj,
+  switchSelectedMarq,
 }) {
   const { isLoading, isSuccess, isError, data, error } = useQuery({
     queryKey: ["get-characters"],
@@ -28,6 +30,8 @@ export default function TableContainer({
             dispAppState={dispAppState}
             marqName={el}
             marqSize={marqSizes[el]}
+            selectedMarqObj={selectedMarqObj}
+            switchSelectedMarq={switchSelectedMarq}
           />
         </StyledMarqueeWrapper>
       ))}

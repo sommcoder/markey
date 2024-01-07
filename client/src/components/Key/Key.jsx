@@ -1,13 +1,13 @@
 import styled from "styled-components";
 import StockTracker from "../StockTracker/StockTracker";
 
-export default function Key({ letter }) {
+export default function Key({ char }) {
   function handleKeyClick(ev) {
     ev.preventDefault();
     console.log("ev:", ev);
   }
 
-  // TODO: ensure the StockTracker component is styled nicely and that each stocktracker will display the REMAINING stock of every letter that has been submitted AND also that has currently been entered but NOT submitted.
+  // TODO: ensure the StockTracker component is styled nicely and that each stocktracker will display the REMAINING stock of every char that has been submitted AND also that has currently been entered but NOT submitted.
 
   // We might need to do a useRef...
 
@@ -17,25 +17,25 @@ export default function Key({ letter }) {
 
   /*
  
-1) We need to access the input field rows of each of the marquees
+1) We need to access the input field rows of each of the marquees we need that ref to be passed down 
 
 2) We need to be 
  
 */
 
-  // Special keys are determined if they are larger than a single character
-  if (letter.length <= 1) {
+  // Special keys are determined if they are larger than a single char
+  if (char.length <= 1) {
     return (
-      <StyledKey onClick={(ev) => handleKeyClick(ev)} value={letter}>
-        <div className="button-text">{letter}</div>
-        <StockTracker letter={letter} />
+      <StyledKey onClick={(ev) => handleKeyClick(ev)} value={char}>
+        <div className="button-text">{char}</div>
+        <StockTracker char={char} />
       </StyledKey>
     );
   } else
     return (
-      <StyledKeySpecial onClick={(ev) => handleKeyClick(ev)} value={letter}>
-        <div className="button-text">{letter}</div>
-        <StockTracker letter={letter} />
+      <StyledKeySpecial onClick={(ev) => handleKeyClick(ev)} value={char}>
+        <div className="button-text">{char}</div>
+        <StockTracker char={char} />
       </StyledKeySpecial>
     );
 }

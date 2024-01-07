@@ -1,45 +1,21 @@
 import Key from "../Key/Key";
 import styled from "styled-components";
-import { letterSet, specialLetterSet } from "./letterSet";
-import { useState } from "react";
+import { characterSet } from "./characterSet";
 
-export default function Keyboard(props) {
-  const [specialKeys, toggleSpecialKeys] = useState(false);
-
-  function handleSpecialKeys(ev) {
-    ev.preventDefault();
-    specialKeys ? toggleSpecialKeys(false) : toggleSpecialKeys(true);
-  }
-
+export default function Keyboard() {
   return (
     <StyledKeyboardContainer>
-      {letterSet.map((obj) => (
+      {characterSet.map((obj) => (
         <StyledKeyboardRow key={obj.rowNum}>
-          {obj.letters.map((ltr) => (
+          {obj.characters.map((char) => (
             <Key
-              letter={ltr}
+              char={char}
               rowNum={obj.rowNum}
-              key={`${obj.rowNum}-${ltr}`}
+              key={`${obj.rowNum}-${char}`}
             />
           ))}
         </StyledKeyboardRow>
       ))}
-      <StyledSpecialButton onClick={(ev) => handleSpecialKeys(ev)}>
-        special characters
-      </StyledSpecialButton>
-      {specialKeys
-        ? specialLetterSet.map((obj) => (
-            <StyledKeyboardRow key={obj.rowNum}>
-              {obj.letters.map((ltr) => (
-                <Key
-                  letter={ltr}
-                  rowNum={obj.rowNum}
-                  key={`${obj.rowNum}-${ltr}`}
-                />
-              ))}
-            </StyledKeyboardRow>
-          ))
-        : ""}
     </StyledKeyboardContainer>
   );
 }
@@ -65,9 +41,4 @@ const StyledKeyboardRow = styled.div`
   align-items: center;
   justify-content: center;
   margin-bottom: 2px;
-`;
-
-const StyledSpecialButton = styled.button`
-  margin: 1rem auto 1rem auto;
-  width: 20rem;
 `;

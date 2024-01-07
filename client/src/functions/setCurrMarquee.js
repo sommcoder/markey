@@ -2,9 +2,12 @@ import data from "../data/blockData.json";
 
 export default function setCurrMarquee(ev, keysArr, rowState) {
   ev.preventDefault();
+  console.log("rowState:", rowState);
+  console.log("keysArr:", keysArr);
   const newMarqObj = rowState; // create a copy of the current state object
   let form = ev.target.form; // form Element
 
+  console.log("form:", form);
   // ROW Loop:
   for (let row = 0; row < keysArr.length; row++) {
     console.log("form[row].value:", form[row].value);

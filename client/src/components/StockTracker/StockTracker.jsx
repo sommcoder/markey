@@ -1,7 +1,7 @@
 ﻿import styled from "styled-components";
 import data from "../../data/blockData.json";
 
-export default function StockTracker({ letter, rowNum }) {
+export default function StockTracker({ char, rowNum }) {
   /*
  
 display the current stock based on what has been entered AND set,
@@ -13,7 +13,7 @@ This is to be dynamic validation
 
   return (
     <StyledStockTracker rowNum={rowNum}>
-      {letter === "<==" || letter === "ENTER" ? "" : data[letter].stock}
+      {char === "<==" || char === "ENTER" ? "" : data[char].stock}
     </StyledStockTracker>
   );
 }

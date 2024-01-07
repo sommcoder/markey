@@ -20,11 +20,18 @@ export default function App() {
   const [modalState, toggleModal] = useState(false);
 
   // [{ ltr: quantity }]
+  //
   const InitAppState = {
     West: {},
     East: {}, // { ltr: #, ltr: #, etc }
     South: {},
   };
+
+  const [selectedMarqObj, switchSelectedMarq] = useState({
+    West: false,
+    East: false,
+    South: false,
+  });
 
   /*
  
@@ -68,6 +75,7 @@ something fucky is happening here, probably just a silly naming conflict but the
 
   const [appState, dispAppState] = useReducer(reducer, InitAppState);
 
+  // in rem
   const marqSizes = {
     East: 42,
     West: 42,
@@ -104,9 +112,11 @@ something fucky is happening here, probably just a silly naming conflict but the
             marKeysArr={marKeysArr}
             appState={appState}
             dispAppState={dispAppState}
+            selectedMarqObj={selectedMarqObj}
+            switchSelectedMarq={switchSelectedMarq}
             marqSizes={marqSizes}
           />
-          <Keyboard />
+          <Keyboard selectedMarqObj={selectedMarqObj} />
         </StyledAppContainer>
       </QueryClientProvider>
     </ThemeProvider>
