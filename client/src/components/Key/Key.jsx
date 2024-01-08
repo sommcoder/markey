@@ -1,10 +1,11 @@
 import styled from "styled-components";
 import StockTracker from "../StockTracker/StockTracker";
 
-export default function Key({ char }) {
+export default function Key({ char, selectedMarqObj }) {
   function handleKeyClick(ev) {
     ev.preventDefault();
     console.log("ev:", ev);
+    console.log("ev.key:", ev.key);
   }
 
   // TODO: ensure the StockTracker component is styled nicely and that each stocktracker will display the REMAINING stock of every char that has been submitted AND also that has currently been entered but NOT submitted.

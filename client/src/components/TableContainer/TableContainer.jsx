@@ -16,7 +16,7 @@ export default function TableContainer({
     queryKey: ["get-characters"],
     queryFn: getCharacterStock, // no parentheses!
   }); // makes MULTIPLE retry queries automatically if query fails.
-  console.log("data:", data);
+
   // fetchOnWindowFocus();
 
   return (

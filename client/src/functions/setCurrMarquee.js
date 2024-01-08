@@ -4,7 +4,8 @@ export default function setCurrMarquee(ev, keysArr, rowState) {
   ev.preventDefault();
   console.log("rowState:", rowState);
   console.log("keysArr:", keysArr);
-  const newMarqObj = rowState; // create a copy of the current state object
+  const newRowObj = rowState; // create a copy of the current state object
+  console.log("ev:", ev);
   let form = ev.target.form; // form Element
 
   console.log("form:", form);
@@ -24,20 +25,19 @@ export default function setCurrMarquee(ev, keysArr, rowState) {
     // INPUT Loop:
     for (let ltr = 0; ltr < inputStr.length; ltr++) {
       if (!data[inputStr[ltr]]) {
-        console.log("error: cannot find letter in database");
+        console.log("error: cannot find character in database");
         continue;
       }
       // if we don't already have the ltr/key in our output object, add it
-      if (!newMarqObj.output[inputStr[ltr]])
-        newMarqObj.output[inputStr[ltr]] = 1;
-      else newMarqObj.output[inputStr[ltr]]++;
+      if (!newRowObj.output[inputStr[ltr]]) newRowObj.output[inputStr[ltr]] = 1;
+      else newRowObj.output[inputStr[ltr]]++;
 
       let inputData = data[inputStr[ltr]];
       rowArr.push([inputData.blockSymbol, inputData.size]);
     }
     form[row].value = ""; // reset row El's value
-    newMarqObj.view[rowName] = rowArr;
-    console.log("newMarqObj.output:", newMarqObj.output);
+    newRowObj.view[rowName] = rowArr;
+    console.log("newRowObj.output:", newRowObj.output);
   }
-  return newMarqObj;
+  return newRowObj;
 }

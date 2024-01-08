@@ -19,7 +19,6 @@ export default function TextRowForm({
   formName,
   selectedMarq,
 }) {
-  console.log("TEXTFORM - data:", data);
   /*
   #component description:
   - Live input validation
@@ -93,12 +92,12 @@ export default function TextRowForm({
     return;
   }
 
-  if (selectedMarq) {
-    console.log("inputRefsArr:", inputRefsArr);
+  // if (selectedMarq) {
+  //   console.log("MARQ SELECTED");
 
-    inputRefsArr.current[0].focus();
-    // inputRefsArr.current.focus();
-  }
+  //   inputRefsArr.current[0].focus();
+  //   // inputRefsArr.current.focus();
+  // }
 
   return (
     <>

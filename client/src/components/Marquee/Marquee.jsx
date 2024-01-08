@@ -34,52 +34,14 @@ export default function Marquee({
   // output is an OBJECT of each ltr and the count of its appearance
 
   const keysArr = Object.keys(initMarqRowState.view);
-  console.log("keysArr:", keysArr);
 
   const reducer = (state, action) => {
     if (!action.payload) return state;
-    console.log("rowREDUCER: action.payload:", action.payload);
-
-    console.log("action.payload.view:", action.payload.view);
-    console.log("action.payload.output:", action.payload.output);
-    console.log("state:", state);
-
-    // we need to ensure that ALL row# keys remain. Right now it looks like this is being remove from the state
-
     switch (action.type) {
       case "set": {
-        // ONLY the output goes to the AppState
-        // dispAppState({
-        //   type: "set",
-        //   payload: {
-        //     [marqName]: action.payload.output,
-        //   },
-        // });
-
         // updates the Marquee UI:
         return { ...state, ...action.payload };
       }
-      // case "compare": {
-      //   dispAppState({
-      //     type: "compare",
-      //     payload: {
-      //       [marqName]: action.payload.output,
-      //     },
-      //   });
-      //   console.log("action.payload:", action.payload.view);
-      //   // updates the Marquee UI:
-      //   return { ...state, ...action.payload.view };
-      // }
-      // case "reset": {
-      //   // full appState reset!
-      //   dispAppState({
-      //     type: "reset",
-      //     payload: action.payload.output,
-      //   });
-      //   console.log("action.payload:", action.payload.view);
-      //   // updates the Marquee UI:
-      //   return { ...state, ...action.payload.view };
-      // }
       default: {
         return state;
       }
@@ -92,20 +54,15 @@ export default function Marquee({
 
   ///////////////////////////////////////////
 
-  console.log("rowState:", rowState);
   // !LEGEND:
   // row = row0, row1, row2
   // row[i] = the index of the letter
-  console.log("rowState.view b4 Marquee 0:", rowState.view.row0);
-  console.log("rowState.view b4 Marquee 1:", rowState.view.row1);
-  console.log("rowState.view b4 Marquee 2:", rowState.view.row2);
 
-  // the unplotted row is return undefined... why is this???
   // rows are mapped from keysArr
   // blocks are mapped from rowState.view[row]
 
-  // the state change is only changing the component where the state belongs
-  console.log("selectedMarqObj[marqName]:", selectedMarqObj[marqName]);
+  console.log("rowState:", rowState);
+
   return (
     <StyledMarquee
       marqName={marqName}
@@ -174,6 +131,7 @@ const StyledMarquee = styled.div`
   animation-iteration-count: 1;
   z-index: 1;
   padding: 1rem;
+  border-radius: 5px;
 
   // marquee select. With using the data prop, we cause a FULL rerendering if the marquee component
   &[data-active="true"] {
@@ -185,7 +143,6 @@ const StyledMarquee = styled.div`
     background-position: 0 0, 0 100%, 0 0, 100% 0;
     animation: ${linearGradientMove} 0.3s infinite linear;
   }
-  border-radius: 5px;
 `;
 
 const StyledMarqueeRow = styled.div`

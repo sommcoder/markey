@@ -7,13 +7,15 @@ export default function SetCurrBtn({
   keysArr,
   formName,
 }) {
+  console.log("SET-BTN rowState:", rowState);
+  console.log("SET-BTN keysArr:", keysArr);
   function submitMarquee(ev) {
     console.log("ev:", ev);
 
     const updatedRowValuesObj = setCurrMarquee(ev, keysArr, rowState);
     console.log("updatedRowValuesObj:", updatedRowValuesObj);
 
-    // dispatch:
+    // dispatch reducer:
     dispRowState({
       type: "set",
       payload: updatedRowValuesObj,

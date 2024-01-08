@@ -2,25 +2,30 @@ import Key from "../Key/Key";
 import styled from "styled-components";
 import { characterSet } from "./characterSet";
 
-export default function Keyboard() {
+export default function KeySet({ selectedMarqObj }) {
+  function handleKeyDown(ev) {
+    ev.preventDefault();
+    console.log("ev:", ev);
+  }
   return (
-    <StyledKeyboardContainer>
+    <StyledSetContainer onKeyDown={(ev) => handleKeyDown}>
       {characterSet.map((obj) => (
-        <StyledKeyboardRow key={obj.rowNum}>
+        <StyledKeySetRow key={obj.rowNum}>
           {obj.characters.map((char) => (
             <Key
+              selectedMarqObj={selectedMarqObj}
               char={char}
               rowNum={obj.rowNum}
               key={`${obj.rowNum}-${char}`}
             />
           ))}
-        </StyledKeyboardRow>
+        </StyledKeySetRow>
       ))}
-    </StyledKeyboardContainer>
+    </StyledSetContainer>
   );
 }
 
-const StyledKeyboardContainer = styled.div`
+const StyledSetContainer = styled.div`
   margin: 0 auto;
   position: sticky;
   display: grid;
@@ -34,7 +39,7 @@ const StyledKeyboardContainer = styled.div`
   overflow: hidden;
 `;
 
-const StyledKeyboardRow = styled.div`
+const StyledKeySetRow = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;

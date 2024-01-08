@@ -1,10 +1,10 @@
 import styled from "styled-components";
 import HamburgerMenu from "../HamburgerMenu/HamburgerMenu";
 
-export default function NavBar(props) {
+export default function NavBar() {
   return (
     <StyledNavBar>
-      <StyledHeader>{props.title}</StyledHeader>
+      <StyledHeader>Mar-Key</StyledHeader>
       <HamburgerMenu />
     </StyledNavBar>
   );
