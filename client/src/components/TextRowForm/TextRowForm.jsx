@@ -5,7 +5,9 @@ import SetCurrBtn from "../SetCurrBtn/SetCurrBtn";
 import ResetBtn from "../ResetBtn/ResetBtn";
 import CompareBtn from "../CompareBtn/CompareBtn";
 
-import { useRef } from "react";
+import setCurrMarquee from "../../functions/setCurrMarquee";
+
+import { useEffect, useRef } from "react";
 
 export default function TextRowForm({
   data,
@@ -17,7 +19,7 @@ export default function TextRowForm({
   marqName,
   marqSize,
   formName,
-  selectedMarq,
+  selectedMarqObj,
 }) {
   /*
   #component description:
@@ -43,15 +45,31 @@ export default function TextRowForm({
     row2: { values: [], sizes: 0 },
   };
 
+  function getNextEl(row) {
+    let currEl = inputRefsArr.current.findIndex(
+      (el) => el.dataset.rowid === row
+    );
+    // if last el, start from the
+    return currEl === inputRefsArr.current.length - 1 ? 0 : currEl + 1;
+  }
+
   function validateEntry(ev) {
     let key = ev.key;
     let row = ev.target.dataset.rowid;
 
     if (key === " ") ev.preventDefault();
     if (key === "Enter") {
-      ev.preventDefault(); // don't submit
+      console.log("row:", row);
+      console.log("inputRefsArr:", inputRefsArr);
+
+      let nextEl = getNextEl(row);
+      inputRefsArr.current[nextEl].focus();
+      // dispatch reducer:
+      dispRowState({
+        type: "set",
+        payload: setCurrMarquee(ev, keysArr, rowState, data),
+      });
       return;
-      // maybe a more elegent solution would be that enter will focus onto the next line and after the LAST input field, the focus will be on the SET button (or more accurately, whichever button is enabled)
     }
     if (key === "Backspace" || key === "Delete") {
       if (inputValidationObj[row].sizes === 0) {
@@ -92,35 +110,37 @@ export default function TextRowForm({
     return;
   }
 
-  // if (selectedMarq) {
-  //   console.log("MARQ SELECTED");
-
-  //   inputRefsArr.current[0].focus();
-  //   // inputRefsArr.current.focus();
-  // }
+  // if current marq selected, focus on FIRST input element
+  // this doesn't rerender when we submit the form thankfully
+  useEffect(() => {
+    if (selectedMarqObj[marqName]) inputRefsArr.current[0].focus();
+  }, [selectedMarqObj]);
 
   return (
     <>
       <form id={formName}>
         {keysArr.map((row) => (
           <StyledTextRow
+            form={formName}
             key={`${marqName}-${row}`}
             readOnly
             ref={addToRefsArr}
             data-rowid={row}
             type="text"
             name={row}
-            onKeyDown={validateEntry}
+            onKeyDown={(ev) => validateEntry(ev)}
           />
         ))}
       </form>
       <SetCurrBtn
+        data={data}
         rowState={rowState}
         formName={formName}
         keysArr={keysArr}
         dispRowState={dispRowState}
       />
       <CompareBtn
+        data={data}
         rowState={rowState}
         formName={formName}
         keysArr={keysArr}

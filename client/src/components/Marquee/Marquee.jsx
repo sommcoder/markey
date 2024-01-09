@@ -33,10 +33,10 @@ export default function Marquee({
   // input is what we render as Block components
   // output is an OBJECT of each ltr and the count of its appearance
 
-  const keysArr = Object.keys(initMarqRowState.view);
-
   const reducer = (state, action) => {
     if (!action.payload) return state;
+    console.log("state:", state);
+    console.log("action.payload:", action.payload);
     switch (action.type) {
       case "set": {
         // updates the Marquee UI:
@@ -48,11 +48,9 @@ export default function Marquee({
     }
   };
 
-  //! Marquee is the immediate parent of Block & TextRowForm so therefore the rowState is managed here
-
   const [rowState, dispRowState] = useReducer(reducer, initMarqRowState);
-
   ///////////////////////////////////////////
+  const keysArr = Object.keys(initMarqRowState.view);
 
   // !LEGEND:
   // row = row0, row1, row2
@@ -90,7 +88,7 @@ export default function Marquee({
       ))}
       <TextRowForm
         data={data}
-        formName={`${marqName}-form`}
+        formName={`${marqName}-Form`}
         appState={appState}
         dispRowState={dispRowState}
         dispAppState={dispAppState}

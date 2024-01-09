@@ -1,7 +1,6 @@
 ﻿import styled from "styled-components";
-import data from "../../data/blockData.json";
 
-export default function StockTracker({ char, rowNum }) {
+export default function StockTracker({ char, rowNum, data }) {
   /*
  
 display the current stock based on what has been entered AND set,

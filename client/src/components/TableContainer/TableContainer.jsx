@@ -1,10 +1,8 @@
 ﻿import styled from "styled-components";
 import Marquee from "../Marquee/Marquee";
-import { useQuery } from "@tanstack/react-query";
-
-import { getCharacterStock } from "../../api/api";
 
 export default function TableContainer({
+  data,
   marKeysArr,
   appState,
   dispAppState,
@@ -12,13 +10,6 @@ export default function TableContainer({
   selectedMarqObj,
   switchSelectedMarq,
 }) {
-  const { isLoading, isSuccess, isError, data, error } = useQuery({
-    queryKey: ["get-characters"],
-    queryFn: getCharacterStock, // no parentheses!
-  }); // makes MULTIPLE retry queries automatically if query fails.
-
-  // fetchOnWindowFocus();
-
   return (
     <StyledTableContainer>
       {marKeysArr.map((el) => (

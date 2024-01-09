@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import StockTracker from "../StockTracker/StockTracker";
 
-export default function Key({ char, selectedMarqObj }) {
+export default function Key({ char, selectedMarqObj, data }) {
   function handleKeyClick(ev) {
     ev.preventDefault();
     console.log("ev:", ev);
@@ -29,14 +29,14 @@ export default function Key({ char, selectedMarqObj }) {
     return (
       <StyledKey onClick={(ev) => handleKeyClick(ev)} value={char}>
         <div className="button-text">{char}</div>
-        <StockTracker char={char} />
+        <StockTracker data={data} char={char} />
       </StyledKey>
     );
   } else
     return (
       <StyledKeySpecial onClick={(ev) => handleKeyClick(ev)} value={char}>
         <div className="button-text">{char}</div>
-        <StockTracker char={char} />
+        <StockTracker data={data} char={char} />
       </StyledKeySpecial>
     );
 }

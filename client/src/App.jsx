@@ -7,13 +7,18 @@ import { useState, useReducer } from "react";
 import styled, { ThemeProvider } from "styled-components";
 import GlobalStyles from "./GlobalStyles";
 /////////////////////////////////////////
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
-// Create a client
-const queryClient = new QueryClient();
+import { useQuery } from "@tanstack/react-query";
+
+import { getCharacterStock } from "./api/api.js";
 
 export default function App() {
+  const { isLoading, isSuccess, isError, data, error } = useQuery({
+    queryKey: ["get-characters"],
+    queryFn: getCharacterStock, // no parentheses!
+  }); // makes MULTIPLE retry queries automatically if query fails.
+
+  // fetchOnWindowFocus();
   // MODAL POPUP STATE:
   const [modalState, toggleModal] = useState(false);
 
@@ -66,33 +71,39 @@ export default function App() {
 
   const marKeysArr = Object.keys(appState);
 
+  /*
+   
+  1) each time appState changes, we need to go through the appState[marqName]
+  2) How can we detect ONLY the keys that have changed? This is through the action.payload right?
+  3) useEffect(() => action.payload) to determine remaining stock of each character
+   
+  */
+
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyles />
-      <QueryClientProvider client={queryClient}>
-        <ReactQueryDevtools />
-        <StyledAppContainer>
-          {toggleModal ? (
-            <Modal
-              modalState={modalState}
-              toggleModal={toggleModal}
-              appState={appState}
-            />
-          ) : (
-            ""
-          )}
-          <NavBar />
-          <TableContainer
-            marKeysArr={marKeysArr}
+      <StyledAppContainer>
+        {toggleModal ? (
+          <Modal
+            modalState={modalState}
+            toggleModal={toggleModal}
             appState={appState}
-            dispAppState={dispAppState}
-            selectedMarqObj={selectedMarqObj}
-            switchSelectedMarq={switchSelectedMarq}
-            marqSizes={marqSizes}
           />
-          <KeySet selectedMarqObj={selectedMarqObj} />
-        </StyledAppContainer>
-      </QueryClientProvider>
+        ) : (
+          ""
+        )}
+        <NavBar />
+        <TableContainer
+          data={data}
+          marKeysArr={marKeysArr}
+          appState={appState}
+          dispAppState={dispAppState}
+          selectedMarqObj={selectedMarqObj}
+          switchSelectedMarq={switchSelectedMarq}
+          marqSizes={marqSizes}
+        />
+        <KeySet data={data} selectedMarqObj={selectedMarqObj} />
+      </StyledAppContainer>
     </ThemeProvider>
   );
 }

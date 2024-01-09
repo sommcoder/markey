@@ -2,7 +2,7 @@ import Key from "../Key/Key";
 import styled from "styled-components";
 import { characterSet } from "./characterSet";
 
-export default function KeySet({ selectedMarqObj }) {
+export default function KeySet({ selectedMarqObj, data }) {
   function handleKeyDown(ev) {
     ev.preventDefault();
     console.log("ev:", ev);
@@ -13,6 +13,7 @@ export default function KeySet({ selectedMarqObj }) {
         <StyledKeySetRow key={obj.rowNum}>
           {obj.characters.map((char) => (
             <Key
+              data={data}
               selectedMarqObj={selectedMarqObj}
               char={char}
               rowNum={obj.rowNum}

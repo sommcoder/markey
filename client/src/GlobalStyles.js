@@ -131,8 +131,8 @@ const GlobalStyles = createGlobalStyle`${css`
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
       monospace;
   }
-
-  div {
+  /* 
+  input {
     animation: fadeInAnimation ease-in-out 1s;
     animation-iteration-count: 1;
 
@@ -144,7 +144,7 @@ const GlobalStyles = createGlobalStyle`${css`
         opacity: 1;
       }
     }
-  }
+  } */
 
   button {
     display: inline-block;
@@ -173,7 +173,7 @@ const GlobalStyles = createGlobalStyle`${css`
 
     padding: 0.5rem;
     text-align: center;
-    animation: fadeInAnimation ease-in-out 1s;
+    /* animation: fadeInAnimation ease-in-out 1s; */
     animation-iteration-count: 1;
 
     outline: solid white;
@@ -201,7 +201,7 @@ const GlobalStyles = createGlobalStyle`${css`
 .Button[data-state='open'] 
      
     */
-
+    /* 
     @keyframes fadeInAnimation {
       start {
         opacity: 0;
@@ -209,7 +209,7 @@ const GlobalStyles = createGlobalStyle`${css`
       end {
         opacity: 1;
       }
-    }
+    } */
   }
 
   .button-text {
@@ -218,7 +218,8 @@ const GlobalStyles = createGlobalStyle`${css`
     height: 100%;
     justify-content: center;
     align-items: center;
-    text-wrap: wrap; // nmot working..?
+    text-wrap: wrap; // not working..?
+    pointer-events: none; // NEEDED! Avoids the issue of the form not submitting due to button-text being clicked instead of the button element
 
     // what we ACTUALLY want is if the button is active, perform this transformation on the button-text box
     &:active {
