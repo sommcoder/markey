@@ -1,42 +1,22 @@
 import styled from "styled-components";
-import StockTracker from "../StockTracker/StockTracker";
+// import StockTracker from "../StockTracker/StockTracker";
 
-export default function Key({ char, selectedMarqObj, data }) {
-  function handleKeyClick(ev) {
-    ev.preventDefault();
-    console.log("ev:", ev);
-    console.log("ev.key:", ev.key);
-  }
+// import { validateInput } from "../../functions/inputValidation";
 
-  // TODO: ensure the StockTracker component is styled nicely and that each stocktracker will display the REMAINING stock of every char that has been submitted AND also that has currently been entered but NOT submitted.
-
-  // We might need to do a useRef...
-
-  // the values in the input fields IS NOT state.. therefore it does seem like this would be an appropriate way to use this hook...
-
-  // we'd have the useRef values, populate them with the values of the Keys that are clicked.. perform the same client side validation and ensure that only the marquees selected have their input rows populated.
-
-  /*
- 
-1) We need to access the input field rows of each of the marquees we need that ref to be passed down 
-
-2) We need to be 
- 
-*/
-
+export default function Key({ data, char }) {
   // Special keys are determined if they are larger than a single char
   if (char.length <= 1) {
     return (
-      <StyledKey onClick={(ev) => handleKeyClick(ev)} value={char}>
+      <StyledKey value={char}>
         <div className="button-text">{char}</div>
-        <StockTracker data={data} char={char} />
+        {/* <StockTracker data={data} char={char} /> */}
       </StyledKey>
     );
   } else
     return (
-      <StyledKeySpecial onClick={(ev) => handleKeyClick(ev)} value={char}>
+      <StyledKeySpecial value={char}>
         <div className="button-text">{char}</div>
-        <StockTracker data={data} char={char} />
+        {/* <StockTracker data={data} char={char} /> */}
       </StyledKeySpecial>
     );
 }

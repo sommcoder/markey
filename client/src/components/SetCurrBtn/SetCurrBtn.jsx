@@ -3,24 +3,17 @@ import setCurrMarquee from "../../functions/setCurrMarquee";
 
 export default function SetCurrBtn({
   data,
-  rowState,
-  dispRowState,
-  keysArr,
+  marqName,
   formName,
+  keysArr,
+  appState,
+  dispAppState,
 }) {
-  console.log("formName:", formName);
-  console.log("SET-BTN rowState:", rowState);
-  console.log("SET-BTN keysArr:", keysArr);
   function submitMarquee(ev) {
-    console.log("ev:", ev);
-    console.log("ev.target.form:", ev.target.form);
-    const updatedRowValuesObj = setCurrMarquee(ev, keysArr, rowState, data);
-    console.log("updatedRowValuesObj:", updatedRowValuesObj);
-
     // dispatch reducer:
-    dispRowState({
+    dispAppState({
       type: "set",
-      payload: updatedRowValuesObj,
+      payload: setCurrMarquee(ev, keysArr, appState, data, marqName),
     });
   }
   return (

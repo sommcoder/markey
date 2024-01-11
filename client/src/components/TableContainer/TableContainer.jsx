@@ -1,34 +1,44 @@
 ﻿import styled from "styled-components";
 import Marquee from "../Marquee/Marquee";
+import { forwardRef } from "react";
 
-export default function TableContainer({
-  data,
-  marKeysArr,
-  appState,
-  dispAppState,
-  marqSizes,
-  selectedMarqObj,
-  switchSelectedMarq,
-}) {
+export default forwardRef(function TableContainer(
+  {
+    data,
+    marKeysArr,
+    appState,
+    dispAppState,
+    marqSizes,
+    selectedMarq,
+    switchSelectedMarq,
+    selectedRow,
+    switchSelectedRow,
+  },
+  ref
+) {
   return (
     <StyledTableContainer>
       {marKeysArr.map((el) => (
         <StyledMarqueeWrapper marqName={el} key={el}>
           <Marquee
+            ref={ref}
             key={`marq-${el}`}
             data={data}
             appState={appState}
             dispAppState={dispAppState}
             marqName={el}
             marqSize={marqSizes[el]}
-            selectedMarqObj={selectedMarqObj}
+            selectedMarq={selectedMarq}
             switchSelectedMarq={switchSelectedMarq}
+            selectedRow={selectedRow}
+            switchSelectedRow={switchSelectedRow}
           />
         </StyledMarqueeWrapper>
       ))}
     </StyledTableContainer>
   );
-}
+});
+
 const StyledTableContainer = styled.div`
   width: 100%;
   /* height: 35vh; // we want this to be scrollable so that the user can always see the keyboard */

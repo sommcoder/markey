@@ -7,49 +7,44 @@ import CompareBtn from "../CompareBtn/CompareBtn";
 
 import setCurrMarquee from "../../functions/setCurrMarquee";
 
-import { useEffect, useRef } from "react";
+import { forwardRef, useEffect, useRef } from "react";
 
-export default function TextRowForm({
-  data,
-  appState,
-  rowState,
-  dispRowState,
-  initMarqRowState,
-  keysArr,
-  marqName,
-  marqSize,
-  formName,
-  selectedMarqObj,
-}) {
-  /*
-  #component description:
-  - Live input validation
-  - Checks Data.json for valid entries
-  - applies error animation in validateEntry()
-  */
-
-  const inputRefsArr = useRef([]);
-  // TODO: looking into forwarding refs to other/multiple components
-
-  // forward each textrow ref UP to the Marquee component.
-  // on state change of selectedMarq, useEffect will apply a focus event on the FIRST text row
-
-  // populates the refArray on render
-  const addToRefsArr = (el) => {
-    if (el && !inputRefsArr.current.includes(el)) inputRefsArr.current.push(el);
-  };
-
+export default forwardRef(function TextRowForm(
+  {
+    data,
+    appState,
+    dispAppState,
+    keysArr,
+    marqName,
+    marqSize,
+    formName,
+    selectedMarq,
+    selectedRow,
+    switchSelectedRow,
+  },
+  ref
+) {
+  // NOT state. Just allows for client-side validation via onKeyDown event:
   const inputValidationObj = {
     row0: { values: [], sizes: 0 },
     row1: { values: [], sizes: 0 },
     row2: { values: [], sizes: 0 },
   };
+  // tracks the sequence of characters entered through onKeyDown():
+  const inputRefsArr = useRef([]);
+
+  function addToRefsArr(el) {
+    if (el && !inputRefsArr.current.includes(el)) {
+      inputRefsArr.current.push(el);
+    }
+  }
 
   function getNextEl(row) {
+    if (!row) return 0;
     let currEl = inputRefsArr.current.findIndex(
       (el) => el.dataset.rowid === row
     );
-    // if last el, start from the
+    // if last el, start from the beginning
     return currEl === inputRefsArr.current.length - 1 ? 0 : currEl + 1;
   }
 
@@ -60,14 +55,14 @@ export default function TextRowForm({
     if (key === " ") ev.preventDefault();
     if (key === "Enter") {
       console.log("row:", row);
-      console.log("inputRefsArr:", inputRefsArr);
 
       let nextEl = getNextEl(row);
-      inputRefsArr.current[nextEl].focus();
+      console.log("nextEl:", nextEl);
+      switchSelectedRow(`row${nextEl}`);
       // dispatch reducer:
-      dispRowState({
+      dispAppState({
         type: "set",
-        payload: setCurrMarquee(ev, keysArr, rowState, data),
+        payload: setCurrMarquee(ev, keysArr, appState, data, marqName),
       });
       return;
     }
@@ -83,12 +78,13 @@ export default function TextRowForm({
       return;
     }
     if (!data[key]) return;
-    // 0.1 = block border size!
+    // key doesn't exist in data
+    // 0.1 = accounts for block border size
     let currBlockSize = +data[key].size + 0.1;
-
     // Max capacity check:
+    // existing width + current block size would be greater than the marqSize
     if (inputValidationObj[row].sizes + currBlockSize > marqSize) {
-      inputRefsArr.current[keysArr.indexOf(row)].animate(
+      ev.target.form[row].animate(
         [
           {
             transform: "translateX(-0.33%)",
@@ -107,55 +103,74 @@ export default function TextRowForm({
     inputValidationObj[row].sizes += currBlockSize;
     inputValidationObj[row].values.push(key);
     ev.target.value = inputValidationObj[row].values.join("");
-    return;
   }
 
-  // if current marq selected, focus on FIRST input element
-  // this doesn't rerender when we submit the form thankfully
+  // when selectedMarq changes, switch selectedRow to nextEl
   useEffect(() => {
-    if (selectedMarqObj[marqName]) inputRefsArr.current[0].focus();
-  }, [selectedMarqObj]);
+    if (selectedMarq === marqName) {
+      switchSelectedRow("row0");
+    }
+  }, [selectedMarq]);
+
+  function handleSelectedRow(ev, row) {
+    console.log(" handled Selected row:", row);
+    console.log("ev:", ev);
+    ev.preventDefault();
+    console.log("selectedMarq:", selectedMarq, "marq:", marqName);
+
+    if (selectedMarq === marqName) {
+      switchSelectedRow(row);
+    }
+  }
 
   return (
     <>
-      <form id={formName}>
+      <form id={formName} ref={ref[marqName]}>
         {keysArr.map((row) => (
           <StyledTextRow
+            ref={addToRefsArr}
             form={formName}
             key={`${marqName}-${row}`}
             readOnly
-            ref={addToRefsArr}
             data-rowid={row}
             type="text"
             name={row}
+            selected={
+              (selectedMarq === marqName && selectedRow) === row ? true : false
+            }
+            onClick={(ev) => handleSelectedRow(ev, row)}
             onKeyDown={(ev) => validateEntry(ev)}
           />
         ))}
       </form>
       <SetCurrBtn
         data={data}
-        rowState={rowState}
+        marqName={marqName}
         formName={formName}
         keysArr={keysArr}
-        dispRowState={dispRowState}
+        appState={appState}
+        dispAppState={dispAppState}
       />
       <CompareBtn
         data={data}
-        rowState={rowState}
+        marqName={marqName}
         formName={formName}
         keysArr={keysArr}
-        dispRowState={dispRowState}
+        appState={appState}
+        dispAppState={dispAppState}
       />
       <ResetBtn
+        data={data}
         formName={formName}
+        marqName={marqName}
         keysArr={keysArr}
-        dispRowState={dispRowState}
-        initMarqRowState={initMarqRowState}
+        appState={appState}
+        dispAppState={dispAppState}
       />
       {appState[marqName].isError === true ? <ErrorMsg /> : ""}
     </>
   );
-}
+});
 
 // CREATE a passive/disabled button state.
 /*
@@ -183,10 +198,17 @@ const StyledTextRow = styled.input`
     0 16px 32px rgba(0, 0, 0, 0.07), 0 32px 64px rgba(0, 0, 0, 0.07);
 
   &:hover {
-    background-color: rgba(176, 224, 230, 0.25);
+    background-color: ${(props) =>
+      props.selected
+        ? "rgba(176, 224, 230, 0.75)"
+        : "rgba(176, 224, 230, 0.25)"};
   }
-  &:focus {
+  /* &:focus {
     outline: none;
     background-color: rgba(176, 224, 230, 0.75);
-  }
+  } */
+
+  outline: none;
+  background-color: ${(props) =>
+    props.selected ? "rgba(176, 224, 230, 0.75)" : "white"};
 `;

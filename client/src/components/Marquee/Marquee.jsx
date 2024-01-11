@@ -1,81 +1,42 @@
-import { useEffect, useReducer, useState } from "react";
 import TextRowForm from "../TextRowForm/TextRowForm.jsx";
 import Block from "../Block/Block.jsx";
 import styled, { keyframes } from "styled-components";
 import SelectBtn from "../SelectBtn/SelectBtn.jsx";
+import { forwardRef } from "react";
 
-export default function Marquee({
-  data,
-  appState,
-  dispAppState,
-  marqName,
-  marqSize,
-  selectedMarqObj,
-  switchSelectedMarq,
-}) {
-  /*
-  !component description:
-  - appState tracks LETTERS and QUANTITY for the modal output
-  - marqState tracks INPUT and THEIR SIZE for rending the Block components dynamically
-  */
+export default forwardRef(function Marquee(
+  {
+    data,
+    appState,
+    dispAppState,
+    marqName,
+    marqSize,
+    selectedMarq,
+    switchSelectedMarq,
+    selectedRow,
+    switchSelectedRow,
+  },
+  ref
+) {
   const marqWidth = marqSize + "rem";
-
-  // for mapping the Block components:
-  const initMarqRowState = {
-    view: {
-      row0: [], // [ [value, size], [value, size], etc]
-      row1: [],
-      row2: [],
-    },
-    output: {}, // { ltr: #, ltr: # }
-  };
-
-  // input is what we render as Block components
-  // output is an OBJECT of each ltr and the count of its appearance
-
-  const reducer = (state, action) => {
-    if (!action.payload) return state;
-    console.log("state:", state);
-    console.log("action.payload:", action.payload);
-    switch (action.type) {
-      case "set": {
-        // updates the Marquee UI:
-        return { ...state, ...action.payload };
-      }
-      default: {
-        return state;
-      }
-    }
-  };
-
-  const [rowState, dispRowState] = useReducer(reducer, initMarqRowState);
-  ///////////////////////////////////////////
-  const keysArr = Object.keys(initMarqRowState.view);
-
-  // !LEGEND:
-  // row = row0, row1, row2
-  // row[i] = the index of the letter
-
-  // rows are mapped from keysArr
-  // blocks are mapped from rowState.view[row]
-
-  console.log("rowState:", rowState);
+  const keysArr = Object.keys(appState[marqName].rows);
 
   return (
     <StyledMarquee
       marqName={marqName}
-      data-active={selectedMarqObj[marqName] ? "true" : "false"}
+      data-active={selectedMarq === marqName ? "true" : "false"}
     >
       <SelectBtn
         keysArr={keysArr}
         marqName={marqName}
-        selectedMarqObj={selectedMarqObj}
+        selectedMarq={selectedMarq}
         switchSelectedMarq={switchSelectedMarq}
+        onBlur={(ev) => ev.preventDefault()}
       />
       {keysArr.map((rowName) => (
         <StyledMarqueeRow marqWidth={marqWidth} key={`${marqName}-${rowName}`}>
-          {rowState.view[rowName].length > 0
-            ? rowState.view[rowName].map((blockKey, i) => (
+          {appState[marqName].rows[rowName].length > 0
+            ? appState[marqName].rows[rowName].map((blockKey, i) => (
                 <Block
                   key={`${marqName}-${rowName}-${i}`}
                   block={blockKey[0]}
@@ -87,31 +48,22 @@ export default function Marquee({
         </StyledMarqueeRow>
       ))}
       <TextRowForm
+        ref={ref}
         data={data}
         formName={`${marqName}-Form`}
         appState={appState}
-        dispRowState={dispRowState}
         dispAppState={dispAppState}
         marqName={marqName}
         keysArr={keysArr}
         marqSize={marqSize}
-        rowState={rowState}
-        initMarqRowState={initMarqRowState}
-        selectedMarqObj={selectedMarqObj}
+        selectedMarq={selectedMarq}
         switchSelectedMarq={switchSelectedMarq}
+        selectedRow={selectedRow}
+        switchSelectedRow={switchSelectedRow}
       />
     </StyledMarquee>
   );
-}
-
-const fadeInAnimation = keyframes`
-     0% {
-      opacity: 0;
-    }
-    100% {
-      opacity: 1;
-    }
-`;
+});
 
 const linearGradientMove = keyframes`
   100% {
@@ -125,8 +77,6 @@ const StyledMarquee = styled.div`
     props.marqSize * 1.5 + "rem" ? props.marqSize * 1.5 + "rem" : "350px"};
   align-items: center;
   justify-content: center;
-  animation: ${fadeInAnimation} ease-in-out 0.75s;
-  animation-iteration-count: 1;
   z-index: 1;
   padding: 1rem;
   border-radius: 5px;
@@ -140,6 +90,7 @@ const StyledMarquee = styled.div`
     background-size: 4px 1px, 4px 1px, 1px 4px, 1px 4px;
     background-position: 0 0, 0 100%, 0 0, 100% 0;
     animation: ${linearGradientMove} 0.3s infinite linear;
+    border-
   }
 `;
 

@@ -2,26 +2,12 @@ import styled from "styled-components";
 
 export default function SelectBtn({
   marqName,
-  selectedMarqObj,
+  selectedMarq,
   switchSelectedMarq,
 }) {
   function toggleDisplay(ev) {
     ev.preventDefault();
-    const newMarqObj = {
-      // had to hard code the object because Object.is() kept passing true when copying selectedMarqObj
-      West: false,
-      East: false,
-      South: false,
-    };
-    // RESET the marq object
-    console.log("BEFORE newMarqObj:", newMarqObj);
-
-    for (const marq of Object.keys(newMarqObj)) {
-      marq === marqName
-        ? (newMarqObj[marq] = true)
-        : (newMarqObj[marq] = false);
-    }
-    switchSelectedMarq(newMarqObj);
+    switchSelectedMarq(marqName);
   }
   /*
    

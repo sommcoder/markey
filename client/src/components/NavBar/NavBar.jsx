@@ -4,7 +4,15 @@ import HamburgerMenu from "../HamburgerMenu/HamburgerMenu";
 export default function NavBar() {
   return (
     <StyledNavBar>
-      <StyledHeader>Mar-Key</StyledHeader>
+      <StyledHeader>
+        <img
+          src="/mar-key logo.svg"
+          style={{
+            height: "6rem",
+            width: "30rem",
+          }}
+        />
+      </StyledHeader>
       <HamburgerMenu />
     </StyledNavBar>
   );
