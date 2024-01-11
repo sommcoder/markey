@@ -19,8 +19,8 @@ export default function NavBar() {
 }
 
 const StyledNavBar = styled.nav`
-  position: -webkit-sticky;
-  position: sticky;
+  align-items: center;
+  position: relative;
   top: 0; /* required */
   z-index: 4;
   width: 100%;

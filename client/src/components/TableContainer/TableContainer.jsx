@@ -13,6 +13,7 @@ export default forwardRef(function TableContainer(
     switchSelectedMarq,
     selectedRow,
     switchSelectedRow,
+    keysArr,
   },
   ref
 ) {
@@ -23,6 +24,7 @@ export default forwardRef(function TableContainer(
           <Marquee
             ref={ref}
             key={`marq-${el}`}
+            keysArr={keysArr}
             data={data}
             appState={appState}
             dispAppState={dispAppState}
@@ -51,7 +53,7 @@ const StyledTableContainer = styled.div`
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr 1fr;
   grid-gap: 1rem;
-  margin-bottom: 1rem;
+  margin: 2.5rem 0;
 
   // DESKTOP/TABLET:
   @media (min-width: 800px) {

@@ -8,6 +8,7 @@ export default forwardRef(function Marquee(
   {
     data,
     appState,
+    keysArr,
     dispAppState,
     marqName,
     marqSize,
@@ -19,7 +20,6 @@ export default forwardRef(function Marquee(
   ref
 ) {
   const marqWidth = marqSize + "rem";
-  const keysArr = Object.keys(appState[marqName].rows);
 
   return (
     <StyledMarquee
@@ -33,12 +33,12 @@ export default forwardRef(function Marquee(
         switchSelectedMarq={switchSelectedMarq}
         onBlur={(ev) => ev.preventDefault()}
       />
-      {keysArr.map((rowName) => (
-        <StyledMarqueeRow marqWidth={marqWidth} key={`${marqName}-${rowName}`}>
-          {appState[marqName].rows[rowName].length > 0
-            ? appState[marqName].rows[rowName].map((blockKey, i) => (
+      {keysArr.map((row) => (
+        <StyledMarqueeRow marqWidth={marqWidth} key={`${marqName}-${row}`}>
+          {appState[marqName].rows[row].length > 0
+            ? appState[marqName].rows[row].map((blockKey, i) => (
                 <Block
-                  key={`${marqName}-${rowName}-${i}`}
+                  key={`${marqName}-${row}-${i}`}
                   block={blockKey[0]}
                   style={blockKey[1]}
                   delay={i + 1}
@@ -78,7 +78,7 @@ const StyledMarquee = styled.div`
   align-items: center;
   justify-content: center;
   z-index: 1;
-  padding: 1rem;
+  padding: 2rem;
   border-radius: 5px;
 
   // marquee select. With using the data prop, we cause a FULL rerendering if the marquee component
@@ -90,7 +90,11 @@ const StyledMarquee = styled.div`
     background-size: 4px 1px, 4px 1px, 1px 4px, 1px 4px;
     background-position: 0 0, 0 100%, 0 0, 100% 0;
     animation: ${linearGradientMove} 0.3s infinite linear;
-    border-
+    box-shadow: 0 1px 2px rgba(176, 224, 230, 0.25),
+      0 2px 4px rgba(176, 224, 230, 0.25), 0 4px 8px rgba(176, 224, 230, 0.25),
+      0 8px 16px rgba(176, 224, 230, 0.25),
+      0 16px 32px rgba(176, 224, 230, 0.25),
+      0 32px 64px rgba(176, 224, 230, 0.25);
   }
 `;
 

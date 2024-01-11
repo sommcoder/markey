@@ -10,6 +10,9 @@ export default function HamburgerMenu() {
   );
 }
 const StyledHamburgerMenu = styled.span`
+  position: absolute;
+  right: 2rem;
+  top: 2rem;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -27,7 +30,7 @@ const StyledHamburgerMenu = styled.span`
 
   span {
     height: 3px;
-    background-color: white;
+    background-color: black;
     border-radius: 5px;
     width: 30px;
   }
