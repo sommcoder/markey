@@ -1,20 +1,25 @@
-export default function setCurrMarquee(ev, keysArr, appState, data, marqName) {
-  ev.preventDefault();
-
+export default function setCurrMarquee(
+  keysArr,
+  formEl,
+  appState,
+  data,
+  selectedMarq
+) {
   console.log("appState:", appState);
-  const newRowObj = appState[marqName]; // create a copy of the current state object
+  console.log("formEl:", formEl);
+  console.log("selectedMarq:", selectedMarq);
+  const newRowObj = appState[selectedMarq]; // create a copy of the current state object
   console.log("SET CURR BTN, newRowObj:", newRowObj);
-  let form = ev.target.form; // form Element
 
   // ROW Loop:
   for (let row = 0; row < keysArr.length; row++) {
     // no value clause
-    if (!form[row].value) {
+    if (!formEl[row].value) {
       continue;
     }
-    let inputStr = form[row].value.trim();
-    let rowName = form[row].dataset.rowid;
-    let rowArr = [];
+    let inputStr = formEl[row].value.trim();
+    let rowName = formEl[row].dataset.rowid;
+    let rowArr = []; // sequence of characters
 
     // INPUT Loop:
     for (let ltr = 0; ltr < inputStr.length; ltr++) {
@@ -31,11 +36,11 @@ export default function setCurrMarquee(ev, keysArr, appState, data, marqName) {
       let inputData = data[inputStr[ltr]];
       rowArr.push([inputData.blockSymbol, inputData.size]);
     }
-    form[row].value = ""; // reset row El's value
+    formEl[row].value = ""; // reset row El's value
     newRowObj.rows[rowName] = rowArr;
   }
   console.log("END Set CurrBTN, newRowObj:", newRowObj);
   return {
-    [marqName]: newRowObj,
+    [selectedMarq]: newRowObj,
   };
 }

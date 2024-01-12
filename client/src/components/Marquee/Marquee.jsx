@@ -38,6 +38,7 @@ export default forwardRef(function Marquee(
           {appState[marqName].rows[row].length > 0
             ? appState[marqName].rows[row].map((blockKey, i) => (
                 <Block
+                  appState={appState}
                   key={`${marqName}-${row}-${i}`}
                   block={blockKey[0]}
                   style={blockKey[1]}
@@ -68,7 +69,7 @@ export default forwardRef(function Marquee(
 const linearGradientMove = keyframes`
   100% {
     background-position: 4px 0, -4px 100%, 0 -4px, 100% 4px;
-  }
+  } 
 `;
 
 const StyledMarquee = styled.div`
@@ -79,7 +80,6 @@ const StyledMarquee = styled.div`
   justify-content: center;
   z-index: 1;
   padding: 2rem;
-  border-radius: 5px;
 
   // marquee select. With using the data prop, we cause a FULL rerendering if the marquee component
   &[data-active="true"] {

@@ -1,27 +1,19 @@
 import styled from "styled-components";
-import setCurrMarquee from "../../functions/setCurrMarquee";
 
-export default function SetCurrBtn({
-  data,
-  marqName,
-  formName,
-  keysArr,
-  appState,
-  dispAppState,
-}) {
-  function submitMarquee(ev) {
-    // dispatch reducer:
-    dispAppState({
-      type: "set",
-      payload: setCurrMarquee(ev, keysArr, appState, data, marqName),
-    });
+export default function SetCurrBtn({ formName }) {
+  function handleSubmit(ev) {
+    ev.preventDefault();
+    console.log("ev:", ev);
+    // TODO: handle submit
   }
+
   return (
     <StyledSetCurrBtn
       form={formName}
+      onClick={(ev) => handleSubmit(ev)}
+      name="Set"
       type="submit"
-      onClick={submitMarquee}
-      title="Sets the current marquee"
+      title="Sets the selected marquee"
     >
       <div className="button-text">Set</div>
     </StyledSetCurrBtn>

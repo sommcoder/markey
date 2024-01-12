@@ -14,7 +14,6 @@ export default forwardRef(function TextRowForm(
     dispAppState,
     keysArr,
     marqName,
-    marqSize,
     formName,
     selectedMarq,
     selectedRow,
@@ -29,6 +28,12 @@ export default forwardRef(function TextRowForm(
     }
   }, [selectedMarq]);
 
+  function handleClick(ev) {
+    ev.preventDefault();
+    // switch selected row to clicked row:
+    switchSelectedRow(+ev.target.name);
+  }
+
   return (
     <>
       <form id={formName} ref={ref[marqName]}>
@@ -40,11 +45,13 @@ export default forwardRef(function TextRowForm(
             data-rowid={row}
             type="text"
             name={row}
-            selected={
+            isSelected={
               selectedMarq === marqName && selectedRow === row ? true : false
             }
-            onClick={(ev) => ev.preventDefault()}
+            marqSelected={selectedMarq === marqName}
+            onClick={(ev) => handleClick(ev)}
             onKeyDown={(ev) => ev.preventDefault()}
+            onBlur={(ev) => ev.preventDefault()}
           />
         ))}
       </form>
@@ -91,19 +98,21 @@ const StyledTextRow = styled.input`
   font-size: 1.6rem;
   font-weight: bold;
   z-index: 1;
-  cursor: default;
+  user-select: none;
+  cursor: ${(props) => (props.marqSelected ? "pointer" : "default")};
+  -webkit-user-select: none;
 
   border: 2px solid rgb(118, 118, 118);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.07),
     0 4px 8px rgba(0, 0, 0, 0.07), 0 8px 16px rgba(0, 0, 0, 0.07),
     0 16px 32px rgba(0, 0, 0, 0.07), 0 32px 64px rgba(0, 0, 0, 0.07);
 
-  /* &:focus {
-    outline: none;
-    background-color: rgba(176, 224, 230, 0.75);
-  } */
+  &:hover {
+    background-color: ${(props) =>
+      props.marqSelected ? "rgba(176, 224, 230, 0.473)" : ""};
+  }
 
   outline: none;
   background-color: ${(props) =>
-    props.selected ? "rgba(176, 224, 230, 0.75)" : "white"};
+    props.isSelected ? "rgba(176, 224, 230, 0.75)" : "white"};
 `;

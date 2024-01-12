@@ -1,6 +1,6 @@
 # MARKEY
 
-Mar-key is a handy tool for the employees of Paradise Theatre!
+Mar-key is a handy tool for the employees of Paradise Theatre and a unique idea to help make manually adjusted the tiles on their analogue display just a little bit easier!
 
 It has a few use cases:
 

@@ -1,33 +1,21 @@
 import styled from "styled-components";
 
 import { FiRefreshCcw } from "react-icons/fi";
-import { IconContext } from "react-icons/lib";
 
-export default function ResetBtn({
-  initMarqRowState,
-  dispRowState,
-  formName,
-  keysArr,
-}) {
-  //////////////////////////////////////////////
-  // RESET FORM FUNCTION
-  function resetRows(ev) {
-    ev.preventDefault();
-
-    console.log("reset - ev:", ev);
-
-    const updatedRowValuesObj = initMarqRowState;
-
-    for (let i = 0; i < keysArr.length; i++) ev.target.form[i].value = "";
-
-    dispRowState({
-      type: "reset",
-      payload: updatedRowValuesObj,
-    });
-  }
+export default function ResetBtn({ formName }) {
+  /*
+ create a small modal popup:
+    with an "Are you sure?" prompt
+*/
 
   return (
-    <StyledResetBtn onClick={(ev) => resetRows(ev)}>
+    <StyledResetBtn
+      onClick={(ev) => ev.preventDefault()}
+      formName={formName}
+      name="Reset"
+      title="Resets the selected marquee"
+      type="reset"
+    >
       <div className="button-text">
         <FiRefreshCcw />
       </div>

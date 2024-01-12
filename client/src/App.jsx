@@ -3,22 +3,23 @@ import TableContainer from "./components/TableContainer/TableContainer.jsx";
 import KeySet from "./components/KeySet/KeySet.jsx";
 import Modal from "./components/Modal/Modal.jsx";
 /////////////////////////////////////////
-import { useState, useReducer, forwardRef, useEffect, useRef } from "react";
+import { useState, useReducer, useRef } from "react";
 import styled, { ThemeProvider } from "styled-components";
 import GlobalStyles from "./GlobalStyles";
 /////////////////////////////////////////
-
 import { useQuery } from "@tanstack/react-query";
-
+/////////////////////////////////////////
 import { getCharacterStock } from "./api/api.js";
-
 import setCurrMarquee from "./functions/setCurrMarquee.js";
-
+import getNextElNum from "./functions/getNextElNum.js";
+/////////////////////////////////////////
 export default function App() {
   const { isLoading, isSuccess, isError, data, error } = useQuery({
     queryKey: ["get-characters"],
     queryFn: getCharacterStock, // no parentheses!
   }); // makes MULTIPLE retry queries automatically if query fails.
+
+  // TODO: the special characters don't have accurate blockWidths
 
   // fetchOnWindowFocus();
   // MODAL POPUP STATE:
@@ -61,10 +62,10 @@ export default function App() {
   };
 
   // String state that gets set by switchSelectedMarq(marqName)
-  const [selectedMarq, switchSelectedMarq] = useState("");
+  const [selectedMarq, switchSelectedMarq] = useState();
   // int: 0, 1, 2
   // we can then concat and coerce with 'row'.
-  const [selectedRow, switchSelectedRow] = useState(null);
+  const [selectedRow, switchSelectedRow] = useState();
 
   const keysArr = [0, 1, 2];
 
@@ -120,68 +121,80 @@ export default function App() {
     2: { values: [], sizes: 0 },
   };
 
-  function getNextEl(row) {
-    console.log("row:", row);
-    if (!row) return 0; // no row, back to 1st row
-    if (selectedRow === 2) return 0; // if last el, back to 1st row
-  }
-
   // TOP level handlekey click. we need to pass the key clicks down to StockTracker
   // we also need to be able to PUSH up the onClick of spe
-  function handleKeyDown(ev) {
-    console.log("ev:", ev);
-    console.log("selectedMarq:", selectedMarq);
-    console.log("selectedRow:", selectedRow);
-    console.log("refStateObj:", refStateObj);
 
-    const row = refStateObj[selectedMarq].current[selectedRow];
-    console.log("row:", row);
+  function inputValidation(ev) {
+    if (!selectedMarq) return; // no selected marq?
 
-    let key = ev.key;
+    let key;
+    ev.type === "click" ? (key = ev.target.value) : (key = ev.key);
 
-    if (key === " ") ev.preventDefault();
+    const formEl = refStateObj[selectedMarq].current;
+    // const rowEl = refStateObj[selectedMarq].current[selectedRow];
+    const rowStr = refStateObj[selectedMarq].current[selectedRow].name;
+
+    if (key === " ") ev.preventDefault(); // is this right?
     if (key === "Enter") {
-      console.log("row:", row);
+      console.log(
+        "inputValidationObj[rowStr].values:",
+        inputValidationObj[rowStr].values
+      );
 
-      let nextEl = getNextEl(row);
-      console.log("nextEl:", nextEl);
-      switchSelectedRow(nextEl);
-      // dispatch reducer:
-      dispAppState({
-        type: "set",
-        payload: setCurrMarquee(ev, keysArr, appState, data, selectedMarq),
-      });
-      return;
-    }
-    // skip to next row
-    if (key === "Tab") {
-      let nextEl = getNextEl(row);
-      console.log("nextEl:", nextEl);
-      switchSelectedRow(nextEl);
-      return;
-    }
-    if (key === "Backspace" || key === "Delete") {
-      if (inputValidationObj[row].sizes === 0) {
+      if (inputValidationObj[rowStr].values.length === 0) {
+        // loop through the other rows to double check.. user could have inputted a row but tabbed to a new row before entering/clicking Set
+
+        if (
+          !Object.keys(inputValidationObj).some(
+            (row) => inputValidationObj[row].values.length > 0
+          )
+        )
+          // Error: "No Characters Entered into Marquee"
+          return;
+      } else {
+        switchSelectedRow(getNextElNum(rowStr, selectedRow));
+        // dispatch reducer:
+        dispAppState({
+          type: "set",
+          payload: setCurrMarquee(
+            keysArr,
+            formEl,
+            appState,
+            data,
+            selectedMarq
+          ),
+        });
         return;
       }
-      // update validation Object:
-      inputValidationObj[row].sizes -=
-        +data[inputValidationObj[row].values.at(-1)].size;
-      inputValidationObj[row].values.pop();
-      ev.target.value = inputValidationObj[row].values.join("");
+    }
+    // tab creates some weird functionality with selecting text
+    if (key === "Tab") return;
+
+    if (key === "Backspace" || key === "Delete") {
+      if (inputValidationObj[rowStr].sizes === 0) {
+        return;
+      }
+      // update validation Object sizes:
+      inputValidationObj[rowStr].sizes -=
+        +data[inputValidationObj[rowStr].values.at(-1)].size;
+      // pop from sequence:
+      inputValidationObj[rowStr].values.pop();
+      // update the selected input field:
+      refStateObj[selectedMarq].current[selectedRow].value =
+        inputValidationObj[rowStr].values.join("");
       return;
     }
-    if (!data[key]) return;
-    // key doesn't exist in data
+    if (!data[key]) return; // key doesn't exist in data
+
     // 0.1 = accounts for block border size
     let currBlockSize = +data[key].size + 0.1;
     // Max capacity check:
     // existing width + current block size would be greater than the marqSize
     if (
-      inputValidationObj[row].sizes + currBlockSize >
+      inputValidationObj[rowStr].sizes + currBlockSize >
       marqSizes[selectedMarq]
     ) {
-      refStateObj[selectedMarq].current[row].animate(
+      refStateObj[selectedMarq].current[rowStr].animate(
         [
           {
             transform: "translateX(-0.33%)",
@@ -196,24 +209,21 @@ export default function App() {
       );
       return;
     }
-    // append validation Object:
-    inputValidationObj[row].sizes += currBlockSize;
-    inputValidationObj[row].values.push(key);
-    ev.target.value = inputValidationObj[row].values.join("");
-  }
-
-  function handleClick(ev) {
-    // FIRSTLY, ensure that only buttons from KeySet are handled here
-    if (!ev.target.value) return;
-    console.log("ev:", ev);
+    // append validation object:
+    inputValidationObj[rowStr].sizes += currBlockSize;
+    // push to sequence:
+    inputValidationObj[rowStr].values.push(key);
+    // update input field:
+    refStateObj[selectedMarq].current[selectedRow].value =
+      inputValidationObj[rowStr].values.join("");
   }
 
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyles />
       <StyledAppContainer
-        onKeyDown={(ev) => handleKeyDown(ev)}
-        onClick={(ev) => handleClick(ev)}
+        onKeyDown={(ev) => inputValidation(ev)}
+        onClick={(ev) => inputValidation(ev)}
       >
         {toggleModal ? (
           <Modal

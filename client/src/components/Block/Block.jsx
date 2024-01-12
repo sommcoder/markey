@@ -1,7 +1,10 @@
+import { useEffect } from "react";
 import styled, { keyframes } from "styled-components";
 
-export default function Block({ block, style, delay }) {
+export default function Block({ block, style, delay, appState }) {
   const blockWidth = style + "rem";
+
+  useEffect(() => {}, [appState]);
 
   return (
     <>
@@ -38,7 +41,7 @@ const StyledBlock = styled.input`
   text-transform: uppercase;
   text-decoration: none;
   text-align: center;
-  border: 0.1rem solid grey;
+  border: 0.1rem solid grey; // maybe we look into an inset outline since this wouldn't affect the element sizing I believe? Downside is that we wouldn't be able to target specific sides like in the "not" block below
   user-select: none;
   background-color: white;
   caret-color: transparent;

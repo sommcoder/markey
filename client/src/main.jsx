@@ -5,8 +5,6 @@ import App from "./App.jsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
-// TODO: Create a Desktop Only interface. Only screens over 1200px
-
 // Create a client
 const queryClient = new QueryClient();
 
