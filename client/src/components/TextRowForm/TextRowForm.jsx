@@ -1,11 +1,11 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
-import ErrorMsg from "../ErrorMsg/ErrorMsg";
-import SetCurrBtn from "../SetCurrBtn/SetCurrBtn";
-import ResetBtn from "../ResetBtn/ResetBtn";
-import CompareBtn from "../CompareBtn/CompareBtn";
+import ErrorMsg from '../ErrorMsg/ErrorMsg';
+import SetCurrBtn from '../SetCurrBtn/SetCurrBtn';
+import ResetBtn from '../ResetBtn/ResetBtn';
+import CompareBtn from '../CompareBtn/CompareBtn';
 
-import { forwardRef, useEffect } from "react";
+import { forwardRef, useEffect } from 'react';
 
 export default forwardRef(function TextRowForm(
   {
@@ -37,7 +37,7 @@ export default forwardRef(function TextRowForm(
   return (
     <>
       <form id={formName} ref={ref[marqName]}>
-        {keysArr.map((row) => (
+        {keysArr.map(row => (
           <StyledTextRow
             form={formName}
             key={`${marqName}-${row}`}
@@ -49,9 +49,9 @@ export default forwardRef(function TextRowForm(
               selectedMarq === marqName && selectedRow === row ? true : false
             }
             marqSelected={selectedMarq === marqName}
-            onClick={(ev) => handleClick(ev)}
-            onKeyDown={(ev) => ev.preventDefault()}
-            onBlur={(ev) => ev.preventDefault()}
+            onClick={ev => handleClick(ev)}
+            onKeyDown={ev => ev.preventDefault()}
+            onBlur={ev => ev.preventDefault()}
           />
         ))}
       </form>
@@ -79,7 +79,7 @@ export default forwardRef(function TextRowForm(
         appState={appState}
         dispAppState={dispAppState}
       />
-      {appState[marqName].isError === true ? <ErrorMsg /> : ""}
+      {appState[marqName].isError === true ? <ErrorMsg /> : ''}
     </>
   );
 });
@@ -99,7 +99,7 @@ const StyledTextRow = styled.input`
   font-weight: bold;
   z-index: 1;
   user-select: none;
-  cursor: ${(props) => (props.marqSelected ? "pointer" : "default")};
+  cursor: ${props => (props.marqSelected ? 'pointer' : 'default')};
   -webkit-user-select: none;
 
   border: 2px solid rgb(118, 118, 118);
@@ -108,11 +108,11 @@ const StyledTextRow = styled.input`
     0 16px 32px rgba(0, 0, 0, 0.07), 0 32px 64px rgba(0, 0, 0, 0.07);
 
   &:hover {
-    background-color: ${(props) =>
-      props.marqSelected ? "rgba(176, 224, 230, 0.473)" : ""};
+    background-color: ${props =>
+      props.marqSelected ? 'rgba(176, 224, 230, 0.473)' : ''};
   }
 
   outline: none;
-  background-color: ${(props) =>
-    props.isSelected ? "rgba(176, 224, 230, 0.75)" : "white"};
+  background-color: ${props =>
+    props.isSelected ? 'rgba(176, 224, 230, 0.75)' : 'white'};
 `;

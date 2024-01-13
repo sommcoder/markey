@@ -1,21 +1,21 @@
-import NavBar from "./components/NavBar/NavBar.jsx";
-import TableContainer from "./components/TableContainer/TableContainer.jsx";
-import KeySet from "./components/KeySet/KeySet.jsx";
-import Modal from "./components/Modal/Modal.jsx";
+import NavBar from './components/NavBar/NavBar.jsx';
+import TableContainer from './components/TableContainer/TableContainer.jsx';
+import KeySet from './components/KeySet/KeySet.jsx';
+import Modal from './components/Modal/Modal.jsx';
 /////////////////////////////////////////
-import { useState, useReducer, useRef } from "react";
-import styled, { ThemeProvider } from "styled-components";
-import GlobalStyles from "./GlobalStyles";
+import { useState, useReducer, useRef } from 'react';
+import styled, { ThemeProvider } from 'styled-components';
+import GlobalStyles from './GlobalStyles';
 /////////////////////////////////////////
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from '@tanstack/react-query';
 /////////////////////////////////////////
-import { getCharacterStock } from "./api/api.js";
-import setCurrMarquee from "./functions/setCurrMarquee.js";
-import getNextElNum from "./functions/getNextElNum.js";
+import { getCharacterStock } from './api/api.js';
+import setCurrMarquee from './functions/setCurrMarquee.js';
+import getNextElNum from './functions/getNextElNum.js';
 /////////////////////////////////////////
 export default function App() {
   const { isLoading, isSuccess, isError, data, error } = useQuery({
-    queryKey: ["get-characters"],
+    queryKey: ['get-characters'],
     queryFn: getCharacterStock, // no parentheses!
   }); // makes MULTIPLE retry queries automatically if query fails.
 
@@ -69,16 +69,16 @@ export default function App() {
 
   const keysArr = [0, 1, 2];
 
-  console.log("selectedRow:", selectedRow);
+  console.log('selectedRow:', selectedRow);
 
   const reducer = (state, action) => {
     if (!action.payload) return state;
-    console.log("appREDUCER: action.payload:", action.payload);
+    console.log('appREDUCER: action.payload:', action.payload);
 
     // let marqName = Object.keys(action.payload).join();
 
     switch (action.type) {
-      case "set": {
+      case 'set': {
         return { ...state, ...action.payload };
       }
       // case "compare": {
@@ -128,16 +128,16 @@ export default function App() {
     if (!selectedMarq) return; // no selected marq?
 
     let key;
-    ev.type === "click" ? (key = ev.target.value) : (key = ev.key);
+    ev.type === 'click' ? (key = ev.target.value) : (key = ev.key);
 
     const formEl = refStateObj[selectedMarq].current;
     // const rowEl = refStateObj[selectedMarq].current[selectedRow];
     const rowStr = refStateObj[selectedMarq].current[selectedRow].name;
 
-    if (key === " ") ev.preventDefault(); // is this right?
-    if (key === "Enter") {
+    if (key === ' ') ev.preventDefault(); // is this right?
+    if (key === 'Enter') {
       console.log(
-        "inputValidationObj[rowStr].values:",
+        'inputValidationObj[rowStr].values:',
         inputValidationObj[rowStr].values
       );
 
@@ -146,7 +146,7 @@ export default function App() {
 
         if (
           !Object.keys(inputValidationObj).some(
-            (row) => inputValidationObj[row].values.length > 0
+            row => inputValidationObj[row].values.length > 0
           )
         )
           // Error: "No Characters Entered into Marquee"
@@ -155,7 +155,7 @@ export default function App() {
         switchSelectedRow(getNextElNum(rowStr, selectedRow));
         // dispatch reducer:
         dispAppState({
-          type: "set",
+          type: 'set',
           payload: setCurrMarquee(
             keysArr,
             formEl,
@@ -168,9 +168,9 @@ export default function App() {
       }
     }
     // tab creates some weird functionality with selecting text
-    if (key === "Tab") return;
+    if (key === 'Tab') return;
 
-    if (key === "Backspace" || key === "Delete") {
+    if (key === 'Backspace' || key === 'Delete') {
       if (inputValidationObj[rowStr].sizes === 0) {
         return;
       }
@@ -181,7 +181,7 @@ export default function App() {
       inputValidationObj[rowStr].values.pop();
       // update the selected input field:
       refStateObj[selectedMarq].current[selectedRow].value =
-        inputValidationObj[rowStr].values.join("");
+        inputValidationObj[rowStr].values.join('');
       return;
     }
     if (!data[key]) return; // key doesn't exist in data
@@ -197,12 +197,12 @@ export default function App() {
       refStateObj[selectedMarq].current[rowStr].animate(
         [
           {
-            transform: "translateX(-0.33%)",
-            borderColor: "rgb(255, 0, 0)",
+            transform: 'translateX(-0.33%)',
+            borderColor: 'rgb(255, 0, 0)',
           },
           {
-            transform: "translateX(0.33%)",
-            borderColor: "rgb(255, 0, 0)",
+            transform: 'translateX(0.33%)',
+            borderColor: 'rgb(255, 0, 0)',
           },
         ],
         { duration: 150, iterations: 3 }
@@ -215,15 +215,15 @@ export default function App() {
     inputValidationObj[rowStr].values.push(key);
     // update input field:
     refStateObj[selectedMarq].current[selectedRow].value =
-      inputValidationObj[rowStr].values.join("");
+      inputValidationObj[rowStr].values.join('');
   }
 
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyles />
       <StyledAppContainer
-        onKeyDown={(ev) => inputValidation(ev)}
-        onClick={(ev) => inputValidation(ev)}
+        onKeyDown={ev => inputValidation(ev)}
+        onClick={ev => inputValidation(ev)}
       >
         {toggleModal ? (
           <Modal
@@ -232,7 +232,7 @@ export default function App() {
             appState={appState}
           />
         ) : (
-          ""
+          ''
         )}
         <NavBar />
         <TableContainer
@@ -268,7 +268,6 @@ const StyledAppContainer = styled.div`
   padding-top: 1rem;
   align-content: center;
   align-items: center;
-  max-width: 100%;
   height: 100vh;
   width: 100%;
   background-color: white;
