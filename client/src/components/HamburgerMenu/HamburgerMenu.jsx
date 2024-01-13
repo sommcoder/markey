@@ -1,8 +1,11 @@
 ﻿import styled from "styled-components";
 
 export default function HamburgerMenu() {
+  function handleMenuClick() {
+    // get refs to animate the span's into an x the is on TOP of the overlay
+  }
   return (
-    <StyledHamburgerMenu>
+    <StyledHamburgerMenu onClick={(ev) => handleMenuClick(ev)}>
       <span></span>
       <span></span>
       <span></span>
@@ -12,7 +15,7 @@ export default function HamburgerMenu() {
 const StyledHamburgerMenu = styled.span`
   position: absolute;
   right: 2rem;
-  top: 2rem;
+  top: 25%;
   display: flex;
   flex-direction: column;
   justify-content: space-around;

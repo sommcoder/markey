@@ -131,20 +131,6 @@ const GlobalStyles = createGlobalStyle`${css`
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
       monospace;
   }
-  /* 
-  input {
-    animation: fadeInAnimation ease-in-out 1s;
-    animation-iteration-count: 1;
-
-    @keyframes fadeInAnimation {
-      start {
-        opacity: 0;
-      }
-      end {
-        opacity: 1;
-      }
-    }
-  } */
 
   button {
     display: inline-block;
@@ -194,22 +180,6 @@ const GlobalStyles = createGlobalStyle`${css`
     &:focus {
       filter: brightness(90%);
     }
-
-    /*
-     This is how Shopify does it. They use the data- prop
-    .Button:active,
-.Button[data-state='open'] 
-     
-    */
-    /* 
-    @keyframes fadeInAnimation {
-      start {
-        opacity: 0;
-      }
-      end {
-        opacity: 1;
-      }
-    } */
   }
 
   .button-text {

@@ -1,13 +1,13 @@
-import Key from '../Key/Key';
-import styled from 'styled-components';
-import { characterSet } from './characterSet';
+import Key from "../Key/Key";
+import styled from "styled-components";
+import { characterSet } from "./characterSet";
 
 export default function KeySet({ data }) {
   return (
     <StyledSetContainer>
-      {characterSet.map(obj => (
+      {characterSet.map((obj) => (
         <StyledKeySetRow key={obj.rowNum}>
-          {obj.characters.map(char => (
+          {obj.characters.map((char) => (
             <Key
               data={data}
               char={char}
@@ -22,7 +22,7 @@ export default function KeySet({ data }) {
 }
 
 const StyledSetContainer = styled.div`
-  margin: 0 auto;
+  margin: 2rem;
   position: block;
   display: grid;
   /* max-width: 500px; */

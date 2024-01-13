@@ -1,21 +1,21 @@
-import NavBar from './components/NavBar/NavBar.jsx';
-import TableContainer from './components/TableContainer/TableContainer.jsx';
-import KeySet from './components/KeySet/KeySet.jsx';
-import Modal from './components/Modal/Modal.jsx';
+import NavBar from "./components/NavBar/NavBar.jsx";
+import TableContainer from "./components/TableContainer/TableContainer.jsx";
+import KeySet from "./components/KeySet/KeySet.jsx";
+import Modal from "./components/Modal/Modal.jsx";
 /////////////////////////////////////////
-import { useState, useReducer, useRef } from 'react';
-import styled, { ThemeProvider } from 'styled-components';
-import GlobalStyles from './GlobalStyles';
+import { useState, useReducer, useRef, useEffect } from "react";
+import styled, { ThemeProvider } from "styled-components";
+import GlobalStyles from "./GlobalStyles";
 /////////////////////////////////////////
-import { useQuery } from '@tanstack/react-query';
+import { useQuery } from "@tanstack/react-query";
 /////////////////////////////////////////
-import { getCharacterStock } from './api/api.js';
-import setCurrMarquee from './functions/setCurrMarquee.js';
-import getNextElNum from './functions/getNextElNum.js';
+import { getCharacterStock } from "./api/api.js";
+import setCurrMarquee from "./functions/setCurrMarquee.js";
+import getNextElNum from "./functions/getNextElNum.js";
 /////////////////////////////////////////
 export default function App() {
   const { isLoading, isSuccess, isError, data, error } = useQuery({
-    queryKey: ['get-characters'],
+    queryKey: ["get-characters"],
     queryFn: getCharacterStock, // no parentheses!
   }); // makes MULTIPLE retry queries automatically if query fails.
 
@@ -69,16 +69,16 @@ export default function App() {
 
   const keysArr = [0, 1, 2];
 
-  console.log('selectedRow:', selectedRow);
+  console.log("selectedRow:", selectedRow);
 
   const reducer = (state, action) => {
     if (!action.payload) return state;
-    console.log('appREDUCER: action.payload:', action.payload);
+    console.log("appREDUCER: action.payload:", action.payload);
 
     // let marqName = Object.keys(action.payload).join();
 
     switch (action.type) {
-      case 'set': {
+      case "set": {
         return { ...state, ...action.payload };
       }
       // case "compare": {
@@ -128,16 +128,16 @@ export default function App() {
     if (!selectedMarq) return; // no selected marq?
 
     let key;
-    ev.type === 'click' ? (key = ev.target.value) : (key = ev.key);
+    ev.type === "click" ? (key = ev.target.value) : (key = ev.key);
 
     const formEl = refStateObj[selectedMarq].current;
     // const rowEl = refStateObj[selectedMarq].current[selectedRow];
     const rowStr = refStateObj[selectedMarq].current[selectedRow].name;
 
-    if (key === ' ') ev.preventDefault(); // is this right?
-    if (key === 'Enter') {
+    if (key === " ") ev.preventDefault(); // is this right?
+    if (key === "Enter") {
       console.log(
-        'inputValidationObj[rowStr].values:',
+        "inputValidationObj[rowStr].values:",
         inputValidationObj[rowStr].values
       );
 
@@ -146,7 +146,7 @@ export default function App() {
 
         if (
           !Object.keys(inputValidationObj).some(
-            row => inputValidationObj[row].values.length > 0
+            (row) => inputValidationObj[row].values.length > 0
           )
         )
           // Error: "No Characters Entered into Marquee"
@@ -155,7 +155,7 @@ export default function App() {
         switchSelectedRow(getNextElNum(rowStr, selectedRow));
         // dispatch reducer:
         dispAppState({
-          type: 'set',
+          type: "set",
           payload: setCurrMarquee(
             keysArr,
             formEl,
@@ -168,9 +168,9 @@ export default function App() {
       }
     }
     // tab creates some weird functionality with selecting text
-    if (key === 'Tab') return;
+    if (key === "Tab") return;
 
-    if (key === 'Backspace' || key === 'Delete') {
+    if (key === "Backspace" || key === "Delete") {
       if (inputValidationObj[rowStr].sizes === 0) {
         return;
       }
@@ -181,7 +181,7 @@ export default function App() {
       inputValidationObj[rowStr].values.pop();
       // update the selected input field:
       refStateObj[selectedMarq].current[selectedRow].value =
-        inputValidationObj[rowStr].values.join('');
+        inputValidationObj[rowStr].values.join("");
       return;
     }
     if (!data[key]) return; // key doesn't exist in data
@@ -197,12 +197,12 @@ export default function App() {
       refStateObj[selectedMarq].current[rowStr].animate(
         [
           {
-            transform: 'translateX(-0.33%)',
-            borderColor: 'rgb(255, 0, 0)',
+            transform: "translateX(-0.33%)",
+            borderColor: "rgb(255, 0, 0)",
           },
           {
-            transform: 'translateX(0.33%)',
-            borderColor: 'rgb(255, 0, 0)',
+            transform: "translateX(0.33%)",
+            borderColor: "rgb(255, 0, 0)",
           },
         ],
         { duration: 150, iterations: 3 }
@@ -215,60 +215,122 @@ export default function App() {
     inputValidationObj[rowStr].values.push(key);
     // update input field:
     refStateObj[selectedMarq].current[selectedRow].value =
-      inputValidationObj[rowStr].values.join('');
+      inputValidationObj[rowStr].values.join("");
   }
+
+  // TODO: the LAST letter inputted is carrying over to the next row element. Perhaps the cleanup is not working properly. Will need to test out!
+
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth); // init state
+
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize); // Cleanup the event listener on component unmount
+    };
+  }, []); // Empty dependency array means this effect will only run once on mount
 
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyles />
-      <StyledAppContainer
-        onKeyDown={ev => inputValidation(ev)}
-        onClick={ev => inputValidation(ev)}
-      >
-        {toggleModal ? (
-          <Modal
-            modalState={modalState}
-            toggleModal={toggleModal}
+      {windowWidth > 775 ? (
+        <StyledAppContainer
+          onKeyDown={(ev) => inputValidation(ev)}
+          onClick={(ev) => inputValidation(ev)}
+        >
+          {toggleModal ? (
+            <Modal
+              modalState={modalState}
+              toggleModal={toggleModal}
+              appState={appState}
+            />
+          ) : (
+            ""
+          )}
+          <NavBar />
+          <TableContainer
+            ref={refStateObj}
+            data={data}
+            keysArr={keysArr}
+            marKeysArr={marKeysArr}
             appState={appState}
+            dispAppState={dispAppState}
+            selectedRow={selectedRow}
+            switchSelectedRow={switchSelectedRow}
+            selectedMarq={selectedMarq}
+            switchSelectedMarq={switchSelectedMarq}
+            marqSizes={marqSizes}
           />
-        ) : (
-          ''
-        )}
-        <NavBar />
-        <TableContainer
-          ref={refStateObj}
-          data={data}
-          keysArr={keysArr}
-          marKeysArr={marKeysArr}
-          appState={appState}
-          dispAppState={dispAppState}
-          selectedRow={selectedRow}
-          switchSelectedRow={switchSelectedRow}
-          selectedMarq={selectedMarq}
-          switchSelectedMarq={switchSelectedMarq}
-          marqSizes={marqSizes}
-        />
-        <KeySet
-          data={data}
-          appState={appState}
-          dispAppState={dispAppState}
-          marqSizes={marqSizes}
-          selectedMarq={selectedMarq}
-          selectedRow={selectedRow}
-          switchSelectedRow={switchSelectedRow}
-          refStateObj={refStateObj}
-        />
-      </StyledAppContainer>
+          <KeySet
+            data={data}
+            appState={appState}
+            dispAppState={dispAppState}
+            marqSizes={marqSizes}
+            selectedMarq={selectedMarq}
+            selectedRow={selectedRow}
+            switchSelectedRow={switchSelectedRow}
+            refStateObj={refStateObj}
+          />
+        </StyledAppContainer>
+      ) : (
+        <StyledErrorContainer>
+          <StyledErrorMessage>
+            <h5
+              style={{
+                textAlign: "center",
+                fontWeight: "800",
+                textDecoration: "underline",
+                paddingBottom: "1rem",
+                margin: "0 auto",
+              }}
+            >
+              Minimum Screen Size Error:
+            </h5>
+            <p
+              style={{
+                textAlign: "center",
+                margin: "0 auto",
+              }}
+            >
+              Your screen must be at least 775px wide
+            </p>
+          </StyledErrorMessage>
+        </StyledErrorContainer>
+      )}
     </ThemeProvider>
   );
 }
 
 const StyledAppContainer = styled.div`
   margin: 0 auto;
-  padding-top: 1rem;
+  display: grid;
+  grid-template-rows: repeat(3, auto);
   align-content: center;
   align-items: center;
-  height: 100vh;
+  height: 100%;
   width: 100%;
   background-color: white;
+`;
+
+const StyledErrorContainer = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  opacity: 0.5;
+  margin: 0 auto;
+  background-image: url("/paradise-vintage.jpeg");
+`;
+
+const StyledErrorMessage = styled.div`
+  position: absolute;
+  top: 50%;
+  right: 0;
+  left: 0;
+  padding: 2rem;
+  display: grid;
+  text-align: center;
+  font-size: 2rem;
+  transform: translateY(-50%);
+  background-color: white;
+  border-radius: 30px;
 `;
