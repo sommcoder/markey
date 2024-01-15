@@ -2,9 +2,10 @@ import { useEffect } from "react";
 import styled, { keyframes } from "styled-components";
 
 export default function Block({ block, style, delay, appState }) {
-  const blockWidth = style + "rem";
+  const blockWidth = style ? style + "rem" : "2rem"; // no style specified? 2 rem
 
-  useEffect(() => {}, [appState]);
+  // useEffect(() => {}, [appState]);
+  // is this what causes the blocks to not all rerender? Does this need to be here?
 
   return (
     <>

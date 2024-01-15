@@ -12,6 +12,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getCharacterStock } from "./api/api.js";
 import setCurrMarquee from "./functions/setCurrMarquee.js";
 import getNextElNum from "./functions/getNextElNum.js";
+
 /////////////////////////////////////////
 export default function App() {
   const { isLoading, isSuccess, isError, data, error } = useQuery({
@@ -19,7 +20,7 @@ export default function App() {
     queryFn: getCharacterStock, // no parentheses!
   }); // makes MULTIPLE retry queries automatically if query fails.
 
-  // TODO: the special characters don't have accurate blockWidths
+  // TODO: the special characters don't have accurate blockWidths. You'll need to review the physcial stock in the theatre.
 
   // fetchOnWindowFocus();
   // MODAL POPUP STATE:
@@ -37,7 +38,7 @@ export default function App() {
   const InitAppState = {
     West: {
       rows: {
-        0: [], // [[ltr, size], [ltr, size], [ltr, size]]
+        0: [], // [[ltr, size], [ltr, size]...]
         1: [],
         2: [],
       },
@@ -62,10 +63,10 @@ export default function App() {
   };
 
   // String state that gets set by switchSelectedMarq(marqName)
-  const [selectedMarq, switchSelectedMarq] = useState();
+  const [selectedMarq, switchSelectedMarq] = useState(null);
   // int: 0, 1, 2
   // we can then concat and coerce with 'row'.
-  const [selectedRow, switchSelectedRow] = useState();
+  const [selectedRow, switchSelectedRow] = useState(null); //
 
   const keysArr = [0, 1, 2];
 
@@ -79,11 +80,26 @@ export default function App() {
 
     switch (action.type) {
       case "set": {
+        // set should update appState (as it is)
+        // StockTracker should then use appState to lookup the values in data and render the difference (charAvail - charSelect = charRender)
         return { ...state, ...action.payload };
       }
-      // case "compare": {
-      //   return { ...state, ...action.payload.count };
-      // }
+      case "set-all": {
+        // Should this be handled differently? set-all will be receiving the ENTIRE appState reploace
+        // all forms at once
+        // should trigger the Modal
+        toggleModal(true);
+        return { ...state, ...action.payload };
+      }
+      case "compare": {
+        // compare should update appState
+        // compare should identify the difference in OUTPUT between the previous and new state payload.
+        // this triggers the modal to display the difference between the former and new desired state.
+
+        toggleModal(true);
+
+        return { ...state, ...action.payload.count };
+      }
       default:
         return state;
     }
@@ -220,8 +236,11 @@ export default function App() {
 
   // TODO: the LAST letter inputted is carrying over to the next row element. Perhaps the cleanup is not working properly. Will need to test out!
 
+  // TODO: should probably create a new component that disables and enables certain Marquee displays. ??? is this actually desirable? Maybe not?
+
   const [windowWidth, setWindowWidth] = useState(window.innerWidth); // init state
 
+  // handles device size issue:
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
     window.addEventListener("resize", handleResize);
@@ -230,9 +249,19 @@ export default function App() {
     };
   }, []); // Empty dependency array means this effect will only run once on mount
 
+  /* // TODO: 
+  - What we really need to do is make setting and comparing GLOBAL. 
+  - keyDown enter can allow the user to see visually how things will look. 
+  - "Set Current" will clear the Marquee Blocks and update appState which triggers a useEffect in the Modal component that gets the Output Tally and triggers the modal to render an all-day of how many chars are needed.
+
+  - The MODAL should present a button to "create new" or "reset"
+
+  */
+
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyles />
+      {/* <div id="firebaseui-auth-container" /> */}
       {windowWidth > 775 ? (
         <StyledAppContainer
           onKeyDown={(ev) => inputValidation(ev)}
@@ -243,11 +272,23 @@ export default function App() {
               modalState={modalState}
               toggleModal={toggleModal}
               appState={appState}
+              marKeysArr={marKeysArr}
+              data={data}
             />
           ) : (
             ""
           )}
-          <NavBar />
+          <NavBar
+            data={data}
+            refStateObj={refStateObj}
+            keysArr={keysArr}
+            appState={appState}
+            dispAppState={dispAppState}
+            selectedMarq={selectedMarq}
+            switchSelectedMarq={switchSelectedMarq}
+            selectedRow={selectedRow}
+            switchSelectedRow={switchSelectedRow}
+          />
           <TableContainer
             ref={refStateObj}
             data={data}

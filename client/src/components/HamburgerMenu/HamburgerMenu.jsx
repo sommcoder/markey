@@ -13,9 +13,6 @@ export default function HamburgerMenu() {
   );
 }
 const StyledHamburgerMenu = styled.span`
-  position: absolute;
-  right: 2rem;
-  top: 25%;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -24,7 +21,7 @@ const StyledHamburgerMenu = styled.span`
   background: transparent;
   border: none;
   cursor: pointer;
-  padding: 0;
+
   box-sizing: border-box;
 
   &:hover {

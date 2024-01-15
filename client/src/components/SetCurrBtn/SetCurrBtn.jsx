@@ -1,35 +1,41 @@
-import styled from 'styled-components';
-import setCurrMarquee from '../../functions/setCurrMarquee';
+import styled from "styled-components";
+
+import setAllMarquee from "../../functions/setAllMarquee";
+import getNextElNum from "../../functions/getNextElNum";
 
 export default function SetCurrBtn({
-  formName,
-  dispAppState,
-  keysArr,
   data,
+  refStateObj,
+  keysArr,
   appState,
+  dispAppState,
+  switchSelectedMarq,
+  switchSelectedRow,
 }) {
   function handleSubmit(ev) {
+    // this button now submits the entire Marquee range!
     ev.preventDefault();
-    console.log('ev:', ev);
-    // TODO: handle submit.
+    console.log("ev:", ev);
 
-    //  switchSelectedRow(getNextElNum(rowStr, selectedRow));
+    // reset to null
+    switchSelectedMarq(null);
+    switchSelectedRow(null);
+
     // dispatch reducer:
     dispAppState({
-      type: 'set',
-      payload: setCurrMarquee(keysArr, formEl, appState, data, selectedMarq),
+      type: "set-all",
+      payload: setAllMarquee(keysArr, refStateObj, appState, data),
     });
   }
 
   return (
     <StyledSetCurrBtn
-      form={formName}
-      onClick={ev => handleSubmit(ev)}
+      onClick={(ev) => handleSubmit(ev)}
       name="Set"
       type="submit"
       title="Sets the selected marquee"
     >
-      <div className="button-text">Set</div>
+      <div className="button-text">Set Current</div>
     </StyledSetCurrBtn>
   );
 }

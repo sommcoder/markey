@@ -1,21 +1,17 @@
-export default function setCurrMarquee(
-  keysArr,
-  formEl,
-  appState,
-  data,
-  selectedMarq
-) {
+export default function setCurrMarquee(keysArr, formEl, appState, data, marq) {
   console.log("appState:", appState);
   console.log("formEl:", formEl);
-  console.log("selectedMarq:", selectedMarq);
-  const newRowObj = appState[selectedMarq]; // create a copy of the current state object
+  console.log("marq:", marq);
+  const newRowObj = appState[marq]; // create a copy of the current state object
   console.log("SET CURR BTN, newRowObj:", newRowObj);
+
+  // if setCurrBtn is clicked we need to set ALL forms!
 
   // ROW Loop:
   for (let row = 0; row < keysArr.length; row++) {
     // no value clause
     if (!formEl[row].value) {
-      continue;
+      continue; // continue to next iteration
     }
     let inputStr = formEl[row].value.trim();
     let rowName = formEl[row].dataset.rowid;
@@ -41,6 +37,6 @@ export default function setCurrMarquee(
   }
   console.log("END Set CurrBTN, newRowObj:", newRowObj);
   return {
-    [selectedMarq]: newRowObj,
+    [marq]: newRowObj,
   };
 }

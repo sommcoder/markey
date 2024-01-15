@@ -1,9 +1,7 @@
 import styled from "styled-components";
 
 import ErrorMsg from "../ErrorMsg/ErrorMsg";
-import SetCurrBtn from "../SetCurrBtn/SetCurrBtn";
 import ResetBtn from "../ResetBtn/ResetBtn";
-import CompareBtn from "../CompareBtn/CompareBtn";
 
 import { forwardRef, useEffect } from "react";
 
@@ -30,6 +28,9 @@ export default forwardRef(function TextRowForm(
 
   function handleClick(ev) {
     ev.preventDefault();
+    if (selectedMarq === marqName) {
+      switchSelectedRow(0);
+    }
     // switch selected row to clicked row:
     switchSelectedRow(+ev.target.name);
   }
@@ -55,22 +56,6 @@ export default forwardRef(function TextRowForm(
           />
         ))}
       </form>
-      <SetCurrBtn
-        data={data}
-        marqName={marqName}
-        formName={formName}
-        keysArr={keysArr}
-        appState={appState}
-        dispAppState={dispAppState}
-      />
-      <CompareBtn
-        data={data}
-        marqName={marqName}
-        formName={formName}
-        keysArr={keysArr}
-        appState={appState}
-        dispAppState={dispAppState}
-      />
       <ResetBtn
         data={data}
         formName={formName}

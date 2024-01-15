@@ -29,5 +29,4 @@ const StyledResetBtn = styled.button`
   margin-left: 1rem;
   width: 3rem;
   height: 3rem;
-  position: absolute; //
 `;

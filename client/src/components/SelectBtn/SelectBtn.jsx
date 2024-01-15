@@ -1,9 +1,21 @@
 import styled from "styled-components";
 
-export default function SelectBtn({ marqName, switchSelectedMarq }) {
+export default function SelectBtn({
+  marqName,
+  selectedMarq,
+  switchSelectedMarq,
+}) {
+  function handleClick(ev) {
+    ev.preventDefault();
+    // same as selected? null : select currMarq
+    selectedMarq === marqName
+      ? switchSelectedMarq(null)
+      : switchSelectedMarq(marqName);
+  }
+
   return (
     <StyledSelectBtn
-      onClick={() => switchSelectedMarq(marqName)}
+      onClick={(ev) => handleClick(ev)}
       data-id={marqName}
       title="Select Marquee(s) to work with"
     >

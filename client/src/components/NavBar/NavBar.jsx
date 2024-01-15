@@ -1,7 +1,18 @@
 import styled from "styled-components";
 import HamburgerMenu from "../HamburgerMenu/HamburgerMenu";
+import SetCurrBtn from "../SetCurrBtn/SetCurrBtn";
 
-export default function NavBar() {
+export default function NavBar({
+  data,
+  refStateObj,
+  keysArr,
+  appState,
+  dispAppState,
+  selectedMarq,
+  selectedRow,
+  switchSelectedRow,
+  switchSelectedMarq,
+}) {
   return (
     <StyledNavBar>
       <StyledHeader
@@ -11,7 +22,20 @@ export default function NavBar() {
           width: "30rem",
         }}
       />
-      <HamburgerMenu />
+      <StyledRightNavArea>
+        <SetCurrBtn
+          data={data}
+          refStateObj={refStateObj}
+          keysArr={keysArr}
+          appState={appState}
+          dispAppState={dispAppState}
+          selectedMarq={selectedMarq}
+          selectedRow={selectedRow}
+          switchSelectedRow={switchSelectedRow}
+          switchSelectedMarq={switchSelectedMarq}
+        />
+        <HamburgerMenu />
+      </StyledRightNavArea>
     </StyledNavBar>
   );
 }
@@ -34,4 +58,17 @@ const StyledNavBar = styled.nav`
 
 const StyledHeader = styled.img`
   height: 100%;
+`;
+
+const StyledRightNavArea = styled.span`
+  right: 2rem;
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  width: 40rem;
+  justify-content: end;
+  gap: 5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  align-items: center;
 `;
