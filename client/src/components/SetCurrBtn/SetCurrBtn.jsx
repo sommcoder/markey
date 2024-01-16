@@ -9,22 +9,16 @@ export default function SetCurrBtn({
   keysArr,
   appState,
   dispAppState,
-  switchSelectedMarq,
-  switchSelectedRow,
 }) {
   function handleSubmit(ev) {
     // this button now submits the entire Marquee range!
     ev.preventDefault();
     console.log("ev:", ev);
 
-    // reset to null
-    switchSelectedMarq(null);
-    switchSelectedRow(null);
-
     // dispatch reducer:
     dispAppState({
-      type: "set-all",
-      payload: setAllMarquee(keysArr, refStateObj, appState, data),
+      type: "set",
+      payload: setAllMarquee(keysArr, refStateObj, data),
     });
   }
 

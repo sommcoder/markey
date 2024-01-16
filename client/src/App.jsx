@@ -10,9 +10,10 @@ import GlobalStyles from "./GlobalStyles";
 import { useQuery } from "@tanstack/react-query";
 /////////////////////////////////////////
 import { getCharacterStock } from "./api/api.js";
+/////////////////////////////////////////
 import setCurrMarquee from "./functions/setCurrMarquee.js";
 import getNextElNum from "./functions/getNextElNum.js";
-
+import getTally from "./functions/getTally.js";
 /////////////////////////////////////////
 export default function App() {
   const { isLoading, isSuccess, isError, data, error } = useQuery({
@@ -26,7 +27,7 @@ export default function App() {
   // MODAL POPUP STATE:
   const [modalState, toggleModal] = useState(false);
 
-  // form element reference Object:
+  // form element reference Object. Populated via forwardRef() hook
   const refStateObj = {
     West: useRef(null),
     East: useRef(null),
@@ -61,53 +62,18 @@ export default function App() {
       output: {},
     },
   };
-
   // String state that gets set by switchSelectedMarq(marqName)
   const [selectedMarq, switchSelectedMarq] = useState(null);
-  // int: 0, 1, 2
-  // we can then concat and coerce with 'row'.
-  const [selectedRow, switchSelectedRow] = useState(null); //
-
-  const keysArr = [0, 1, 2];
-
-  console.log("selectedRow:", selectedRow);
-
-  const reducer = (state, action) => {
-    if (!action.payload) return state;
-    console.log("appREDUCER: action.payload:", action.payload);
-
-    // let marqName = Object.keys(action.payload).join();
-
-    switch (action.type) {
-      case "set": {
-        // set should update appState (as it is)
-        // StockTracker should then use appState to lookup the values in data and render the difference (charAvail - charSelect = charRender)
-        return { ...state, ...action.payload };
-      }
-      case "set-all": {
-        // Should this be handled differently? set-all will be receiving the ENTIRE appState reploace
-        // all forms at once
-        // should trigger the Modal
-        toggleModal(true);
-        return { ...state, ...action.payload };
-      }
-      case "compare": {
-        // compare should update appState
-        // compare should identify the difference in OUTPUT between the previous and new state payload.
-        // this triggers the modal to display the difference between the former and new desired state.
-
-        toggleModal(true);
-
-        return { ...state, ...action.payload.count };
-      }
-      default:
-        return state;
-    }
-  };
-
+  // we can then concat and coerce with 'row': 0, 1, 2
+  const [selectedRow, switchSelectedRow] = useState(null);
+  // null until user submits something:
+  const [stateOutputObj, setStateOutputObj] = useState(null);
+  // "set" or "compare" or null
+  const [outputProcess, setOutputProcess] = useState(null);
+  // primary state control:
   const [appState, dispAppState] = useReducer(reducer, InitAppState);
 
-  // in rem
+  // gets concatenated to rem. needs to be calculated therefore is number
   const marqSizes = {
     East: 42,
     West: 42,
@@ -122,23 +88,65 @@ export default function App() {
 
   const marKeysArr = Object.keys(appState);
 
-  /*
-   
-  1) each time appState changes, we need to go through the appState[marqName]
-  2) How can we detect ONLY the keys that have changed? This is through the action.payload right?
-  3) useEffect(() => action.payload) to determine remaining stock of each character
-   
-  */
+  const keysArr = [0, 1, 2]; // should probably be named to "rowsArr"
 
-  // NOT state. Just allows for client-side validation via onKeyDown event:
+  function reducer(state, action) {
+    if (!action.payload) return state;
+    console.log("appREDUCER: action.payload:", action.payload);
+
+    switch (action.type) {
+      case "input": {
+        console.log("INPUT:", action.payload);
+        // set should update appState (as it is)
+        // StockTracker should then use appState to lookup the values in data and render the difference (charAvail - charSelect = charRender)
+
+        return { ...state, ...action.payload };
+      }
+      case "set": {
+        console.log("REDUCER action.payload:", action.payload);
+        const tallyObj = getTally(action.payload);
+
+        console.log("REDUCER: tallyObj:", tallyObj);
+        // NOW WE NEED TO DETERMINE WHEN WE ASSIGN OUR TALLY OBJECT
+
+        setStateOutputObj({
+          currOutput: tallyObj,
+          newOutput: {},
+        });
+        setOutputProcess("set");
+        switchSelectedMarq(null);
+        switchSelectedRow(null);
+        toggleModal(true);
+
+        return { ...state, ...action.payload };
+      }
+      case "compare": {
+        console.log("REDUCER action.payload:", action.payload);
+        const tallyObj = getTally(action.payload);
+        // this sets the newOutput property and calls the comparison function to get the difference in characters from curr to new outputs
+
+        setStateOutputObj({
+          currOutput: stateOutputObj.currOutput,
+          newOutput: tallyObj,
+        });
+        setOutputProcess("compare");
+        switchSelectedMarq(null);
+        switchSelectedRow(null);
+        toggleModal(true);
+
+        return { ...state, ...action.payload.count };
+      }
+      default:
+        return state;
+    }
+  }
+
+  // NOT state. Client-side validation via onKeyDown/onClick events:
   const inputValidationObj = {
     0: { values: [], sizes: 0 },
     1: { values: [], sizes: 0 },
     2: { values: [], sizes: 0 },
   };
-
-  // TOP level handlekey click. we need to pass the key clicks down to StockTracker
-  // we also need to be able to PUSH up the onClick of spe
 
   function inputValidation(ev) {
     if (!selectedMarq) return; // no selected marq?
@@ -152,11 +160,6 @@ export default function App() {
 
     if (key === " ") ev.preventDefault(); // is this right?
     if (key === "Enter") {
-      console.log(
-        "inputValidationObj[rowStr].values:",
-        inputValidationObj[rowStr].values
-      );
-
       if (inputValidationObj[rowStr].values.length === 0) {
         // loop through the other rows to double check.. user could have inputted a row but tabbed to a new row before entering/clicking Set
 
@@ -168,18 +171,16 @@ export default function App() {
           // Error: "No Characters Entered into Marquee"
           return;
       } else {
-        switchSelectedRow(getNextElNum(rowStr, selectedRow));
+        console.log("selectedMarq:", selectedMarq);
         // dispatch reducer:
         dispAppState({
-          type: "set",
-          payload: setCurrMarquee(
-            keysArr,
-            formEl,
-            appState,
-            data,
-            selectedMarq
-          ),
+          type: "input",
+          payload: {
+            [selectedMarq]: setCurrMarquee(keysArr, formEl, appState, data),
+          },
         });
+
+        switchSelectedRow(getNextElNum(rowStr, selectedRow));
         return;
       }
     }
@@ -234,10 +235,6 @@ export default function App() {
       inputValidationObj[rowStr].values.join("");
   }
 
-  // TODO: the LAST letter inputted is carrying over to the next row element. Perhaps the cleanup is not working properly. Will need to test out!
-
-  // TODO: should probably create a new component that disables and enables certain Marquee displays. ??? is this actually desirable? Maybe not?
-
   const [windowWidth, setWindowWidth] = useState(window.innerWidth); // init state
 
   // handles device size issue:
@@ -247,16 +244,7 @@ export default function App() {
     return () => {
       window.removeEventListener("resize", handleResize); // Cleanup the event listener on component unmount
     };
-  }, []); // Empty dependency array means this effect will only run once on mount
-
-  /* // TODO: 
-  - What we really need to do is make setting and comparing GLOBAL. 
-  - keyDown enter can allow the user to see visually how things will look. 
-  - "Set Current" will clear the Marquee Blocks and update appState which triggers a useEffect in the Modal component that gets the Output Tally and triggers the modal to render an all-day of how many chars are needed.
-
-  - The MODAL should present a button to "create new" or "reset"
-
-  */
+  }, []); // Empty dependency array means this effect will only run once on mount..?
 
   return (
     <ThemeProvider theme={theme}>
@@ -274,6 +262,7 @@ export default function App() {
               appState={appState}
               marKeysArr={marKeysArr}
               data={data}
+              outputProcess={outputProcess}
             />
           ) : (
             ""
@@ -288,6 +277,8 @@ export default function App() {
             switchSelectedMarq={switchSelectedMarq}
             selectedRow={selectedRow}
             switchSelectedRow={switchSelectedRow}
+            stateOutputObj={stateOutputObj}
+            setStateOutputObj={setStateOutputObj}
           />
           <TableContainer
             ref={refStateObj}
@@ -351,12 +342,15 @@ const StyledAppContainer = styled.div`
   height: 100%;
   width: 100%;
   background-color: white;
+  overflow-x: scroll;
 `;
+
+// TODO: there is a gap on the right side of the app. I don't want to remove overflow-x scrolling specially for smaller screen sizes.Could probably be a vw styling on a child component
 
 const StyledErrorContainer = styled.div`
   position: relative;
   width: 100%;
-  height: 100vh;
+  height: 100%;
   opacity: 0.5;
   margin: 0 auto;
   background-image: url("/paradise-vintage.jpeg");

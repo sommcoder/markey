@@ -14,7 +14,7 @@ export default function Block({ block, style, delay, appState }) {
         readOnly
         maxLength="1"
         type="text"
-        blockWidth={blockWidth}
+        $blockwidth={blockWidth}
         value={block}
       />
     </>
@@ -37,7 +37,7 @@ const populateMarquee = keyframes`
 const StyledBlock = styled.input`
   font-size: 2.8rem;
   user-select: none;
-  width: ${(props) => (props.blockWidth ? props.blockWidth : "2rem")};
+  width: ${(props) => (props.$blockwidth ? props.$blockwidth : "2rem")};
   -webkit-user-select: none;
   text-transform: uppercase;
   text-decoration: none;

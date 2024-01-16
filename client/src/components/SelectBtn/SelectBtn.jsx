@@ -7,10 +7,12 @@ export default function SelectBtn({
 }) {
   function handleClick(ev) {
     ev.preventDefault();
-    // same as selected? null : select currMarq
-    selectedMarq === marqName
-      ? switchSelectedMarq(null)
-      : switchSelectedMarq(marqName);
+    switchSelectedMarq(marqName);
+    // // null checK:
+    // if (!selectedMarq) switchSelectedMarq(marqName);
+    // selectedMarq === marqName
+    //   ? switchSelectedMarq(null) // reset to null
+    //   : switchSelectedMarq(marqName); // change to curr marquee
   }
 
   return (

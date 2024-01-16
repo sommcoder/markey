@@ -69,8 +69,6 @@ export default forwardRef(function TextRowForm(
   );
 });
 
-// TODO: CREATE a passive/disabled button state. button should be colored and solid when available and transparent with grey background when not available
-
 const StyledTextRow = styled.input`
   height: 3rem;
   border-radius: 7px;

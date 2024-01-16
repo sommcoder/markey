@@ -1,17 +1,17 @@
-export default function setCurrMarquee(keysArr, formEl, appState, data, marq) {
-  console.log("appState:", appState);
-  console.log("formEl:", formEl);
-  console.log("marq:", marq);
-  const newRowObj = appState[marq]; // create a copy of the current state object
-  console.log("SET CURR BTN, newRowObj:", newRowObj);
-
-  // if setCurrBtn is clicked we need to set ALL forms!
+export default function setCurrMarquee(keysArr, formEl, data) {
+  // THIS IS HOW WE SET A SINGLE MARQUEE SUBMISSION
+  const output = {};
+  const rows = {
+    0: [],
+    1: [],
+    2: [],
+  };
 
   // ROW Loop:
   for (let row = 0; row < keysArr.length; row++) {
-    // no value clause
+    // no value clause:
     if (!formEl[row].value) {
-      continue; // continue to next iteration
+      continue;
     }
     let inputStr = formEl[row].value.trim();
     let rowName = formEl[row].dataset.rowid;
@@ -19,24 +19,24 @@ export default function setCurrMarquee(keysArr, formEl, appState, data, marq) {
 
     // INPUT Loop:
     for (let ltr = 0; ltr < inputStr.length; ltr++) {
-      if (!data[inputStr[ltr]]) {
-        console.log("error: cannot find character in database");
-        continue;
-      }
+      if (!data[inputStr[ltr]]) continue;
+
       // if we don't already have the ltr/key in our output object, add it
-      if (!newRowObj.output[inputStr[ltr]]) {
-        newRowObj.output[inputStr[ltr]] = 1;
-      } else {
-        newRowObj.output[inputStr[ltr]]++;
-      }
+      !output[inputStr[ltr]]
+        ? (output[inputStr[ltr]] = 1)
+        : output[inputStr[ltr]]++;
+
       let inputData = data[inputStr[ltr]];
       rowArr.push([inputData.blockSymbol, inputData.size]);
     }
     formEl[row].value = ""; // reset row El's value
-    newRowObj.rows[rowName] = rowArr;
+    rows[rowName] = rowArr;
   }
-  console.log("END Set CurrBTN, newRowObj:", newRowObj);
+  console.log("END Input CurrBTN:", output);
+  console.log("END Input CurrBTN:", rows);
+  // returns an anonymous object to be assigned to a marqName outside this function. So whether this is a single marq "input" or a "set" function.
   return {
-    [marq]: newRowObj,
+    rows: rows,
+    output: output,
   };
 }

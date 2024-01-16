@@ -1,93 +1,64 @@
 import styled, { keyframes } from "styled-components";
 import ModalTable from "../ModalTable/ModalTable";
 import ModalHeader from "../ModalHeader/ModalHeader";
-import { useEffect, useState } from "react";
-
-import getTally from "../../functions/getTally";
+import { useEffect } from "react";
 
 export default function ModalWindow({
   modalState,
   toggleModal,
-  appState,
-  marKeysArr,
   data,
+  stateOutputObj,
+  outputProcess,
 }) {
   console.log("modalWindow Component modalState:", modalState);
   const modalWindowWidth = 500;
 
-  const [stateOutputObj, setStateOutputObj] = useState({
-    currOutput: {},
-    newOutput: {},
-  });
+  console.log("stateOutputObj:", stateOutputObj);
   // will need a way to swap these.
   // If currOutput and newOutput have keys, then currOutput gets deleted, newOutput becomes currOutput and then we will have to calculate
-
-  // useEffect(() => {
-  //   //
-  //   const tallyObj = getTally(appState, marKeysArr);
-
-  //   if (
-  //     Object.keys(stateOutputObj.currOutput.length) > 0 &&
-  //     Object.keys(stateOutputObj.newOutput.length > 0)
-  //   ) {
-  //     // both stateOutputs have keys, create new object with the new key/values
-  //     setStateOutputObj({
-  //       currOutput: stateOutputObj.newOutput,
-  //       newOutput: tallyObj,
-  //     });
-  //   }
-  //   // determine if this is current or new
-  //   setStateOutputObj();
-  // }, [appState, marKeysArr]);
   /*
- 
+
 We need to manage the FULL tally of ALL of the marquees in teh App component in State
 
-
 user needs to see: 
-
 1) what they need to ADD from inventory
 2) what they can LEAVE on the current Marquee board
-
  
 */
 
-  //Object.keys(obj).length === 0 && obj.constructor === Object
-
   // TODO: we need to determine if this was a "set" or "compare" trigger. The Modal components will simply accept the data sent to them.
 
-  const output = (stateOutputObj) => {
-    if (
-      Object.keys(stateOutputObj.currOutput).length === 0 &&
-      Object.keys(stateOutputObj.newOutput).length === 0
-    ) {
-      // if both empty
-      return {};
+  let outputObj;
+  useEffect(() => {
+    if (stateOutputObj && outputProcess === "Set") {
+      outputObj = stateOutputObj.currOutput;
     }
-  };
-
-  // if no keys in output, table won't render
-  const outputKeysArr = Object.keys(output);
+    if (stateOutputObj && outputProcess === "Compare") {
+      outputObj = stateOutputObj.newOutput;
+    }
+    // else do nothing
+  }, [stateOutputObj, outputProcess]);
 
   return (
     <StyledOverlay modalState={modalState}>
       {modalState ? (
         <StyledModalWindow modalWindowWidth={modalWindowWidth}>
           <ModalHeader />
-          {outputKeysArr.length > 0 ? (
-            <>
-              <ModalTable
-                data={data}
-                output={output}
-                outputKeysArr={outputKeysArr}
-              />
-              <StyledModalBtn onClick={() => toggleModal(false)}>
-                Close
-              </StyledModalBtn>
-            </>
+          {outputObj ? (
+            <ModalTable
+              data={data}
+              outputObj={outputObj}
+              outputProcess={outputProcess}
+            />
           ) : (
-            ""
+            <div>
+              ERROR: No characters submitted to Marquees. <br /> Submit
+              characters, then click: &apos;Set Current&apos;
+            </div>
           )}
+          <StyledModalBtn onClick={() => toggleModal(false)}>
+            Close
+          </StyledModalBtn>
         </StyledModalWindow>
       ) : (
         ""
