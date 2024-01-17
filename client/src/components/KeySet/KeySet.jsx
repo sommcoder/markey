@@ -22,17 +22,15 @@ export default function KeySet({ data }) {
 }
 
 const StyledSetContainer = styled.div`
-  margin: 2rem;
   position: block;
   display: grid;
   /* max-width: 500px; */
   padding-top: 2rem;
   padding-bottom: 2rem;
   width: 100%;
-  -webkit-box-shadow: inset 0px 0px 5px #c1c1c1;
-  -moz-box-shadow: inset 0px 0px 5px #c1c1c1;
   box-shadow: inset 0px 0px 5px #c1c1c1;
   overflow: hidden;
+  z-index: 10;
 `;
 
 const StyledKeySetRow = styled.div`

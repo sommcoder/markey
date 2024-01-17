@@ -13,4 +13,5 @@ const StyledModalHeader = styled.h3`
   padding-top: 2rem;
   font-weight: 800;
   font-size: 2rem;
+  color: black;
 `;

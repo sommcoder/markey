@@ -5,7 +5,7 @@ import Modal from "./components/Modal/Modal.jsx";
 /////////////////////////////////////////
 import { useState, useReducer, useRef, useEffect } from "react";
 import styled, { ThemeProvider } from "styled-components";
-import GlobalStyles from "./GlobalStyles";
+import { GlobalStyles, darkTheme, lightTheme } from "./GlobalStyles";
 /////////////////////////////////////////
 import { useQuery } from "@tanstack/react-query";
 /////////////////////////////////////////
@@ -23,9 +23,8 @@ export default function App() {
 
   // TODO: the special characters don't have accurate blockWidths. You'll need to review the physcial stock in the theatre.
 
+  // TODO: still need to figure out updating stockTracker and then also the side menu and how to adjust character sizing and stock in case the user gets more or some break/get lost
   // fetchOnWindowFocus();
-  // MODAL POPUP STATE:
-  const [modalState, toggleModal] = useState(false);
 
   // form element reference Object. Populated via forwardRef() hook
   const refStateObj = {
@@ -62,6 +61,9 @@ export default function App() {
       output: {},
     },
   };
+
+  // popup modal = the apps output
+  const [modalState, toggleModal] = useState(false);
   // String state that gets set by switchSelectedMarq(marqName)
   const [selectedMarq, switchSelectedMarq] = useState(null);
   // we can then concat and coerce with 'row': 0, 1, 2
@@ -80,11 +82,8 @@ export default function App() {
     South: 84,
   };
 
-  // look into creating dark-mode functionality here
-  const theme = {
-    dark: {},
-    light: {},
-  };
+  // "light" or "dark"
+  const [theme, setTheme] = useState("light");
 
   const marKeysArr = Object.keys(appState);
 
@@ -255,7 +254,8 @@ export default function App() {
   }, []); // Empty dependency array means this effect will only run once on mount..?
 
   return (
-    <ThemeProvider theme={theme}>
+    // specifies which
+    <ThemeProvider theme={theme === "dark" ? darkTheme : lightTheme}>
       <GlobalStyles />
       {/* <div id="firebaseui-auth-container" /> */}
       {windowWidth > 775 ? (
@@ -288,6 +288,8 @@ export default function App() {
             switchSelectedRow={switchSelectedRow}
             stateOutputObj={stateOutputObj}
             setStateOutputObj={setStateOutputObj}
+            setTheme={setTheme}
+            theme={theme}
           />
           <TableContainer
             ref={refStateObj}
@@ -346,9 +348,9 @@ const StyledAppContainer = styled.div`
   margin: 0 auto;
   display: grid;
   grid-template-rows: repeat(3, auto);
-  align-content: center;
+  align-content: baseline;
   align-items: center;
-  height: 100%;
+  height: 100vh;
   width: 100%;
   background-color: white;
   overflow-x: scroll;

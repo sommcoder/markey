@@ -8,6 +8,12 @@ export default function ResetBtn({ formName }) {
     with an "Are you sure?" prompt
 */
 
+  const style = {
+    color: "black",
+    height: "1rem",
+    width: "1rem",
+  };
+
   return (
     <StyledResetBtn
       onClick={(ev) => ev.preventDefault()}
@@ -17,7 +23,7 @@ export default function ResetBtn({ formName }) {
       type="reset"
     >
       <div className="button-text">
-        <FiRefreshCcw />
+        <FiRefreshCcw style={style} />
       </div>
     </StyledResetBtn>
   );

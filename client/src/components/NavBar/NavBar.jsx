@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import HamburgerMenu from "../HamburgerMenu/HamburgerMenu";
 import SetCurrBtn from "../SetCurrBtn/SetCurrBtn";
+import DarkModeBtn from "../DarkModeBtn/DarkModeBtn";
 
 export default function NavBar({
   data,
@@ -8,13 +9,14 @@ export default function NavBar({
   keysArr,
   appState,
   dispAppState,
-  selectedMarq,
-  selectedRow,
-  switchSelectedRow,
-  switchSelectedMarq,
+  setTheme,
+  theme,
 }) {
   return (
     <StyledNavBar>
+      <StyledLeftNavArea>
+        <DarkModeBtn setTheme={setTheme} theme={theme} />
+      </StyledLeftNavArea>
       <StyledHeader
         src="/mar-key logo.svg"
         style={{
@@ -29,10 +31,6 @@ export default function NavBar({
           keysArr={keysArr}
           appState={appState}
           dispAppState={dispAppState}
-          selectedMarq={selectedMarq}
-          selectedRow={selectedRow}
-          switchSelectedRow={switchSelectedRow}
-          switchSelectedMarq={switchSelectedMarq}
         />
         <HamburgerMenu />
       </StyledRightNavArea>
@@ -48,8 +46,7 @@ const StyledNavBar = styled.nav`
   width: 100%;
   font-size: 4rem;
   font-weight: 650;
-  background-color: white;
-  margin: 0rem auto 2rem auto;
+  margin: 0 auto;
   text-align: center;
   border-bottom: 0.1rem solid lightgrey;
   height: 6rem;
@@ -71,4 +68,13 @@ const StyledRightNavArea = styled.span`
   top: 50%;
   transform: translateY(-50%);
   align-items: center;
+`;
+
+const StyledLeftNavArea = styled.span`
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  width: 40rem;
+  top: 30%;
+  align-items: left;
 `;

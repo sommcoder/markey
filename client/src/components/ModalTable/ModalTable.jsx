@@ -61,4 +61,5 @@ const StyledBlockTally = styled.span`
   font-size: 2rem;
   align-self: baseline;
   text-align: left;
+  color: black;
 `;

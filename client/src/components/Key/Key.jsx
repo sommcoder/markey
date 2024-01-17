@@ -31,35 +31,14 @@ const StyledKey = styled.button`
   margin-left: 3px;
   width: 3rem;
   height: 5rem;
-  background-color: rgb(194, 197, 197);
   color: black;
   text-align: center;
   border-radius: 15%;
   box-shadow: none;
-
-  // DESKTOP/TABLET:
-  /* @media (min-width: 800px) {
-    width: 5rem;
-    height: 7rem;
-  } */
-
-  &:hover {
-    background-color: rgb(172, 172, 172);
-    cursor: pointer;
-  }
 `;
 
 const StyledKeySpecial = styled(StyledKey)`
   position: relative;
   width: 5.5rem;
   font-size: 1rem;
-
-  // DESKTOP/TABLET:
-  /* @media (min-width: 800px) {
-     width: 9.5rem;
-  } */
-
-  &:hover {
-    background-color: rgb(172, 172, 172);
-  }
 `;

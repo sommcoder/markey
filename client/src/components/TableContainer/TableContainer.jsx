@@ -14,9 +14,11 @@ export default forwardRef(function TableContainer(
     selectedRow,
     switchSelectedRow,
     keysArr,
+    theme,
   },
   ref
 ) {
+  console.log("theme:", theme);
   return (
     <StyledTableContainer>
       {marKeysArr.map((el) => (
@@ -47,6 +49,7 @@ const StyledTableContainer = styled.div`
   display: grid;
   align-items: center;
   justify-content: center;
+  padding: 3rem 0rem 5rem 0rem;
 `;
 
 const StyledMarqueeWrapper = styled.div`
