@@ -1,50 +1,42 @@
-export default function setCurrMarquee(keysArr, formEl, data, ...appState) {
+export default function setCurrMarquee(keysArr, formEl, data, appState) {
   // THIS IS HOW WE SET A SINGLE MARQUEE SUBMISSION
-  const output = {};
-  const rows = {
-    0: [],
-    1: [],
-    2: [],
-  };
 
-  let currAppState = appState[0];
+  const newInputObj = appState;
+  console.log("newInputObj:", newInputObj);
+  // TODO: WE NEED TO ONLY ACCEPT ROWS THAT HAVE INPUT
 
   // ROW Loop:
   for (let row = 0; row < keysArr.length; row++) {
     // no value clause:
-    if (!formEl[row].value) {
-      console.log("currAppState:", currAppState);
-      if (currAppState) continue;
-    }
+    if (!formEl[row].value) continue;
+    // we don't want empty row input
+
     let inputStr = formEl[row].value.trim();
     let rowName = formEl[row].dataset.rowid;
     let rowArr = []; // sequence of characters
 
+    console.log("inputStr:", inputStr);
+    console.log("rowName:", rowName);
     // INPUT Loop:
-    for (let ltr = 0; ltr < inputStr.length; ltr++) {
-      if (!data[inputStr[ltr]]) {
-        // the letter does not exist in the data
-        continue;
-      }
 
-      // if we don't already have the ltr/key in our output object, add it with a 1, else increment it
-      if (!output[inputStr[ltr]]) {
-        output[inputStr[ltr]] = 1;
+    for (const ltr in inputStr) {
+      if (!data[inputStr[ltr]]) return; // this is a double check.
+
+      if (!newInputObj.output[inputStr[ltr]]) {
+        newInputObj.output[inputStr[ltr]] = 1; // assign to one
       } else {
-        output[inputStr[ltr]]++;
+        newInputObj.output[inputStr[ltr]]++; // increment by one
       }
-      // push to the sequence array in this format: [[ltr, size], [ltr, size] ...]
+      // push to arr in this format: [[ltr, size], [ltr, size] ...]
       let inputData = data[inputStr[ltr]];
       rowArr.push([inputData.blockSymbol, inputData.size]);
     }
+
     formEl[row].value = ""; // reset row El's input value
-    rows[rowName] = rowArr;
+    newInputObj.rows[rowName] = rowArr;
   }
-  console.log("END Input output:", output);
-  console.log("END Input rows:", rows);
-  // returns an anonymous object to be assigned to a marqName outside this function. So whether this is a single marq "input" or a "set" function.
-  return {
-    rows: rows,
-    output: output,
-  };
+  console.log("END Input newInputObj.output:", newInputObj.output);
+  console.log("END Input newInputObj.rows:", newInputObj.rows);
+
+  return newInputObj;
 }

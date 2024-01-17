@@ -82,7 +82,7 @@ const StyledTextRow = styled.input`
   font-weight: bold;
   z-index: 1;
   user-select: none;
-  cursor: ${(props) => (props.marqSelected ? "pointer" : "default")};
+  cursor: ${(props) => (props.marqSelected ? "text" : "default")};
   -webkit-user-select: none;
 
   border: 2px solid rgb(118, 118, 118);

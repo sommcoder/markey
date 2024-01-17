@@ -96,19 +96,21 @@ export default function App() {
     switch (action.type) {
       case "input": {
         console.log("INPUT Payload:", action.payload);
+        console.log("state:", state);
         // set should update appState (as it is)
         // StockTracker should then use appState to lookup the values in data and render the difference (charAvail - charSelect = charRender)
 
         // assign the action.payload to the selectedMarq, only updating that child object and not the other two marquee objects
         // TODO: currently the app state appears to be fully REPLACING all of the marquees... need to fix
+
         return { ...state, [selectedMarq]: action.payload };
       }
       case "set": {
         // TODO: set should only be a function after SUBMIT. They should do different things. Right now we're trying to make it do the same thing and it's making this process excessively complicated. "set" should just update state
 
         // "set" sets the CURRENT APP STATE
-        console.log("SET state:", state);
-        const tallyObj = getTally(state);
+        console.log("SET state:", action.payload);
+        const tallyObj = getTally(action.payload);
 
         console.log("REDUCER: tallyObj:", tallyObj);
         // "set" sets to the currOutput
@@ -151,28 +153,22 @@ export default function App() {
     2: { values: [], sizes: 0 },
   };
 
-  // kind of a silly solution but it works:
-  // function setSingleMarquee(keysArr, formEl, data) {
-  //   return {
-  //     [selectedMarq]: setCurrMarquee(keysArr, formEl, data),
-  //   };
-  // }
-
   function inputValidation(ev) {
     if (!selectedMarq) return; // no selected marq?
 
     let key;
+    // assign key based on the event:
     ev.type === "click" ? (key = ev.target.value) : (key = ev.key);
 
     const formEl = refStateObj[selectedMarq].current;
     // const rowEl = refStateObj[selectedMarq].current[selectedRow];
     const rowStr = refStateObj[selectedMarq].current[selectedRow].name;
 
+    // TODO: we need to get all of the keys to work properly. The current implementation is treating them all as individual characters but what we want is to handle these "special keys" as the SINGLE tiles that they are
     if (key === " ") ev.preventDefault(); // is this right?
     if (key === "Enter") {
       if (inputValidationObj[rowStr].values.length === 0) {
         // loop through the other rows to double check.. user could have inputted a row but tabbed to a new row before entering/clicking Set
-
         if (
           !Object.keys(inputValidationObj).some(
             (row) => inputValidationObj[row].values.length > 0
@@ -184,7 +180,12 @@ export default function App() {
         // dispatch reducer:
         dispAppState({
           type: "input",
-          payload: setCurrMarquee(keysArr, formEl, data),
+          payload: setCurrMarquee(
+            keysArr,
+            formEl,
+            data,
+            appState[selectedMarq] // no marqName just the obj contents
+          ),
         });
         //  switch to next row:
         switchSelectedRow(getNextElNum(rowStr, selectedRow));
@@ -208,7 +209,11 @@ export default function App() {
         inputValidationObj[rowStr].values.join("");
       return;
     }
-    if (!data[key]) return; // key doesn't exist in data
+    if (!data[key]) {
+      return;
+      // key doesn't exist in data
+      // should produce an Error message
+    }
 
     // 0.1 = accounts for block border size
     let currBlockSize = +data[key].size + 0.1;
@@ -253,6 +258,7 @@ export default function App() {
     };
   }, []); // Empty dependency array means this effect will only run once on mount..?
 
+  console.log("appState:", appState);
   return (
     // specifies which
     <ThemeProvider theme={theme === "dark" ? darkTheme : lightTheme}>

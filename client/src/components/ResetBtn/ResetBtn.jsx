@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-import { FiRefreshCcw } from "react-icons/fi";
+// import { FiRefreshCcw } from "react-icons/fi";
 
 export default function ResetBtn({ formName }) {
   /*
@@ -8,11 +8,14 @@ export default function ResetBtn({ formName }) {
     with an "Are you sure?" prompt
 */
 
-  const style = {
-    color: "black",
-    height: "1rem",
-    width: "1rem",
-  };
+  // const style = {
+  //   color: "black",
+  //   height: "1.25rem",
+  //   width: "1.25rem",
+  //   position: "absolute",
+  //   right: "1rem",
+  //   top: "30%",
+  // };
 
   return (
     <StyledResetBtn
@@ -23,16 +26,19 @@ export default function ResetBtn({ formName }) {
       type="reset"
     >
       <div className="button-text">
-        <FiRefreshCcw style={style} />
+        Reset
+        {/* <FiRefreshCcw style={style} /> */}
       </div>
     </StyledResetBtn>
   );
 }
 
 const StyledResetBtn = styled.button`
+  font-size: 1.4rem;
+  position: relative;
   border-radius: 20px;
   margin-top: 0.75rem;
   margin-left: 1rem;
-  width: 3rem;
+  width: 8rem;
   height: 3rem;
 `;

@@ -112,4 +112,5 @@ const StyledModalWindow = styled.div`
 
 const StyledModalBtn = styled.button`
   align-self: center;
+  margin: 1.5rem;
 `;

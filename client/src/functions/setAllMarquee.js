@@ -16,7 +16,7 @@ export default function setAllMarquee(keysArr, refStateObj, data, appState) {
       keysArr,
       refStateObj[formKey].current,
       data,
-      appState
+      appState[formKey]
     );
     // TODO: its reassigning after each iteration. We need a reference to the marqs to be able to dynamically assign the returning object to the CORRECT marq key
   }

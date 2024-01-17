@@ -31,13 +31,15 @@ export default function ModalTable({ data, appState, stateOutputObj }) {
 const StyledModalTable = styled.div`
   display: flex;
   flex-wrap: wrap;
+  flex-basis: auto;
+  flex-direction: column;
+  max-height: 300px;
+
   margin: 0 auto;
   padding-top: 2rem;
   max-width: ${(props) => props.modalWindowWidth - 50 + "px"};
   align-content: center;
   align-items: center;
-  flex-basis: auto;
-  flex-direction: row;
   justify-content: center;
   border-top: 1px solid grey;
   border-bottom: 1px solid grey;

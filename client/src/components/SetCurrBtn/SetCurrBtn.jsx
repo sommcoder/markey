@@ -1,7 +1,5 @@
 import styled from "styled-components";
-
 import setAllMarquee from "../../functions/setAllMarquee";
-import getNextElNum from "../../functions/getNextElNum";
 
 export default function SetCurrBtn({
   data,
@@ -29,9 +27,12 @@ export default function SetCurrBtn({
       type="submit"
       title="Sets the selected marquee"
     >
-      <div className="button-text">Set Current</div>
+      <div className="button-text">Set Marquee</div>
     </StyledSetCurrBtn>
   );
 }
 
-const StyledSetCurrBtn = styled.button``;
+const StyledSetCurrBtn = styled.button`
+  border-radius: 30px;
+  width: 15rem;
+`;

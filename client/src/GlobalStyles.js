@@ -33,6 +33,7 @@ export const GlobalStyles = createGlobalStyle`${css`
 
   body {
     filter: ${({ theme }) => theme.overallColor};
+    transition: filter 250ms ease-in-out;
   }
 
   /* remember to define focus styles! */
@@ -142,27 +143,3 @@ export const lightTheme = {
 export const darkTheme = {
   overallColor: "invert(100%) hue-rotate(180deg)",
 };
-
-//   background: "whitesmoke",
-//   text: " #121212",
-//   activeBorder:
-//     "linear-gradient(90deg, #333 50%, transparent 0) repeat-x,linear-gradient(90deg, #333 50%, transparent 0) repeat-x,linear-gradient(0deg, #333 50%, transparent 0) repeat-y,linear-gradient(0deg, #333 50%, transparent 0) repeat-y",
-//   boxShadow:
-//     "0 1px 1px rgba(0, 0, 0, 0.08), 0 2px 2px rgba(0, 0, 0, 0.12),0 4px 4px rgba(0, 0, 0, 0.16), 0 8px 8px rgba(0, 0, 0, 0.2);",
-//   marqRowBackground: "rgb(253, 243, 229)",
-//   buttonColor: "#B6D0E2",
-//   buttonGradient: "linear-gradient(to bottom, #B6D0E2, #c9e9ec)",
-//   colorNav: "white",
-//   menuColor: "black",
-
-//   background: "#121212",
-//   text: "white",
-//   activeBorder:
-//     "linear-gradient(90deg, #f1eeee 50%, transparent 0) repeat-x,linear-gradient(90deg, #f1eeee 50%, transparent 0) repeat-x,linear-gradient(0deg, #f1eeee 50%, transparent 0) repeat-y,linear-gradient(0deg, #f1eeee 50%, transparent 0) repeat-y",
-//   boxShadow:
-//     "0 1px 1px rgba(233, 233, 233, 0.849), 0 2px 2px rgba(233, 233, 233, 0.658),0 4px 4px rgba(233, 233, 233, 0.418), 0 8px 8px rgba(233, 233, 233, 0.329)",
-//   marqRowBackground: "rgb(196, 196, 196)",
-//   buttonColor: "#9bcaec",
-//   buttonGradient: "linear-gradient(to bottom, ##9bcaec, #76b3df)",
-//   colorNav: "#363535",
-//   menuColor: "whitesmoke",

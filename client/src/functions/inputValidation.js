@@ -1,3 +1,10 @@
+import getNextElNum from "./getNextElNum";
+
+// Trying to figure out if this function can be isolated into it's own module/script...so far looks like it's not worth it
+
+//////////////////////////////////
+//////////////////////////////////
+// THIS WOULD BE KEPT GLOBAL:
 const inputValidationObj = {
   row0: { values: [], sizes: 0 },
   row1: { values: [], sizes: 0 },
@@ -11,18 +18,21 @@ function getNextEl(row) {
   // if last el, start from the beginning
   return currEl === inputRefsArr.current.length - 1 ? 0 : currEl + 1;
 }
-
-export function validateInput(formEl, row, key, currMarq, marqSize) {
+//////////////////////////////////
+//////////////////////////////////
+//////////////////////////////////
+//////////////////////////////////
+export function validateInput(row, key, data, ev, marqSize) {
   if (key === "Enter") {
     console.log("row:", row);
 
     let nextEl = getNextEl(row);
     inputRefsArr.current[nextEl].focus();
     // dispatch reducer:
-    dispAppState({
-      type: "set",
-      payload: setCurrMarquee(ev, keysArr, appState, data, currMarq),
-    });
+    // dispAppState({
+    //   type: "set",
+    //   payload: setCurrMarquee(ev, keysArr, appState, data, currMarq),
+    // });
     return;
   }
   if (key === "Backspace" || key === "Delete") {

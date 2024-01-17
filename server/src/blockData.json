@@ -328,12 +328,6 @@
     "size": "3"
   },
 
-  "💬": {
-    "blockSymbol": "💬",
-    "stock": 29,
-    "size": "2"
-  },
-
   "www": {
     "blockSymbol": "WWW",
     "stock": 3,
@@ -352,18 +346,6 @@
     "size": "3"
   },
 
-  "❤️": {
-    "blockSymbol": "❤️",
-    "stock": 3,
-    "size": "2"
-  },
-
-  "🔥": {
-    "blockSymbol": "🔥",
-    "stock": 3,
-    "size": "2"
-  },
-
   "paradiseonbloor.com": {
     "blockSymbol": "paradiseonbloor.com",
     "stock": 3,
@@ -374,30 +356,6 @@
     "blockSymbol": "osteriarialto.com",
     "stock": 3,
     "size": "5.5"
-  },
-
-  "🍾": {
-    "blockSymbol": "🍾",
-    "stock": 10,
-    "size": "2"
-  },
-
-  "📷": {
-    "blockSymbol": "📷",
-    "stock": 3,
-    "size": "2"
-  },
-
-  "🎥": {
-    "blockSymbol": "🎥",
-    "stock": 3,
-    "size": "2"
-  },
-
-  "🍿": {
-    "blockSymbol": "🍿",
-    "stock": 3,
-    "size": "2"
   },
 
   "osteria rialto": {

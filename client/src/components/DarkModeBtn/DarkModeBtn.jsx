@@ -1,5 +1,6 @@
 import { styled } from "styled-components";
 import { CiLight } from "react-icons/ci";
+import { CiDark } from "react-icons/ci";
 
 export default function DarkModeBtn({ setTheme, theme }) {
   const toggleTheme = () => {
@@ -15,8 +16,15 @@ export default function DarkModeBtn({ setTheme, theme }) {
 
   return (
     <StyledDarkModeBtn onClick={toggleTheme}>
-      <StyledCircle>
-        <CiLight style={style} />
+      <StyledCircle data-dark={theme === "dark" ? true : false}>
+        {theme === "dark" ? (
+          <CiDark style={style} />
+        ) : (
+          <StyledLightIcon
+            style={style}
+            data-dark={theme === "dark" ? true : false}
+          />
+        )}
       </StyledCircle>
     </StyledDarkModeBtn>
   );
@@ -24,6 +32,7 @@ export default function DarkModeBtn({ setTheme, theme }) {
 
 const StyledDarkModeBtn = styled.div`
   background-color: #b6d0e2;
+  border: 1px solid black;
   position: relative;
   display: flex;
   align-items: center;
@@ -40,17 +49,29 @@ const StyledDarkModeBtn = styled.div`
 const StyledCircle = styled.div`
   border-radius: 30px;
   position: absolute;
-  left: 0rem;
   width: 2.35rem;
   height: 2.35rem;
-  transform: ${({ theme }) =>
-    theme === "dark" ? "translateX(120%)" : "translateX(0%)"};
   background-color: rgb(253, 243, 229);
   // handles the icon:
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: transform 250ms linear; // transition back
   &:hover {
     filter: brightness(95%);
+  }
+
+  &[data-dark="true"] {
+    transform: translateX(120%);
+    transition: transform 250ms linear;
+  }
+`;
+
+const StyledLightIcon = styled(CiLight)`
+  transition: transform 800ms linear;
+  &[data-dark="true"] {
+    opacity: 0%;
+    transition: transform 500ms linear, opacity 250ms linear;
+    transform: translateY(-100%); // transition down
   }
 `;

@@ -61,7 +61,7 @@ export const characterSet = [
     characters: [
       "am",
       "pm",
-      "presents",
+      "pre-\nsents", // TODO: this may present an issue
       "www",
       ".com",
       "live",
@@ -69,9 +69,5 @@ export const characterSet = [
       "free",
       "sold out",
     ],
-  },
-  {
-    rowNum: "row3",
-    characters: ["💬", "❤️", "🔥", "🍿", "🎥", "📷", "🍾"],
   },
 ];
