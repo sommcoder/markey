@@ -96,19 +96,23 @@ export default function App() {
 
     switch (action.type) {
       case "input": {
-        console.log("INPUT:", action.payload);
+        console.log("INPUT Payload:", action.payload);
         // set should update appState (as it is)
         // StockTracker should then use appState to lookup the values in data and render the difference (charAvail - charSelect = charRender)
 
-        return { ...state, ...action.payload };
+        // assign the action.payload to the selectedMarq, only updating that child object and not the other two marquee objects
+        // TODO: currently the app state appears to be fully REPLACING all of the marquees... need to fix
+        return { ...state, [selectedMarq]: action.payload };
       }
       case "set": {
-        console.log("REDUCER action.payload:", action.payload);
-        const tallyObj = getTally(action.payload);
+        // TODO: set should only be a function after SUBMIT. They should do different things. Right now we're trying to make it do the same thing and it's making this process excessively complicated. "set" should just update state
+
+        // "set" sets the CURRENT APP STATE
+        console.log("SET state:", state);
+        const tallyObj = getTally(state);
 
         console.log("REDUCER: tallyObj:", tallyObj);
-        // NOW WE NEED TO DETERMINE WHEN WE ASSIGN OUR TALLY OBJECT
-
+        // "set" sets to the currOutput
         setStateOutputObj({
           currOutput: tallyObj,
           newOutput: {},
@@ -123,8 +127,8 @@ export default function App() {
       case "compare": {
         console.log("REDUCER action.payload:", action.payload);
         const tallyObj = getTally(action.payload);
-        // this sets the newOutput property and calls the comparison function to get the difference in characters from curr to new outputs
-
+        // "compare" sets to newOutput and
+        // currOutput would stay the same
         setStateOutputObj({
           currOutput: stateOutputObj.currOutput,
           newOutput: tallyObj,
@@ -147,6 +151,13 @@ export default function App() {
     1: { values: [], sizes: 0 },
     2: { values: [], sizes: 0 },
   };
+
+  // kind of a silly solution but it works:
+  // function setSingleMarquee(keysArr, formEl, data) {
+  //   return {
+  //     [selectedMarq]: setCurrMarquee(keysArr, formEl, data),
+  //   };
+  // }
 
   function inputValidation(ev) {
     if (!selectedMarq) return; // no selected marq?
@@ -171,15 +182,12 @@ export default function App() {
           // Error: "No Characters Entered into Marquee"
           return;
       } else {
-        console.log("selectedMarq:", selectedMarq);
         // dispatch reducer:
         dispAppState({
           type: "input",
-          payload: {
-            [selectedMarq]: setCurrMarquee(keysArr, formEl, appState, data),
-          },
+          payload: setCurrMarquee(keysArr, formEl, data),
         });
-
+        //  switch to next row:
         switchSelectedRow(getNextElNum(rowStr, selectedRow));
         return;
       }
@@ -262,6 +270,7 @@ export default function App() {
               appState={appState}
               marKeysArr={marKeysArr}
               data={data}
+              stateOutputObj={stateOutputObj}
               outputProcess={outputProcess}
             />
           ) : (

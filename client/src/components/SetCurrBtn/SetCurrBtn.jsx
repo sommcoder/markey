@@ -18,7 +18,7 @@ export default function SetCurrBtn({
     // dispatch reducer:
     dispAppState({
       type: "set",
-      payload: setAllMarquee(keysArr, refStateObj, data),
+      payload: setAllMarquee(keysArr, refStateObj, data, appState),
     });
   }
 

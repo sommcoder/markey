@@ -28,26 +28,26 @@ user needs to see:
 
   // TODO: we need to determine if this was a "set" or "compare" trigger. The Modal components will simply accept the data sent to them.
 
-  let outputObj;
-  useEffect(() => {
-    if (stateOutputObj && outputProcess === "Set") {
-      outputObj = stateOutputObj.currOutput;
-    }
-    if (stateOutputObj && outputProcess === "Compare") {
-      outputObj = stateOutputObj.newOutput;
-    }
-    // else do nothing
-  }, [stateOutputObj, outputProcess]);
+  // let outputObj;
+  // useEffect(() => {
+  //   if (stateOutputObj && outputProcess === "Set") {
+  //     outputObj = stateOutputObj.currOutput;
+  //   }
+  //   if (stateOutputObj && outputProcess === "Compare") {
+  //     outputObj = stateOutputObj.newOutput;
+  //   }
+  //   // else do nothing
+  // }, [stateOutputObj, outputProcess]);
 
   return (
     <StyledOverlay modalState={modalState}>
       {modalState ? (
         <StyledModalWindow modalWindowWidth={modalWindowWidth}>
           <ModalHeader />
-          {outputObj ? (
+          {outputProcess ? (
             <ModalTable
               data={data}
-              outputObj={outputObj}
+              stateOutputObj={stateOutputObj.currOutput}
               outputProcess={outputProcess}
             />
           ) : (

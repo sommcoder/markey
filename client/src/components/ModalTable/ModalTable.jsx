@@ -1,13 +1,13 @@
 ﻿import styled from "styled-components";
 import Block from "../Block/Block";
 
-export default function ModalTable({ data, appState, outputObj }) {
+export default function ModalTable({ data, appState, stateOutputObj }) {
   console.log("appState:", appState);
-  console.log("MODAL TABLE outputObj:", outputObj);
+  console.log("MODAL TABLE outputObj:", stateOutputObj);
 
   return (
     <StyledModalTable>
-      {Object.keys(outputObj)
+      {Object.keys(stateOutputObj)
         .sort() // easier to view
         .map((char, i) => {
           // render nothing if character is ' '
@@ -21,7 +21,7 @@ export default function ModalTable({ data, appState, outputObj }) {
                 delay={i + 1}
                 style={data[char].size}
               />
-              <StyledBlockTally>x{outputObj[char]}</StyledBlockTally>
+              <StyledBlockTally>x{stateOutputObj[char]}</StyledBlockTally>
             </StyledModalBlockContainer>
           );
         })}

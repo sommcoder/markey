@@ -1,6 +1,6 @@
 import setCurrMarquee from "./setCurrMarquee";
 
-export default function setAllMarquee(keysArr, refStateObj, data) {
+export default function setAllMarquee(keysArr, refStateObj, data, appState) {
   let newAppState = {}; // blank object
 
   // TODO: Create a help modal: - select marquee - enter characters - submit current - choose "compare" or "close". if "close", "set Current" will be replaced by "View Tally".
@@ -15,7 +15,8 @@ export default function setAllMarquee(keysArr, refStateObj, data) {
     newAppState[formKey] = setCurrMarquee(
       keysArr,
       refStateObj[formKey].current,
-      data
+      data,
+      appState
     );
     // TODO: its reassigning after each iteration. We need a reference to the marqs to be able to dynamically assign the returning object to the CORRECT marq key
   }
