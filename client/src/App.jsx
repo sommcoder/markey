@@ -98,6 +98,9 @@ export default function App() {
 
   function prepareKey(ev) {
     let key;
+
+    // TODO: ! also can we distinguish between events and key entries???
+
     if (ev.type === "click") {
       key = ev.target.value;
     } else {
