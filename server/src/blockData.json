@@ -1,372 +1,383 @@
-{
-  " ": {
-    "blockSymbol": " ",
-    "stock": 100,
-    "size": "1.5"
-  },
-  "a": {
-    "blockSymbol": "A",
-    "stock": 19,
-    "size": "2.88"
-  },
-  "b": {
-    "blockSymbol": "B",
-    "stock": 10,
-    "size": "2.39"
-  },
-  "c": {
-    "blockSymbol": "C",
-    "stock": 7,
-    "size": "2.43"
-  },
-  "d": {
-    "blockSymbol": "D",
-    "stock": 8,
-    "size": "2.43"
-  },
-  "e": {
-    "blockSymbol": "E",
-    "stock": 20,
-    "size": "2.28"
-  },
-  "f": {
-    "blockSymbol": "F",
-    "stock": 7,
-    "size": "2.28"
-  },
-  "g": {
-    "blockSymbol": "G",
-    "stock": 10,
-    "size": "2.51"
-  },
+[
+  {
+    "2341": {
+      "MarqueeBlock": " ",
+      "stock": 100,
+      "size": "1.5",
+      "textRow": " "
+    },
+    "7891": {
+      "MarqueeBlock": "A",
+      "stock": 19,
+      "size": "2.88",
+      "textRow": "a"
+    },
+    "5679": {
+      "MarqueeBlock": "B",
+      "stock": 10,
+      "size": "2.39",
+      "textRow": "b"
+    },
+    "1235": {
+      "MarqueeBlock": "C",
+      "stock": 7,
+      "size": "2.43",
+      "textRow": "c"
+    },
+    "8903": {
+      "MarqueeBlock": "D",
+      "stock": 8,
+      "size": "2.43",
+      "textRow": "d"
+    },
+    "4564": {
+      "MarqueeBlock": "E",
+      "stock": 20,
+      "size": "2.28",
+      "textRow": "e"
+    },
+    "3457": {
+      "MarqueeBlock": "F",
+      "stock": 7,
+      "size": "2.28",
+      "textRow": "f"
+    },
+    "6780": {
+      "MarqueeBlock": "G",
+      "stock": 10,
+      "size": "2.51",
+      "textRow": "g"
+    },
+    "9013": {
+      "MarqueeBlock": "H",
+      "stock": 9,
+      "size": "2.51",
+      "textRow": "h"
+    },
+    "7896": {
+      "MarqueeBlock": "I",
+      "stock": 21,
+      "size": "1.39",
+      "textRow": "i"
+    },
+    "2349": {
+      "MarqueeBlock": "J",
+      "stock": 6,
+      "size": "2.43",
+      "textRow": "j"
+    },
+    "6781": {
+      "MarqueeBlock": "K",
+      "stock": 6,
+      "size": "2.58",
+      "textRow": "k"
+    },
+    "3459": {
+      "MarqueeBlock": "L",
+      "stock": 16,
+      "size": "2.43",
+      "textRow": "l"
+    },
+    "8902": {
+      "MarqueeBlock": "M",
+      "stock": 10,
+      "size": "3.03",
+      "textRow": "m"
+    },
+    "2346": {
+      "MarqueeBlock": "N",
+      "stock": 15,
+      "size": "2.55",
+      "textRow": "n"
+    },
+    "5677": {
+      "MarqueeBlock": "O",
+      "stock": 32,
+      "size": "2.55",
+      "textRow": "o"
+    },
+    "9011": {
+      "MarqueeBlock": "P",
+      "stock": 13,
+      "size": "2.36",
+      "textRow": "p"
+    },
+    "3454": {
+      "MarqueeBlock": "Q",
+      "stock": 3,
+      "size": "2.58",
+      "textRow": "q"
+    },
+    "7892": {
+      "MarqueeBlock": "R",
+      "stock": 14,
+      "size": "2.51",
+      "textRow": "r"
+    },
+    "1236": {
+      "MarqueeBlock": "S",
+      "stock": 14,
+      "size": "2.51",
+      "textRow": "s"
+    },
+    "4566": {
+      "MarqueeBlock": "T",
+      "stock": 18,
+      "size": "2.43",
+      "textRow": "t"
+    },
+    "8904": {
+      "MarqueeBlock": "U",
+      "stock": 22,
+      "size": "2.51",
+      "textRow": "u"
+    },
+    "2347": {
+      "MarqueeBlock": "V",
+      "stock": 5,
+      "size": "2.76",
+      "textRow": "v"
+    },
+    "6788": {
+      "MarqueeBlock": "W",
+      "stock": 6,
+      "size": "2.95",
+      "textRow": "w"
+    },
+    "0124": {
+      "MarqueeBlock": "X",
+      "stock": 2,
+      "size": "2.58",
+      "textRow": "x"
+    },
+    "4568": {
+      "MarqueeBlock": "Y",
+      "stock": 5,
+      "size": "2.76",
+      "textRow": "y"
+    },
+    "8909": {
+      "MarqueeBlock": "Z",
+      "stock": 4,
+      "size": "2.39",
+      "textRow": "z"
+    },
+    "3210": {
+      "MarqueeBlock": "1",
+      "stock": 10,
+      "size": "1.75",
+      "textRow": "1"
+    },
+    "5676": {
+      "MarqueeBlock": "1",
+      "stock": 10,
+      "size": "2",
+      "textRow": "1"
+    },
+    "9876": {
+      "MarqueeBlock": "2",
+      "stock": 10,
+      "size": "2",
+      "textRow": "2"
+    },
+    "5432": {
+      "MarqueeBlock": "3",
+      "stock": 10,
+      "size": "2",
+      "textRow": "3"
+    },
+    "6782": {
+      "MarqueeBlock": "4",
+      "stock": 9,
+      "size": "2",
+      "textRow": "4"
+    },
+    "0133": {
+      "MarqueeBlock": "5",
+      "stock": 10,
+      "size": "2",
+      "textRow": "5"
+    },
+    "2445": {
+      "MarqueeBlock": "6",
+      "stock": 10,
+      "size": "2",
+      "textRow": "6"
+    },
+    "4577": {
+      "MarqueeBlock": "7",
+      "stock": 10,
+      "size": "2",
+      "textRow": "7"
+    },
+    "6489": {
+      "MarqueeBlock": "8",
+      "stock": 10,
+      "size": "2",
+      "textRow": "8"
+    },
+    "8201": {
+      "MarqueeBlock": "9",
+      "stock": 10,
+      "size": "2",
+      "textRow": "9"
+    },
+    "3256": {
+      "MarqueeBlock": "-",
+      "stock": 3,
+      "size": "1.5",
+      "textRow": "-"
+    },
+    "9890": {
+      "MarqueeBlock": ".",
+      "stock": 4,
+      "size": "1.5",
+      "textRow": "."
+    },
+    "8012": {
+      "MarqueeBlock": ";",
+      "stock": 3,
+      "size": "1.25",
+      "textRow": ";"
+    },
+    "4456": {
+      "MarqueeBlock": ",",
+      "stock": 9,
+      "size": "1.25",
+      "textRow": ","
+    },
+    "5890": {
+      "MarqueeBlock": "!",
+      "stock": 3,
+      "size": "1.25",
+      "textRow": "!"
+    },
+    "1234": {
+      "MarqueeBlock": "&",
+      "stock": 6,
+      "size": "2",
+      "textRow": "&"
+    },
+    "5678": {
+      "MarqueeBlock": "$",
+      "stock": 3,
+      "size": "2",
+      "textRow": "$"
+    },
+    "9012": {
+      "MarqueeBlock": "#",
+      "stock": 3,
+      "size": "2",
+      "textRow": "#"
+    },
+    "3456": {
+      "MarqueeBlock": "/",
+      "stock": 11,
+      "size": "2",
+      "textRow": "/"
+    },
+    "7890": {
+      "MarqueeBlock": "?",
+      "stock": 3,
+      "size": "2",
+      "textRow": "?"
+    },
+    "1345": {
+      "MarqueeBlock": "+",
+      "stock": 6,
+      "size": "1.5",
+      "textRow": "+"
+    },
+    "5789": {
+      "MarqueeBlock": ":",
+      "stock": 6,
+      "size": "1.25",
+      "textRow": ":"
+    },
+    "6789": {
+      "MarqueeBlock": "@",
+      "stock": 3,
+      "size": "3",
+      "textRow": "@"
+    },
+    "3123": {
+      "MarqueeBlock": "AM",
+      "stock": 6,
+      "size": "2",
+      "textRow": "{am}"
+    },
+    "3567": {
+      "MarqueeBlock": "PM",
+      "stock": 8,
+      "size": "2",
+      "textRow": "{pm}"
+    },
+    "3901": {
+      "MarqueeBlock": "PRESENTS",
+      "stock": 3,
+      "size": "4",
+      "textRow": "{presents}"
+    },
+    "3345": {
+      "MarqueeBlock": "SOLD OUT",
+      "stock": 4,
+      "size": "4",
+      "textRow": "{sold out}"
+    },
+    "3789": {
+      "MarqueeBlock": "FREE",
+      "stock": 3,
+      "size": "3",
+      "textRow": "{free}"
+    },
+    "5123": {
+      "MarqueeBlock": "FEAT",
+      "stock": 3,
+      "size": "3",
+      "textRow": "{feat}"
+    },
+    "1567": {
+      "MarqueeBlock": "LIVE",
+      "stock": 3,
+      "size": "3",
+      "textRow": "{live}"
+    },
+    "2901": {
+      "MarqueeBlock": "WWW",
+      "stock": 3,
+      "size": "2",
+      "textRow": "{www}"
+    },
+    "8345": {
+      "MarqueeBlock": ".com",
+      "stock": 3,
+      "size": "2",
+      "textRow": "{.com}"
+    },
 
-  "h": {
-    "blockSymbol": "H",
-    "stock": 9,
-    "size": "2.51"
-  },
-
-  "i": {
-    "blockSymbol": "I",
-    "stock": 21,
-    "size": "1.39"
-  },
-
-  "j": {
-    "blockSymbol": "J",
-    "stock": 6,
-    "size": "2.43"
-  },
-
-  "k": {
-    "blockSymbol": "K",
-    "stock": 6,
-    "size": "2.58"
-  },
-
-  "l": {
-    "blockSymbol": "L",
-    "stock": 16,
-    "size": "2.43"
-  },
-
-  "m": {
-    "blockSymbol": "M",
-    "stock": 10,
-    "size": "3.03"
-  },
-
-  "n": {
-    "blockSymbol": "N",
-    "stock": 15,
-    "size": "2.55"
-  },
-
-  "o": {
-    "blockSymbol": "O",
-    "stock": 32,
-    "size": "2.55"
-  },
-
-  "p": {
-    "blockSymbol": "P",
-    "stock": 13,
-    "size": "2.36"
-  },
-
-  "q": {
-    "blockSymbol": "Q",
-    "stock": 3,
-    "size": "2.58"
-  },
-
-  "r": {
-    "blockSymbol": "R",
-    "stock": 14,
-    "size": "2.51"
-  },
-
-  "s": {
-    "blockSymbol": "S",
-    "stock": 14,
-    "size": "2.51"
-  },
-
-  "t": {
-    "blockSymbol": "T",
-    "stock": 18,
-    "size": "2.43"
-  },
-
-  "u": {
-    "blockSymbol": "U",
-    "stock": 22,
-    "size": "2.51"
-  },
-
-  "v": {
-    "blockSymbol": "V",
-    "stock": 5,
-    "size": "2.76"
-  },
-
-  "w": {
-    "blockSymbol": "W",
-    "stock": 6,
-    "size": "2.95"
-  },
-
-  "x": {
-    "blockSymbol": "X",
-    "stock": 2,
-    "size": "2.58"
-  },
-
-  "y": {
-    "blockSymbol": "Y",
-    "stock": 5,
-    "size": "2.76"
-  },
-
-  "z": {
-    "blockSymbol": "Z",
-    "stock": 4,
-    "size": "2.39"
-  },
-
-  "0": {
-    "blockSymbol": "1",
-    "stock": 10,
-    "size": "1.75"
-  },
-
-  "1": {
-    "blockSymbol": "1",
-    "stock": 10,
-    "size": "2"
-  },
-
-  "2": {
-    "blockSymbol": "2",
-    "stock": 10,
-    "size": "2"
-  },
-
-  "3": {
-    "blockSymbol": "3",
-    "stock": 10,
-    "size": "2"
-  },
-
-  "4": {
-    "blockSymbol": "4",
-    "stock": 9,
-    "size": "2"
-  },
-
-  "5": {
-    "blockSymbol": "5",
-    "stock": 10,
-    "size": "2"
-  },
-
-  "6": {
-    "blockSymbol": "6",
-    "stock": 10,
-    "size": "2"
-  },
-
-  "7": {
-    "blockSymbol": "7",
-    "stock": 10,
-    "size": "2"
-  },
-
-  "8": {
-    "blockSymbol": "8",
-    "stock": 10,
-    "size": "2"
-  },
-
-  "9": {
-    "blockSymbol": "9",
-    "stock": 10,
-    "size": "2"
-  },
-
-  "-": {
-    "blockSymbol": "-",
-    "stock": 3,
-    "size": "1.5"
-  },
-
-  ".": {
-    "blockSymbol": ".",
-    "stock": 4,
-    "size": "1.5"
-  },
-
-  ";": {
-    "blockSymbol": ";",
-    "stock": 3,
-    "size": "1.25"
-  },
-
-  ",": {
-    "blockSymbol": ",",
-    "stock": 9,
-    "size": "1.25"
-  },
-
-  "!": {
-    "blockSymbol": "!",
-    "stock": 3,
-    "size": "1.25"
-  },
-
-  "&": {
-    "blockSymbol": "&",
-    "stock": 6,
-    "size": "2"
-  },
-
-  "$": {
-    "blockSymbol": "$",
-    "stock": 3,
-    "size": "2"
-  },
-
-  "#": {
-    "blockSymbol": "#",
-    "stock": 3,
-    "size": "2"
-  },
-
-  "/": {
-    "blockSymbol": "/",
-    "stock": 11,
-    "size": "2"
-  },
-
-  "?": {
-    "blockSymbol": "?",
-    "stock": 3,
-    "size": "2"
-  },
-
-  "+": {
-    "blockSymbol": "+",
-    "stock": 6,
-    "size": "1.5"
-  },
-
-  ":": {
-    "blockSymbol": ":",
-    "stock": 6,
-    "size": "1.25"
-  },
-
-  "am": {
-    "blockSymbol": "AM",
-    "stock": 6,
-    "size": "2"
-  },
-
-  "pm": {
-    "blockSymbol": "PM",
-    "stock": 8,
-    "size": "2"
-  },
-
-  "presents": {
-    "blockSymbol": "PRESENTS",
-    "stock": 3,
-    "size": "4"
-  },
-
-  "sold out": {
-    "blockSymbol": "SOLD OUT",
-    "stock": 4,
-    "size": "4"
-  },
-
-  "free": {
-    "blockSymbol": "FREE",
-    "stock": 3,
-    "size": "3"
-  },
-
-  "feat": {
-    "blockSymbol": "FEAT",
-    "stock": 3,
-    "size": "3"
-  },
-
-  "live": {
-    "blockSymbol": "LIVE",
-    "stock": 3,
-    "size": "3"
-  },
-
-  "www": {
-    "blockSymbol": "WWW",
-    "stock": 3,
-    "size": "2"
-  },
-
-  ".com": {
-    "blockSymbol": ".com",
-    "stock": 3,
-    "size": "2"
-  },
-
-  "@": {
-    "blockSymbol": "@",
-    "stock": 3,
-    "size": "3"
-  },
-
-  "paradiseonbloor.com": {
-    "blockSymbol": "paradiseonbloor.com",
-    "stock": 3,
-    "size": "5.5"
-  },
-
-  "osteriarialto.com": {
-    "blockSymbol": "osteriarialto.com",
-    "stock": 3,
-    "size": "5.5"
-  },
-
-  "osteria rialto": {
-    "blockSymbol": "Osteria Rialto",
-    "stock": 3,
-    "size": "2"
-  },
-
-  "dine at": {
-    "blockSymbol": "Dine At",
-    "stock": 3,
-    "size": "2"
+    "0123": {
+      "MarqueeBlock": "paradiseonbloor.com",
+      "stock": 3,
+      "size": "5.5",
+      "textRow": "{paradiseonbloor.com}"
+    },
+    "4567": {
+      "MarqueeBlock": "osteriarialto.com",
+      "stock": 3,
+      "size": "5.5",
+      "textRow": "{osteriarialto.com}"
+    },
+    "8901": {
+      "MarqueeBlock": "Osteria Rialto",
+      "stock": 3,
+      "size": "2",
+      "textRow": "{osteria rialto}"
+    },
+    "2345": {
+      "MarqueeBlock": "Dine At",
+      "stock": 3,
+      "size": "2",
+      "textRow": "{dine at}"
+    }
   }
-}
+]

@@ -15,26 +15,19 @@ import setCurrMarquee from "./functions/setCurrMarquee.js";
 import getNextElNum from "./functions/getNextElNum.js";
 import getTally from "./functions/getTally.js";
 /////////////////////////////////////////
+import { specialKeysArr } from "./components/KeySet/characterSet.js";
+/////////////////////////////////////////
 export default function App() {
   const { isLoading, isSuccess, isError, data, error } = useQuery({
     queryKey: ["get-characters"],
     queryFn: getCharacterStock, // no parentheses!
   }); // makes MULTIPLE retry queries automatically if query fails.
 
-  // TODO: the special characters don't have accurate blockWidths. You'll need to review the physcial stock in the theatre.
+  // TODO: the special characters don't have accurate blockWidths. You'll need to review the physical stock in the theatre.
 
   // TODO: still need to figure out updating stockTracker and then also the side menu and how to adjust character sizing and stock in case the user gets more or some break/get lost
   // fetchOnWindowFocus();
 
-  // form element reference Object. Populated via forwardRef() hook
-  const refStateObj = {
-    West: useRef(null),
-    East: useRef(null),
-    South: useRef(null),
-  };
-
-  // [{ ltr: quantity }]
-  // Going to try and hold ALL of the app state here and not divide the individual rows into the state of the individual marquee.
   const InitAppState = {
     West: {
       rows: {
@@ -61,7 +54,8 @@ export default function App() {
       output: {},
     },
   };
-
+  // * Main App State *: //
+  /////////////////////////////////////////////
   // popup modal = the apps output
   const [modalState, toggleModal] = useState(false);
   // String state that gets set by switchSelectedMarq(marqName)
@@ -70,81 +64,28 @@ export default function App() {
   const [selectedRow, switchSelectedRow] = useState(null);
   // null until user submits something:
   const [stateOutputObj, setStateOutputObj] = useState(null);
-  // "set" or "compare" or null
+  // "set" or "compare" or "input" or null
   const [outputProcess, setOutputProcess] = useState(null);
   // primary state control:
   const [appState, dispAppState] = useReducer(reducer, InitAppState);
-
-  // gets concatenated to rem. needs to be calculated therefore is number
+  // window Sizing Check:
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  // "light" or "dark"
+  const [theme, setTheme] = useState("light");
+  // form element reference Object. Populated via forwardRef() hook
+  const refStateObj = {
+    West: useRef(null),
+    East: useRef(null),
+    South: useRef(null),
+  };
+  //////////////////////////////////////////////
   const marqSizes = {
     East: 42,
     West: 42,
     South: 84,
   };
-
-  // "light" or "dark"
-  const [theme, setTheme] = useState("light");
-
   const marKeysArr = Object.keys(appState);
-
   const keysArr = [0, 1, 2]; // should probably be named to "rowsArr"
-
-  function reducer(state, action) {
-    if (!action.payload) return state;
-    console.log("appREDUCER: action.payload:", action.payload);
-
-    switch (action.type) {
-      case "input": {
-        console.log("INPUT Payload:", action.payload);
-        console.log("state:", state);
-        // set should update appState (as it is)
-        // StockTracker should then use appState to lookup the values in data and render the difference (charAvail - charSelect = charRender)
-
-        // assign the action.payload to the selectedMarq, only updating that child object and not the other two marquee objects
-        // TODO: currently the app state appears to be fully REPLACING all of the marquees... need to fix
-
-        return { ...state, [selectedMarq]: action.payload };
-      }
-      case "set": {
-        // TODO: set should only be a function after SUBMIT. They should do different things. Right now we're trying to make it do the same thing and it's making this process excessively complicated. "set" should just update state
-
-        // "set" sets the CURRENT APP STATE
-        console.log("SET state:", action.payload);
-        const tallyObj = getTally(action.payload);
-
-        console.log("REDUCER: tallyObj:", tallyObj);
-        // "set" sets to the currOutput
-        setStateOutputObj({
-          currOutput: tallyObj,
-          newOutput: {},
-        });
-        setOutputProcess("set");
-        switchSelectedMarq(null);
-        switchSelectedRow(null);
-        toggleModal(true);
-
-        return { ...state, ...action.payload };
-      }
-      case "compare": {
-        console.log("REDUCER action.payload:", action.payload);
-        const tallyObj = getTally(action.payload);
-        // "compare" sets to newOutput and
-        // currOutput would stay the same
-        setStateOutputObj({
-          currOutput: stateOutputObj.currOutput,
-          newOutput: tallyObj,
-        });
-        setOutputProcess("compare");
-        switchSelectedMarq(null);
-        switchSelectedRow(null);
-        toggleModal(true);
-
-        return { ...state, ...action.payload.count };
-      }
-      default:
-        return state;
-    }
-  }
 
   // NOT state. Client-side validation via onKeyDown/onClick events:
   const inputValidationObj = {
@@ -153,60 +94,82 @@ export default function App() {
     2: { values: [], sizes: 0 },
   };
 
-  function inputValidation(ev) {
-    if (!selectedMarq) return; // no selected marq?
+  const specialBtnsArr = ["Enter", "Backspace", "Delete", "CapsLock", "Tab"];
 
+  function prepareKey(ev) {
     let key;
-    // assign key based on the event:
-    ev.type === "click" ? (key = ev.target.value) : (key = ev.key);
+    if (ev.type === "click") {
+      key = ev.target.value;
+    } else {
+      key = ev.key;
+    }
+    if (!key) return; // undefined input clause
+    if (specialBtnsArr.includes(key)) return key;
+    // the only thing excessive is that we're lower casing "Enter", "CapsLock", "Backspace", key presses
+    let lowerKey = key.toLowerCase();
+    if (ev.target.dataset.special) return `{${lowerKey}}`;
+    return lowerKey;
+  }
 
-    const formEl = refStateObj[selectedMarq].current;
+  function inputValidation(ev) {
+    ev.preventDefault(); // prevents the Enter key from "clicking" the focused KeySet Key
+    if (!selectedMarq) return; // no selected marq?
+    console.log("ev.target.dataset.special:", ev.target.dataset.special);
+    console.log("ev.target:", ev.target);
+
+    // TODO: so because of focus event. Enter is submitting the key, which is special, however, it isn't a 'click' event, therefore ev.key === 'Enter' which is why we're getting key = 'enter'
+
+    const key = prepareKey(ev);
+    if (!key) return;
+
+    console.log("key:", key);
+
+    let formEl = refStateObj[selectedMarq].current;
     // const rowEl = refStateObj[selectedMarq].current[selectedRow];
-    const rowStr = refStateObj[selectedMarq].current[selectedRow].name;
+    let rowName = refStateObj[selectedMarq].current[selectedRow].name;
 
+    // console.log("refStateObj:", refStateObj);
     // TODO: we need to get all of the keys to work properly. The current implementation is treating them all as individual characters but what we want is to handle these "special keys" as the SINGLE tiles that they are
     if (key === " ") ev.preventDefault(); // is this right?
+    if (key === "CapsLock") {
+      // popup warning indicating that the CAPSLOCK is on
+    }
     if (key === "Enter") {
-      if (inputValidationObj[rowStr].values.length === 0) {
-        // loop through the other rows to double check.. user could have inputted a row but tabbed to a new row before entering/clicking Set
-        if (
-          !Object.keys(inputValidationObj).some(
-            (row) => inputValidationObj[row].values.length > 0
-          )
-        )
-          // Error: "No Characters Entered into Marquee"
-          return;
-      } else {
-        // dispatch reducer:
-        dispAppState({
-          type: "input",
-          payload: setCurrMarquee(
-            keysArr,
-            formEl,
-            data,
-            appState[selectedMarq] // no marqName just the obj contents
-          ),
-        });
-        //  switch to next row:
-        switchSelectedRow(getNextElNum(rowStr, selectedRow));
-        return;
-      }
+      // dispatch reducer:
+      dispAppState({
+        type: "INPUT_MARQUEE",
+        marq: selectedMarq,
+        payload: setCurrMarquee(
+          keysArr,
+          formEl,
+          data,
+          appState[selectedMarq] // no marqName just the obj contents
+        ),
+      });
+      setOutputProcess("input");
+      switchSelectedRow(getNextElNum(rowName, selectedRow));
+      return;
     }
     // tab creates some weird functionality with selecting text
-    if (key === "Tab") return;
+    if (key === "Tab") {
+      // popup warning that " Tab is disabled in Mar-Key ""
+      return;
+    }
 
     if (key === "Backspace" || key === "Delete") {
-      if (inputValidationObj[rowStr].sizes === 0) {
+      console.log("key:", key);
+      console.log("inputValidationObj:", inputValidationObj);
+      if (inputValidationObj[rowName].sizes === 0) {
         return;
       }
       // update validation Object sizes:
-      inputValidationObj[rowStr].sizes -=
-        +data[inputValidationObj[rowStr].values.at(-1)].size;
+      inputValidationObj[rowName].sizes -=
+        +data[inputValidationObj[rowName].values.at(-1)].size;
       // pop from sequence:
-      inputValidationObj[rowStr].values.pop();
+      inputValidationObj[rowName].values.pop();
       // update the selected input field:
       refStateObj[selectedMarq].current[selectedRow].value =
-        inputValidationObj[rowStr].values.join("");
+        inputValidationObj[rowName].values.join("");
       return;
     }
     if (!data[key]) {
@@ -220,10 +183,10 @@ export default function App() {
     // Max capacity check:
     // existing width + current block size would be greater than the marqSize
     if (
-      inputValidationObj[rowStr].sizes + currBlockSize >
+      inputValidationObj[rowName].sizes + currBlockSize >
       marqSizes[selectedMarq]
     ) {
-      refStateObj[selectedMarq].current[rowStr].animate(
+      refStateObj[selectedMarq].current[rowName].animate(
         [
           {
             transform: "translateX(-0.33%)",
@@ -237,28 +200,44 @@ export default function App() {
         { duration: 150, iterations: 3 }
       );
       return;
+    } else {
+      // append validation object:
+      inputValidationObj[rowName].sizes += currBlockSize;
+      // push to sequence:
+      inputValidationObj[rowName].values.push(key);
+      // update input field:
+      refStateObj[selectedMarq].current[selectedRow].value =
+        inputValidationObj[rowName].values.join("");
+      console.log("inputValidationObj:", inputValidationObj);
+      // TODO: can probably reduce the memory of inputValidationObj down to just a single flat object/array
     }
-    // append validation object:
-    inputValidationObj[rowStr].sizes += currBlockSize;
-    // push to sequence:
-    inputValidationObj[rowStr].values.push(key);
-    // update input field:
-    refStateObj[selectedMarq].current[selectedRow].value =
-      inputValidationObj[rowStr].values.join("");
   }
 
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth); // init state
-
-  // handles device size issue:
+  // SCREEN SIZE:
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
     window.addEventListener("resize", handleResize);
     return () => {
       window.removeEventListener("resize", handleResize); // Cleanup the event listener on component unmount
     };
-  }, []); // Empty dependency array means this effect will only run once on mount..?
+  }, []); // run once on componentDidMount()
+
+  // OUTPUT PROCESS SIDE-EFFECTS:
+  useEffect(() => {
+    if (outputProcess === "set") {
+      setStateOutputObj({
+        currOutput: getTally(appState),
+        newOutput: {},
+      });
+      // reset:
+      switchSelectedMarq(null);
+      switchSelectedRow(null);
+      toggleModal(true);
+    }
+  }, [outputProcess, appState]);
 
   console.log("appState:", appState);
+  console.log("data:", data);
   return (
     // specifies which
     <ThemeProvider theme={theme === "dark" ? darkTheme : lightTheme}>
@@ -268,6 +247,7 @@ export default function App() {
         <StyledAppContainer
           onKeyDown={(ev) => inputValidation(ev)}
           onClick={(ev) => inputValidation(ev)}
+          onFocus={(ev) => ev.preventDefault()}
         >
           {toggleModal ? (
             <Modal
@@ -294,6 +274,7 @@ export default function App() {
             switchSelectedRow={switchSelectedRow}
             stateOutputObj={stateOutputObj}
             setStateOutputObj={setStateOutputObj}
+            setOutputProcess={setOutputProcess}
             setTheme={setTheme}
             theme={theme}
           />
@@ -310,20 +291,11 @@ export default function App() {
             switchSelectedMarq={switchSelectedMarq}
             marqSizes={marqSizes}
           />
-          <KeySet
-            data={data}
-            appState={appState}
-            dispAppState={dispAppState}
-            marqSizes={marqSizes}
-            selectedMarq={selectedMarq}
-            selectedRow={selectedRow}
-            switchSelectedRow={switchSelectedRow}
-            refStateObj={refStateObj}
-          />
+          {isSuccess ? <KeySet data={data} /> : ""}
         </StyledAppContainer>
       ) : (
         <StyledErrorContainer>
-          <StyledErrorMessage>
+          <StyledErrorComponent>
             <h5
               style={{
                 textAlign: "center",
@@ -343,11 +315,43 @@ export default function App() {
             >
               Your screen must be at least 775px wide
             </p>
-          </StyledErrorMessage>
+          </StyledErrorComponent>
         </StyledErrorContainer>
       )}
     </ThemeProvider>
   );
+}
+
+function reducer(state, action) {
+  if (!action.payload) return state;
+  console.log("appREDUCER: action.payload:", action.payload);
+
+  switch (action.type) {
+    case "INPUT_MARQUEE": {
+      return { ...state, [action.marq]: action.payload };
+    }
+    case "SET_APP": {
+      return { ...state, ...action.updatedState };
+    }
+    // case "COMPARE_PREVIOUS_STATE": {
+    //   console.log("REDUCER action.payload:", action.payload);
+    //   const tallyObj = getTally(action.payload);
+    //   // "compare" sets to newOutput and
+    //   // currOutput would stay the same
+    //   setStateOutputObj({
+    //     currOutput: stateOutputObj.currOutput,
+    //     newOutput: tallyObj,
+    //   });
+    //   setOutputProcess("compare");
+    //   switchSelectedMarq(null);
+    //   switchSelectedRow(null);
+    //   toggleModal(true);
+
+    //   return { ...state, ...action.payload.count };
+    // }
+    default:
+      return state;
+  }
 }
 
 const StyledAppContainer = styled.div`
@@ -367,13 +371,14 @@ const StyledAppContainer = styled.div`
 const StyledErrorContainer = styled.div`
   position: relative;
   width: 100%;
+
   height: 100%;
   opacity: 0.5;
   margin: 0 auto;
   background-image: url("/paradise-vintage.jpeg");
 `;
 
-const StyledErrorMessage = styled.div`
+const StyledErrorComponent = styled.div`
   position: absolute;
   top: 50%;
   right: 0;

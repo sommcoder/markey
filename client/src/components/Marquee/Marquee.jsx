@@ -42,7 +42,7 @@ export default forwardRef(function Marquee(
                   key={`${marqName}-${row}-${i}`}
                   block={blockKey[0]}
                   style={blockKey[1]}
-                  delay={i + 1}
+                  delay={i++}
                 />
               ))
             : ""}
@@ -110,7 +110,7 @@ const StyledMarqueeRow = styled.div`
     0 4px 4px rgba(0, 0, 0, 0.16), 0 8px 8px rgba(0, 0, 0, 0.2);
   border: 0.25rem grey solid;
   border-top: none; // prevents border stacking
-  /* 0th child is the DisplayBtn component */
+
   &:nth-child(2) {
     border-top: 0.25rem grey solid;
   }

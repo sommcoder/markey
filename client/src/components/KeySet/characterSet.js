@@ -56,18 +56,19 @@ export const characterSet = [
       "+",
     ],
   },
-  {
-    rowNum: "row2",
-    characters: [
-      "am",
-      "pm",
-      "pre-\nsents", // TODO: this may present an issue
-      "www",
-      ".com",
-      "live",
-      "feat",
-      "free",
-      "sold out",
-    ],
-  },
 ];
+
+export const specialKeysArr = [
+  "am",
+  "pm",
+  "presents",
+  "www",
+  ".com",
+  "live",
+  "feat",
+  "free",
+  "sold out",
+  "osteria rialto",
+  "paradiseonbloor.com",
+  "Dine At",
+]; // how do we autowrap in css?

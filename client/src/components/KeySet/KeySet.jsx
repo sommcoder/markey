@@ -1,6 +1,6 @@
 import Key from "../Key/Key";
 import styled from "styled-components";
-import { characterSet } from "./characterSet";
+import { characterSet, specialKeysArr } from "./characterSet";
 
 export default function KeySet({ data }) {
   return (
@@ -9,6 +9,7 @@ export default function KeySet({ data }) {
         <StyledKeySetRow key={obj.rowNum}>
           {obj.characters.map((char) => (
             <Key
+              special={false}
               data={data}
               char={char}
               rowNum={obj.rowNum}
@@ -17,6 +18,11 @@ export default function KeySet({ data }) {
           ))}
         </StyledKeySetRow>
       ))}
+      <StyledKeySetRow>
+        {specialKeysArr.map((char, i) => (
+          <Key special={true} data={data} char={char} key={`${char}-${i}`} />
+        ))}
+      </StyledKeySetRow>
     </StyledSetContainer>
   );
 }

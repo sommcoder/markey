@@ -1,6 +1,5 @@
 export default function getTally(appState) {
   const tallyObj = {};
-  // TODO: seems to have issues tallying
   let marKeysArr = Object.keys(appState);
   // Double for loop, through marquees, then through their output chars
   for (let marq = 0; marq < marKeysArr.length; marq++) {

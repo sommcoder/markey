@@ -11,6 +11,7 @@ export default function NavBar({
   dispAppState,
   setTheme,
   theme,
+  setOutputProcess,
 }) {
   return (
     <StyledNavBar>
@@ -31,6 +32,7 @@ export default function NavBar({
           keysArr={keysArr}
           appState={appState}
           dispAppState={dispAppState}
+          setOutputProcess={setOutputProcess}
         />
         <HamburgerMenu />
       </StyledRightNavArea>

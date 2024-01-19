@@ -7,6 +7,7 @@ export default function SetCurrBtn({
   keysArr,
   appState,
   dispAppState,
+  setOutputProcess,
 }) {
   function handleSubmit(ev) {
     // this button now submits the entire Marquee range!
@@ -15,9 +16,10 @@ export default function SetCurrBtn({
 
     // dispatch reducer:
     dispAppState({
-      type: "set",
-      payload: setAllMarquee(keysArr, refStateObj, data, appState),
+      type: "SET_APP",
+      updatedState: setAllMarquee(keysArr, refStateObj, data, appState),
     });
+    setOutputProcess("set"); // will this work?
   }
 
   return (

@@ -19,3 +19,4 @@ Mar-key will provide immediate validation BEFORE you submit your entry if your e
 - staggered css animations
 - styled-components
 - react-query w. Axios
+- Used native HTML to create a game with custom components

@@ -1,24 +1,24 @@
-import { useEffect } from "react";
 import styled, { keyframes } from "styled-components";
 
 export default function Block({ block, style, delay, appState }) {
   const blockWidth = style ? style + "rem" : "2rem"; // no style specified? 2 rem
 
-  // useEffect(() => {}, [appState]);
-  // is this what causes the blocks to not all rerender? Does this need to be here?
+  // TODO: may need to find a way to use a different font size for the "special components" so that they'll actually fit. They're also being considered as individual blocks by setCurrMarquee() function and I need a way for them to be interpreted as single tiles
 
-  return (
-    <>
+  if (block === " ") {
+    return <StyledEmptySpace blockWidth={blockWidth} />;
+  } else {
+    return (
       <StyledBlock
         delay={delay}
         readOnly
         maxLength="1"
         type="text"
-        $blockwidth={blockWidth}
+        blockwidth={blockWidth}
         value={block}
       />
-    </>
-  );
+    );
+  }
 }
 
 const populateMarquee = keyframes`
@@ -37,7 +37,7 @@ const populateMarquee = keyframes`
 const StyledBlock = styled.input`
   font-size: 2.8rem;
   user-select: none;
-  width: ${(props) => (props.$blockwidth ? props.$blockwidth : "2rem")};
+  width: ${(props) => (props.blockwidth ? props.blockwidth : "2rem")};
   -webkit-user-select: none;
   text-transform: uppercase;
   text-decoration: none;
@@ -58,4 +58,10 @@ const StyledBlock = styled.input`
   &:focus {
     outline: none;
   }
+`;
+
+const StyledEmptySpace = styled.span`
+  height: 100%;
+  width: ${({ blockWidth }) => blockWidth};
+  border-left: 0.1rem solid grey; // <--- need this
 `;
