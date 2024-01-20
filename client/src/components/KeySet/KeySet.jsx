@@ -1,48 +1,28 @@
-import Key from '../Key/Key';
-import styled from 'styled-components';
-import { characterSet, specialKeysArr } from './characterSet';
+import Key from "../Key/Key";
+import styled from "styled-components";
+import { regularKeysArr, specialKeysArr } from "./characterSet";
 
 export default function KeySet({ data }) {
-  // TODO: data: is set up to lookup based on the id... we need to aggregate the data and assign each Key component the id's props in alphabetical order
-  const keys = Object.keys(data);
-  console.log('keys:', keys);
-  const values = Object.values(data);
-  console.log('values:', values);
-  // TODO: the whole point of this is to make it so that it's easier to click keys and use their props to populate the sequence array for input validation and also make it easy to look up items by id
-  const keySetObj = {};
-  // aggregate the data to be by
-  for (let i = 0; i < values.length; i++) {
-    keySetObj[values[i].textRow] = {
-      marqBlock: values[i].marqBlock,
-      id: keys[i],
-      size: values[i].size,
-      stock: values[i].stock,
-    };
-  }
-
-  console.log('keySetObj:', keySetObj);
-  /*
-  { 
-    marqBlock: ""
-    id: #,
-    size: #,
-    stock: #,
-    textRow: ""
-  }
-  */
-
   return (
     <StyledSetContainer>
-      {characterSet.map(obj => (
-        <StyledKeySetRow key={obj.rowNum}>
-          {Object.keys(keySetObj).map(char => (
+      {regularKeysArr.map((row) => (
+        <StyledKeySetRow key={row}>
+          {row.map((char, i) => (
             <Key
               special={false}
-              data={data}
-              keySetObj={keySetObj[char]}
-              char={char}
-              key={`${obj.rowNum}-${char}`}
-              rowNum={obj.rowNum}
+              charObj={data.regular[char]}
+              key={`${data.regular[char]}-${i}`}
+            />
+          ))}
+        </StyledKeySetRow>
+      ))}
+      {specialKeysArr.map((row) => (
+        <StyledKeySetRow key={row}>
+          {row.map((char, i) => (
+            <Key
+              special={true}
+              charObj={data.special[char]}
+              key={`${data.special[char]}-${i}`}
             />
           ))}
         </StyledKeySetRow>
@@ -52,9 +32,7 @@ export default function KeySet({ data }) {
 }
 
 const StyledSetContainer = styled.div`
-  position: block;
   display: grid;
-  /* max-width: 500px; */
   padding-top: 2rem;
   padding-bottom: 2rem;
   width: 100%;
@@ -66,7 +44,7 @@ const StyledSetContainer = styled.div`
 const StyledKeySetRow = styled.div`
   display: flex;
   flex-direction: row;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
   margin-bottom: 2px;

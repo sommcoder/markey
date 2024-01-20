@@ -6,3 +6,9 @@ module.exports = async function characterRoutes(fastify, options, done) {
   });
   done();
 };
+
+/*
+ 
+Should we pull data from the db and compute it on the server 
+ 
+*/

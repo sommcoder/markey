@@ -127,10 +127,16 @@ export const GlobalStyles = createGlobalStyle`${css`
     text-wrap: wrap; // not working..?
     pointer-events: none; // NEEDED! Avoids the issue of the form not submitting due to button-text being clicked instead of the button element
 
-    // what we ACTUALLY want is if the button is active, perform this transformation on the button-text box
     &:active {
       // move text down slightly as if being pushed
       transform: translateY(1px);
+    }
+
+    &[data-special="true"] {
+      font-size: 1rem;
+      overflow-wrap: break-word;
+      inline-size: fit-content;
+      word-break: break-all;
     }
   }
 `}`;
