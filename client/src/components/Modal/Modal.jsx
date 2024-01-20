@@ -1,7 +1,7 @@
-import styled, { keyframes } from "styled-components";
-import ModalTable from "../ModalTable/ModalTable";
-import ModalHeader from "../ModalHeader/ModalHeader";
-import { useEffect } from "react";
+import styled, { keyframes } from 'styled-components';
+import ModalTable from '../ModalTable/ModalTable';
+import ModalHeader from '../ModalHeader/ModalHeader';
+import { useState } from 'react';
 
 export default function ModalWindow({
   modalState,
@@ -10,10 +10,10 @@ export default function ModalWindow({
   stateOutputObj,
   outputProcess,
 }) {
-  console.log("modalWindow Component modalState:", modalState);
+  console.log('modalWindow Component modalState:', modalState);
   const modalWindowWidth = 500;
 
-  console.log("stateOutputObj:", stateOutputObj);
+  console.log('stateOutputObj:', stateOutputObj);
   // will need a way to swap these.
   // If currOutput and newOutput have keys, then currOutput gets deleted, newOutput becomes currOutput and then we will have to calculate
   /*
@@ -26,7 +26,11 @@ user needs to see:
  
 */
 
+  const [dragging, setDrag] = useState(false);
+
   // TODO: we need to determine if this was a "set" or "compare" trigger. The Modal components will simply accept the data sent to them.
+
+  // TODO: would be really nice to make the Modal draggable across the modal overlay
 
   // let outputObj;
   // useEffect(() => {
@@ -42,7 +46,11 @@ user needs to see:
   return (
     <StyledOverlay modalState={modalState}>
       {modalState ? (
-        <StyledModalWindow modalWindowWidth={modalWindowWidth}>
+        <StyledModalWindow
+          draggable
+          dragging={dragging}
+          modalWindowWidth={modalWindowWidth}
+        >
           <ModalHeader />
           {outputProcess ? (
             <ModalTable
@@ -61,7 +69,7 @@ user needs to see:
           </StyledModalBtn>
         </StyledModalWindow>
       ) : (
-        ""
+        ''
       )}
     </StyledOverlay>
   );
@@ -77,7 +85,7 @@ const slideDown = keyframes`
 `;
 
 const StyledOverlay = styled.div`
-  display: ${(props) => (props.modalState ? "block" : "none")};
+  display: ${props => (props.modalState ? 'block' : 'none')};
   background-color: rgba(176, 224, 230, 0.4);
   position: fixed;
   height: 100%;
@@ -92,6 +100,7 @@ const StyledOverlay = styled.div`
 `;
 
 const StyledModalWindow = styled.div`
+  cursor: grab;
   display: grid;
   grid-template-rows: auto auto auto;
   text-align: center;
@@ -100,7 +109,7 @@ const StyledModalWindow = styled.div`
   position: fixed; // always viewable
   top: 50%;
   left: 50%;
-  width: ${(props) => props.modalWindowWidth + "px"};
+  width: ${props => props.modalWindowWidth + 'px'};
   min-height: 250px;
   background-color: rgba(255, 255, 255, 1);
   transform: translate(-50%, -50%);

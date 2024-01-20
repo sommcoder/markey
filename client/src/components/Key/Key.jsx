@@ -1,37 +1,29 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 // import StockTracker from "../StockTracker/StockTracker";
-import { specialKeysArr } from "../KeySet/characterSet";
+import { specialKeysArr } from '../KeySet/characterSet';
 
-export default function Key({ data, char, special }) {
+export default function Key({ data, char, keySetObj }) {
   // Special keys are determined if they are larger than a single char
-  if (specialKeysArr.includes(char)) {
-    return (
-      <StyledKeySpecial
-        tabIndex={0}
-        onFocus={(ev) => ev.preventDefault()}
-        value={char}
-        data-special={special}
-      >
-        <StyledKeyText tabIndex={0} className="button-text">
-          {char}
-        </StyledKeyText>
-        {/* <StockTracker data={data} char={char} /> */}
-      </StyledKeySpecial>
-    );
-  } else {
-    return (
-      <StyledKey
-        tabIndex={0}
-        value={char}
-        onFocus={(ev) => ev.preventDefault()}
-      >
-        <StyledKeyText tabIndex={0} className="button-text">
-          {char}
-        </StyledKeyText>
-        {/* <StockTracker data={data} char={char} /> */}
-      </StyledKey>
-    );
-  }
+  console.log('keySetObj:', keySetObj, char);
+
+  // TODO:
+  return (
+    <StyledKey
+      tabIndex={0}
+      onFocus={ev => ev.preventDefault()}
+      value={char}
+      data-special={specialKeysArr.includes(char) ? true : false}
+      stock={keySetObj.stock}
+      size={keySetObj.size}
+      textRow={keySetObj.textRow}
+      id={keySetObj.id}
+    >
+      <StyledKeyText tabIndex={0} className="button-text">
+        {char}
+      </StyledKeyText>
+      {/* <StockTracker data={data} char={char} /> */}
+    </StyledKey>
+  );
 }
 
 const StyledKey = styled.button`
@@ -51,12 +43,11 @@ const StyledKey = styled.button`
   padding: 0;
   display: flex;
   justify-content: center;
-`;
 
-const StyledKeySpecial = styled(StyledKey)`
-  position: relative;
-  width: 6rem;
-  font-size: 1rem;
+  &[data-special='true'] {
+    width: 6rem;
+    font-size: 1rem;
+  }
 `;
 
 const StyledKeyText = styled.div`

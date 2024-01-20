@@ -1,25 +1,23 @@
-import NavBar from "./components/NavBar/NavBar.jsx";
-import TableContainer from "./components/TableContainer/TableContainer.jsx";
-import KeySet from "./components/KeySet/KeySet.jsx";
-import Modal from "./components/Modal/Modal.jsx";
+import NavBar from './components/NavBar/NavBar.jsx';
+import TableContainer from './components/TableContainer/TableContainer.jsx';
+import KeySet from './components/KeySet/KeySet.jsx';
+import Modal from './components/Modal/Modal.jsx';
 /////////////////////////////////////////
-import { useState, useReducer, useRef, useEffect } from "react";
-import styled, { ThemeProvider } from "styled-components";
-import { GlobalStyles, darkTheme, lightTheme } from "./GlobalStyles";
+import { useState, useReducer, useRef, useEffect } from 'react';
+import styled, { ThemeProvider } from 'styled-components';
+import { GlobalStyles, darkTheme, lightTheme } from './GlobalStyles';
 /////////////////////////////////////////
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from '@tanstack/react-query';
 /////////////////////////////////////////
-import { getCharacterStock } from "./api/api.js";
+import { getCharacterStock } from './api/api.js';
 /////////////////////////////////////////
-import setCurrMarquee from "./functions/setCurrMarquee.js";
-import getNextElNum from "./functions/getNextElNum.js";
-import getTally from "./functions/getTally.js";
-/////////////////////////////////////////
-import { specialKeysArr } from "./components/KeySet/characterSet.js";
+import setCurrMarquee from './functions/setCurrMarquee.js';
+import getNextElNum from './functions/getNextElNum.js';
+import getTally from './functions/getTally.js';
 /////////////////////////////////////////
 export default function App() {
   const { isLoading, isSuccess, isError, data, error } = useQuery({
-    queryKey: ["get-characters"],
+    queryKey: ['get-characters'],
     queryFn: getCharacterStock, // no parentheses!
   }); // makes MULTIPLE retry queries automatically if query fails.
 
@@ -71,7 +69,7 @@ export default function App() {
   // window Sizing Check:
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   // "light" or "dark"
-  const [theme, setTheme] = useState("light");
+  const [theme, setTheme] = useState('light');
   // form element reference Object. Populated via forwardRef() hook
   const refStateObj = {
     West: useRef(null),
@@ -94,14 +92,14 @@ export default function App() {
     2: { values: [], sizes: 0 },
   };
 
-  const specialBtnsArr = ["Enter", "Backspace", "Delete", "CapsLock", "Tab"];
+  const specialBtnsArr = ['Enter', 'Backspace', 'Delete', 'CapsLock', 'Tab'];
 
   function prepareKey(ev) {
     let key;
 
     // TODO: ! also can we distinguish between events and key entries???
 
-    if (ev.type === "click") {
+    if (ev.type === 'click') {
       key = ev.target.value;
     } else {
       key = ev.key;
@@ -117,15 +115,15 @@ export default function App() {
   function inputValidation(ev) {
     ev.preventDefault(); // prevents the Enter key from "clicking" the focused KeySet Key
     if (!selectedMarq) return; // no selected marq?
-    console.log("ev.target.dataset.special:", ev.target.dataset.special);
-    console.log("ev.target:", ev.target);
+    console.log('ev.target.dataset.special:', ev.target.dataset.special);
+    console.log('ev.target:', ev.target);
 
     // TODO: so because of focus event. Enter is submitting the key, which is special, however, it isn't a 'click' event, therefore ev.key === 'Enter' which is why we're getting key = 'enter'
 
     const key = prepareKey(ev);
     if (!key) return;
 
-    console.log("key:", key);
+    console.log('key:', key);
 
     let formEl = refStateObj[selectedMarq].current;
     // const rowEl = refStateObj[selectedMarq].current[selectedRow];
@@ -133,14 +131,14 @@ export default function App() {
 
     // console.log("refStateObj:", refStateObj);
     // TODO: we need to get all of the keys to work properly. The current implementation is treating them all as individual characters but what we want is to handle these "special keys" as the SINGLE tiles that they are
-    if (key === " ") ev.preventDefault(); // is this right?
-    if (key === "CapsLock") {
+    if (key === ' ') ev.preventDefault(); // is this right?
+    if (key === 'CapsLock') {
       // popup warning indicating that the CAPSLOCK is on
     }
-    if (key === "Enter") {
+    if (key === 'Enter') {
       // dispatch reducer:
       dispAppState({
-        type: "INPUT_MARQUEE",
+        type: 'INPUT_MARQUEE',
         marq: selectedMarq,
         payload: setCurrMarquee(
           keysArr,
@@ -149,19 +147,19 @@ export default function App() {
           appState[selectedMarq] // no marqName just the obj contents
         ),
       });
-      setOutputProcess("input");
+      setOutputProcess('input');
       switchSelectedRow(getNextElNum(rowName, selectedRow));
       return;
     }
     // tab creates some weird functionality with selecting text
-    if (key === "Tab") {
+    if (key === 'Tab') {
       // popup warning that " Tab is disabled in Mar-Key ""
       return;
     }
 
-    if (key === "Backspace" || key === "Delete") {
-      console.log("key:", key);
-      console.log("inputValidationObj:", inputValidationObj);
+    if (key === 'Backspace' || key === 'Delete') {
+      console.log('key:', key);
+      console.log('inputValidationObj:', inputValidationObj);
       if (inputValidationObj[rowName].sizes === 0) {
         return;
       }
@@ -172,7 +170,7 @@ export default function App() {
       inputValidationObj[rowName].values.pop();
       // update the selected input field:
       refStateObj[selectedMarq].current[selectedRow].value =
-        inputValidationObj[rowName].values.join("");
+        inputValidationObj[rowName].values.join('');
       return;
     }
     if (!data[key]) {
@@ -192,12 +190,12 @@ export default function App() {
       refStateObj[selectedMarq].current[rowName].animate(
         [
           {
-            transform: "translateX(-0.33%)",
-            borderColor: "rgb(255, 0, 0)",
+            transform: 'translateX(-0.33%)',
+            borderColor: 'rgb(255, 0, 0)',
           },
           {
-            transform: "translateX(0.33%)",
-            borderColor: "rgb(255, 0, 0)",
+            transform: 'translateX(0.33%)',
+            borderColor: 'rgb(255, 0, 0)',
           },
         ],
         { duration: 150, iterations: 3 }
@@ -210,8 +208,8 @@ export default function App() {
       inputValidationObj[rowName].values.push(key);
       // update input field:
       refStateObj[selectedMarq].current[selectedRow].value =
-        inputValidationObj[rowName].values.join("");
-      console.log("inputValidationObj:", inputValidationObj);
+        inputValidationObj[rowName].values.join('');
+      console.log('inputValidationObj:', inputValidationObj);
       // TODO: can probably reduce the memory of inputValidationObj down to just a single flat object/array
     }
   }
@@ -219,15 +217,15 @@ export default function App() {
   // SCREEN SIZE:
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
-    window.addEventListener("resize", handleResize);
+    window.addEventListener('resize', handleResize);
     return () => {
-      window.removeEventListener("resize", handleResize); // Cleanup the event listener on component unmount
+      window.removeEventListener('resize', handleResize); // Cleanup the event listener on component unmount
     };
   }, []); // run once on componentDidMount()
 
   // OUTPUT PROCESS SIDE-EFFECTS:
   useEffect(() => {
-    if (outputProcess === "set") {
+    if (outputProcess === 'set') {
       setStateOutputObj({
         currOutput: getTally(appState),
         newOutput: {},
@@ -239,18 +237,18 @@ export default function App() {
     }
   }, [outputProcess, appState]);
 
-  console.log("appState:", appState);
-  console.log("data:", data);
+  console.log('appState:', appState);
+  console.log('data:', data);
   return (
     // specifies which
-    <ThemeProvider theme={theme === "dark" ? darkTheme : lightTheme}>
+    <ThemeProvider theme={theme === 'dark' ? darkTheme : lightTheme}>
       <GlobalStyles />
       {/* <div id="firebaseui-auth-container" /> */}
       {windowWidth > 775 ? (
         <StyledAppContainer
-          onKeyDown={(ev) => inputValidation(ev)}
-          onClick={(ev) => inputValidation(ev)}
-          onFocus={(ev) => ev.preventDefault()}
+          onKeyDown={ev => inputValidation(ev)}
+          onClick={ev => inputValidation(ev)}
+          onFocus={ev => ev.preventDefault()}
         >
           {toggleModal ? (
             <Modal
@@ -263,7 +261,7 @@ export default function App() {
               outputProcess={outputProcess}
             />
           ) : (
-            ""
+            ''
           )}
           <NavBar
             data={data}
@@ -294,26 +292,26 @@ export default function App() {
             switchSelectedMarq={switchSelectedMarq}
             marqSizes={marqSizes}
           />
-          {isSuccess ? <KeySet data={data} /> : ""}
+          {isSuccess ? <KeySet data={data} /> : ''}
         </StyledAppContainer>
       ) : (
         <StyledErrorContainer>
           <StyledErrorComponent>
             <h5
               style={{
-                textAlign: "center",
-                fontWeight: "800",
-                textDecoration: "underline",
-                paddingBottom: "1rem",
-                margin: "0 auto",
+                textAlign: 'center',
+                fontWeight: '800',
+                textDecoration: 'underline',
+                paddingBottom: '1rem',
+                margin: '0 auto',
               }}
             >
               Minimum Screen Size Error:
             </h5>
             <p
               style={{
-                textAlign: "center",
-                margin: "0 auto",
+                textAlign: 'center',
+                margin: '0 auto',
               }}
             >
               Your screen must be at least 775px wide
@@ -327,13 +325,13 @@ export default function App() {
 
 function reducer(state, action) {
   if (!action.payload) return state;
-  console.log("appREDUCER: action.payload:", action.payload);
+  console.log('appREDUCER: action.payload:', action.payload);
 
   switch (action.type) {
-    case "INPUT_MARQUEE": {
+    case 'INPUT_MARQUEE': {
       return { ...state, [action.marq]: action.payload };
     }
-    case "SET_APP": {
+    case 'SET_APP': {
       return { ...state, ...action.updatedState };
     }
     // case "COMPARE_PREVIOUS_STATE": {
@@ -378,7 +376,7 @@ const StyledErrorContainer = styled.div`
   height: 100%;
   opacity: 0.5;
   margin: 0 auto;
-  background-image: url("/paradise-vintage.jpeg");
+  background-image: url('/paradise-vintage.jpeg');
 `;
 
 const StyledErrorComponent = styled.div`
