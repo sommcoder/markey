@@ -7,18 +7,18 @@ export default function Block({ block, style, delay, appState }) {
 
   if (block === " ") {
     return <StyledEmptySpace blockWidth={blockWidth} />;
-  } else {
-    return (
-      <StyledBlock
-        delay={delay}
-        readOnly
-        maxLength="1"
-        type="text"
-        blockwidth={blockWidth}
-        value={block}
-      />
-    );
   }
+  return (
+    <StyledBlock
+      delay={delay}
+      readOnly
+      maxLength="1"
+      type="text"
+      blockwidth={blockWidth}
+      value={block}
+      data-special={block.length > 1 ? true : false}
+    />
+  );
 }
 
 const populateMarquee = keyframes`
@@ -48,6 +48,10 @@ const StyledBlock = styled.input`
   caret-color: transparent;
   animation: 0.5s linear ${(props) => (props.delay * 90).toString() + "ms"} 1
     ${populateMarquee};
+
+  &[data-special="true"] {
+    font-size: 1.2rem;
+  }
 
   // prevents border layering:
   &:not(:last-of-type) {

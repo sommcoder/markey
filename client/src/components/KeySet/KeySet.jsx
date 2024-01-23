@@ -21,8 +21,8 @@ export default function KeySet({ data }) {
           {row.map((char, i) => (
             <Key
               special={true}
-              charObj={data.special[char]}
-              key={`${data.special[char]}-${i}`}
+              charObj={data.special[`{${char}}`]}
+              key={`${data.special[`{${char}}`]}-${i}`}
             />
           ))}
         </StyledKeySetRow>

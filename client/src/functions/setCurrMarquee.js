@@ -19,32 +19,46 @@ export default function setCurrMarquee(keysArr, formEl, data, appState) {
     console.log("inputStr:", inputStr);
     console.log("rowName:", rowName);
 
-    let inputTile;
-    let multiCharStr;
+    let inputTile; // gets assigned in the loop below
+    let inputTileObj;
+    let multiCharStr; // gets assigned in the loop below
     // INPUT Loop:
     for (let ltr = 0; ltr < inputStr.length; ltr++) {
       console.log("inputStr[ltr]:", inputStr[ltr]);
+
+      // special char?
       if (inputStr[ltr] === "{") {
-        console.log("special!");
+        console.log("special! we found a: { ");
         let start = inputStr.indexOf("{") + 1;
-        let end = inputStr.indexOf("}"); // UNTIL
-        multiCharStr = inputStr.slice(start, end);
+        let end = inputStr.indexOf("}");
+
+        multiCharStr = inputStr.slice(start, end); // gets up UNTIL
+        // TODO: maybe we should look into splice as well since we need to modify the inputStr? The problem is when we HAVE multiple special characters on a single line
         console.log("multiCharStr:", multiCharStr);
-        inputTile = data[inputStr[multiCharStr]];
-        rowArr.push([inputTile.blockSymbol, inputTile.size]);
-        // Can we force an iteration of the loop until AFTER "}" ???
-        // Would prevent excess loops, not that it would take much longer though
-        // TODO: truthfully, the best lookup would be to give each "tile" an id, this would be we wouldn't be tripped up by all of this string bs
-        /*
-  "01234": { <--- there would need to be a key = id lookup for onKeyDown()
-    "marqueeTile": "paradiseonbloor.com",   // <--- how each block renders
-    "textRow": "{paradiseonbloor.com}"  // <--- how input renders 
-    "stock": 3,
-    "size": "5.5"
-  },
-*/
+        console.log("inputStr POST SLICE:", inputStr);
+        if (!data.special[`{${multiCharStr}}`]) return; // this is a double check.
+        inputTileObj = data.special[`{${multiCharStr}}`]; // needed for lookup
+        console.log("inputTileObj:", inputTileObj);
+        // push the whole string between { and } to the rowArr/
+        console.log("rowArr:", rowArr);
+        console.log("start:", start);
+        console.log("end:", end);
+        ltr += end - (start - 1); // iterate by the difference so we don't go each letter again and process the letter in the else block below.
+        // need to increment end since we don't want to iterate over the }
+        console.log("ltr:", ltr);
+
+        if (!newInputObj.output[multiCharStr]) {
+          newInputObj.output[multiCharStr] = 1; // assign to one
+        } else {
+          newInputObj.output[multiCharStr]++; // increment by one
+        }
+
+        // push to arr in this format: [[ltr, size], [ltr, size] ...]
+        rowArr.push([inputTileObj.marqBlock, inputTileObj.size]);
       } else {
-        if (!data[inputStr[ltr]]) return; // this is a double check.
+        console.log("ELSE BLOCK: ltr:", inputStr[ltr]);
+        // handle individual chars:
+        if (!data.regular[inputStr[ltr]]) return; // this is a double check.
 
         if (!newInputObj.output[inputStr[ltr]]) {
           newInputObj.output[inputStr[ltr]] = 1; // assign to one
@@ -52,8 +66,9 @@ export default function setCurrMarquee(keysArr, formEl, data, appState) {
           newInputObj.output[inputStr[ltr]]++; // increment by one
         }
         // push to arr in this format: [[ltr, size], [ltr, size] ...]
-        inputTile = data[inputStr[ltr]];
-        rowArr.push([inputTile.blockSymbol, inputTile.size]);
+        inputTile = data.regular[inputStr[ltr]];
+        console.log("inputTile:", inputTile);
+        rowArr.push([inputTile.marqBlock, inputTile.size]);
       }
     }
 
@@ -64,8 +79,4 @@ export default function setCurrMarquee(keysArr, formEl, data, appState) {
   console.log("END Input newInputObj.rows:", newInputObj.rows);
 
   return newInputObj;
-}
-
-function handleMultiCharKeys() {
-  //
 }

@@ -92,54 +92,25 @@ export default function App() {
   const specialBtnsArr = ["Enter", "Backspace", "Delete", "CapsLock", "Tab"];
 
   function prepareKey(ev) {
-    let key;
-
-    // TODO: Can we distinguish between events and key entries???
-    if (ev.type === "click") {
-      key = ev.target.value;
-    } else {
-      key = ev.key;
-    }
+    let key = ev.type === "click" ? ev.target.value : ev.key;
     if (!key) return; // undefined input clause
     if (specialBtnsArr.includes(key)) return key;
     let lowerKey = key.toLowerCase();
     if (ev.target.dataset.special) return `{${lowerKey}}`;
     return lowerKey;
-
-    // TODO: Could we just perform a "match" when it comes to the special tiles? Like:
-
-    /*
-
-    if (specialCharObj[key]) `{${key}}`
-     
-    specialCharObj: {
-      "osteria rialto": {
-         "marqBlock": "Osteria Rialto",
-         "stock": 3,
-         "size": 2,
-      }
-    }
-
-    */
   }
-
-  function handleSpecialInput() {}
 
   function inputValidation(ev) {
     ev.preventDefault(); // prevents the Enter key from "clicking" the focused KeySet Key
     if (!selectedMarq) return; // no selected marq?
+    console.log("ev:", ev);
     console.log("ev.target.dataset.special:", ev.target.dataset.special);
     console.log("ev.target:", ev.target);
     console.log("ev.type:", ev.type);
+    console.log("ev.target.value:", ev.target.value);
 
     // so because of focus event. Enter is submitting the key, which is special, however, it isn't a 'click' event, therefore ev.key === 'Enter' which is why we're getting key = 'enter'
-
-    if (ev.type === "click" && specialBtnsArr.includes(ev.target.value)) {
-      // if event was a click and is one of the things above, handle differently
-      handleSpecialInput(ev);
-      return;
-    }
-
+    const special = ev.target.dataset.special;
     const key = prepareKey(ev);
 
     if (!key) return;
@@ -150,8 +121,6 @@ export default function App() {
     // const rowEl = refStateObj[selectedMarq].current[selectedRow];
     let rowName = refStateObj[selectedMarq].current[selectedRow].name;
 
-    // console.log("refStateObj:", refStateObj);
-    // TODO: we need to get all of the keys to work properly. The current implementation is treating them all as individual characters but what we want is to handle these "special keys" as the SINGLE tiles that they are
     if (key === " ") ev.preventDefault(); // is this right?
     if (key === "CapsLock") {
       // popup warning indicating that the CAPSLOCK is on
@@ -193,14 +162,17 @@ export default function App() {
         inputValidationObj.values.join("");
       return;
     }
-    if (!data[key]) {
+    if (!data.regular[key] && !data.special[key]) {
+      console.log("key does not exist in data regular or special");
       return;
       // key doesn't exist in data
       // should produce an Error message
     }
 
+    //* keyDown or click functions below:
     // 0.1 = accounts for block border size
-    let currBlockSize = +data[key].size + 0.1;
+    // special or not?
+    let currBlockSize = +data[special ? "special" : "regular"][key].size + 0.1;
     // Max capacity check:
     // existing width + current block size would be greater than the marqSize
     if (inputValidationObj.sizes + currBlockSize > marqSizes[selectedMarq]) {
@@ -218,17 +190,20 @@ export default function App() {
         { duration: 150, iterations: 3 }
       );
       return;
-    } else {
-      // append validation object:
-      inputValidationObj.sizes += currBlockSize;
-      // push to sequence:
-      inputValidationObj.values.push(key);
-      // update input field:
-      refStateObj[selectedMarq].current[selectedRow].value =
-        inputValidationObj.values.join("");
-      console.log("inputValidationObj:", inputValidationObj);
-      // TODO: can probably reduce the memory of inputValidationObj down to just a single flat object/array
     }
+
+    // console.log("refStateObj:", refStateObj);
+    // TODO: we need to get all of the keys to work properly. The current implementation is treating them all as individual characters but what we want is to handle these "special keys" as the SINGLE tiles that they are
+
+    // append validation object:
+    inputValidationObj.sizes += currBlockSize;
+    // push to sequence:
+    inputValidationObj.values.push(key);
+    // update input field:
+    refStateObj[selectedMarq].current[selectedRow].value =
+      inputValidationObj.values.join("");
+
+    console.log("inputValidationObj:", inputValidationObj);
   }
 
   // SCREEN SIZE:
@@ -255,7 +230,7 @@ export default function App() {
   }, [outputProcess, appState]);
 
   console.log("appState:", appState);
-  console.log("data:", data);
+
   return (
     // specifies which
     <ThemeProvider theme={theme === "dark" ? darkTheme : lightTheme}>
@@ -378,7 +353,7 @@ const StyledAppContainer = styled.div`
   grid-template-rows: repeat(3, auto);
   align-content: baseline;
   align-items: center;
-  height: 100vh;
+  height: 100%; // look into svh and dvh for mobile
   width: 100%;
   background-color: white;
   overflow-x: scroll;
@@ -389,7 +364,6 @@ const StyledAppContainer = styled.div`
 const StyledErrorContainer = styled.div`
   position: relative;
   width: 100%;
-
   height: 100%;
   opacity: 0.5;
   margin: 0 auto;
