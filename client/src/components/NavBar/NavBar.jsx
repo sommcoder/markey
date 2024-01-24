@@ -12,6 +12,8 @@ export default function NavBar({
   setTheme,
   theme,
   setOutputProcess,
+  menuState,
+  toggleMenuState,
 }) {
   return (
     <StyledNavBar>
@@ -34,7 +36,10 @@ export default function NavBar({
           dispAppState={dispAppState}
           setOutputProcess={setOutputProcess}
         />
-        <HamburgerMenu />
+        <HamburgerMenu
+          menuState={menuState}
+          toggleMenuState={toggleMenuState}
+        />
       </StyledRightNavArea>
     </StyledNavBar>
   );

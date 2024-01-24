@@ -90,7 +90,6 @@ export const GlobalStyles = createGlobalStyle`${css`
     width: 10rem;
     padding: 0.5rem 1rem;
     text-align: center;
-    background-color: #b6d0e2;
     background-image: linear-gradient(to bottom, #b6d0e2, #c9e9ec);
 
     padding: 0.5rem;
@@ -102,6 +101,9 @@ export const GlobalStyles = createGlobalStyle`${css`
     outline-style: ridge;
     outline-offset: -1px;
 
+    &[data-special="true"] {
+      background-image: linear-gradient(to bottom, #83bbe2, #c9e9ec);
+    }
     &:hover {
       filter: brightness(90%);
       cursor: pointer;

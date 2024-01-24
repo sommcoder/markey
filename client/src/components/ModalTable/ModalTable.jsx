@@ -19,7 +19,11 @@ export default function ModalTable({ data, appState, stateOutputObj }) {
                 block={char}
                 key={`Modal-${char}`}
                 delay={i + 1}
-                style={data[char].size}
+                style={
+                  data[char.length > 1 ? "special" : "regular"][
+                    `${char.length > 1 ? `{${char}}` : char}`
+                  ].size
+                }
               />
               <StyledBlockTally>x{stateOutputObj[char]}</StyledBlockTally>
             </StyledModalBlockContainer>
@@ -37,7 +41,7 @@ const StyledModalTable = styled.div`
 
   margin: 0 auto;
   padding-top: 2rem;
-  max-width: ${(props) => props.modalWindowWidth - 50 + "px"};
+  max-width: ${({ modalWindowWidth }) => modalWindowWidth - 50 + "px"};
   align-content: center;
   align-items: center;
   justify-content: center;
@@ -46,22 +50,20 @@ const StyledModalTable = styled.div`
 `;
 
 const StyledModalBlockContainer = styled.div`
-  display: grid;
-  min-width: 8rem;
-  grid-template-columns: 50% 50%;
+  display: flex;
+  min-width: 12rem;
   margin-bottom: 0.5rem;
   padding: 0.5rem;
   align-items: center;
   justify-items: center;
-  align-items: center;
-  justify-items: center;
   align-content: center;
+  justify-content: center;
+  gap: 1rem;
 `;
 
 // ideally would want this to the top right of each tile
 const StyledBlockTally = styled.span`
   font-size: 2rem;
-  align-self: baseline;
   text-align: left;
   color: black;
 `;

@@ -1,6 +1,6 @@
 ﻿import styled from "styled-components";
 
-export default function HamburgerMenu() {
+export default function HamburgerMenu({ menuState, toggleMenuState }) {
   function handleMenuClick() {
     // get refs to animate the span's into an x the is on TOP of the overlay
   }

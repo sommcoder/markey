@@ -14,6 +14,8 @@ import { getCharacterStock } from "./api/api.js";
 import setCurrMarquee from "./functions/setCurrMarquee.js";
 import getNextElNum from "./functions/getNextElNum.js";
 import getTally from "./functions/getTally.js";
+import prepareKey from "./functions/prepareKey.js";
+import InventoryOverlay from "./components/InventoryOverlay/InventoryOverlay.jsx";
 /////////////////////////////////////////
 
 export default function App() {
@@ -71,6 +73,8 @@ export default function App() {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   // "light" or "dark"
   const [theme, setTheme] = useState("light");
+  // inventory menu state:
+  const [menuState, toggleMenuState] = useState(false);
   // form element reference Object. Populated via forwardRef() hook
   const refStateObj = {
     West: useRef(null),
@@ -89,33 +93,24 @@ export default function App() {
   // NOT state. Client-side validation via onKeyDown/onClick events:
   const inputValidationObj = { values: [], sizes: 0 };
 
-  const specialBtnsArr = ["Enter", "Backspace", "Delete", "CapsLock", "Tab"];
-
-  function prepareKey(ev) {
-    let key = ev.type === "click" ? ev.target.value : ev.key;
-    if (!key) return; // undefined input clause
-    if (specialBtnsArr.includes(key)) return key;
-    let lowerKey = key.toLowerCase();
-    if (ev.target.dataset.special) return `{${lowerKey}}`;
-    return lowerKey;
-  }
-
   function inputValidation(ev) {
     ev.preventDefault(); // prevents the Enter key from "clicking" the focused KeySet Key
     if (!selectedMarq) return; // no selected marq?
-    console.log("ev:", ev);
-    console.log("ev.target.dataset.special:", ev.target.dataset.special);
-    console.log("ev.target:", ev.target);
-    console.log("ev.type:", ev.type);
-    console.log("ev.target.value:", ev.target.value);
+
+    if (ev.target.type === "reset") {
+      dispAppState({
+        type: "RESET_MARQUEE",
+        currState: appState,
+        marq: ev.target.value,
+      });
+      return;
+    }
 
     // so because of focus event. Enter is submitting the key, which is special, however, it isn't a 'click' event, therefore ev.key === 'Enter' which is why we're getting key = 'enter'
     const special = ev.target.dataset.special;
     const key = prepareKey(ev);
 
     if (!key) return;
-
-    console.log("key:", key);
 
     let formEl = refStateObj[selectedMarq].current;
     // const rowEl = refStateObj[selectedMarq].current[selectedRow];
@@ -142,19 +137,20 @@ export default function App() {
       return;
     }
     // tab creates some weird functionality with selecting text
-    if (key === "Tab") {
+    if (key === "Tab" || key === "Shift") {
       // popup warning that " Tab is disabled in Mar-Key ""
       return;
     }
 
     if (key === "Backspace" || key === "Delete") {
-      console.log("key:", key);
-      console.log("inputValidationObj:", inputValidationObj);
-      if (inputValidationObj.sizes === 0) {
+      // No element in the array, assign to 0 and return
+      if (!inputValidationObj.values.at(-1)) {
+        inputValidationObj.sizes = 0;
         return;
       }
-      // update validation Object sizes:
-      inputValidationObj.sizes -= +data[inputValidationObj.values.at(-1)].size;
+      inputValidationObj.sizes -=
+        +data[special ? "special" : "regular"][inputValidationObj.values.at(-1)]
+          .size;
       // pop from sequence:
       inputValidationObj.values.pop();
       // update the selected input field:
@@ -165,13 +161,9 @@ export default function App() {
     if (!data.regular[key] && !data.special[key]) {
       console.log("key does not exist in data regular or special");
       return;
-      // key doesn't exist in data
-      // should produce an Error message
     }
 
-    //* keyDown or click functions below:
     // 0.1 = accounts for block border size
-    // special or not?
     let currBlockSize = +data[special ? "special" : "regular"][key].size + 0.1;
     // Max capacity check:
     // existing width + current block size would be greater than the marqSize
@@ -191,10 +183,6 @@ export default function App() {
       );
       return;
     }
-
-    // console.log("refStateObj:", refStateObj);
-    // TODO: we need to get all of the keys to work properly. The current implementation is treating them all as individual characters but what we want is to handle these "special keys" as the SINGLE tiles that they are
-
     // append validation object:
     inputValidationObj.sizes += currBlockSize;
     // push to sequence:
@@ -202,7 +190,6 @@ export default function App() {
     // update input field:
     refStateObj[selectedMarq].current[selectedRow].value =
       inputValidationObj.values.join("");
-
     console.log("inputValidationObj:", inputValidationObj);
   }
 
@@ -255,6 +242,7 @@ export default function App() {
           ) : (
             ""
           )}
+          {menuState ? <InventoryOverlay /> : ""}
           <NavBar
             data={data}
             refStateObj={refStateObj}
@@ -268,6 +256,8 @@ export default function App() {
             stateOutputObj={stateOutputObj}
             setStateOutputObj={setStateOutputObj}
             setOutputProcess={setOutputProcess}
+            menuState={menuState}
+            toggleMenuState={toggleMenuState}
             setTheme={setTheme}
             theme={theme}
           />
@@ -316,15 +306,18 @@ export default function App() {
 }
 
 function reducer(state, action) {
-  if (!action.payload) return state;
-  console.log("appREDUCER: action.payload:", action.payload);
-
   switch (action.type) {
     case "INPUT_MARQUEE": {
       return { ...state, [action.marq]: action.payload };
     }
     case "SET_APP": {
       return { ...state, ...action.updatedState };
+    }
+    case "RESET_MARQUEE": {
+      return {
+        ...state,
+        [action.marq]: { output: {}, rows: { 0: [], 1: [], 2: [] } },
+      };
     }
     // case "COMPARE_PREVIOUS_STATE": {
     //   console.log("REDUCER action.payload:", action.payload);
@@ -358,8 +351,6 @@ const StyledAppContainer = styled.div`
   background-color: white;
   overflow-x: scroll;
 `;
-
-// TODO: there is a gap on the right side of the app. I don't want to remove overflow-x scrolling specially for smaller screen sizes.Could probably be a vw styling on a child component
 
 const StyledErrorContainer = styled.div`
   position: relative;

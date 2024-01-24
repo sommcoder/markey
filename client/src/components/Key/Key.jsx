@@ -4,10 +4,11 @@ import styled from "styled-components";
 export default function Key({ charObj, special }) {
   // console.log("charObj:", charObj);
 
+  // better to add the { } in the Key, so that they appear in input fields and can then be processed by setCurrMarquee
   return charObj.marqBlock !== " " ? (
     <StyledKey
       tabIndex={-1}
-      value={charObj.marqBlock}
+      value={special ? `{${charObj.marqBlock}}` : charObj.marqBlock}
       data-special={special ? true : false}
       charObj={charObj}
     >
@@ -44,5 +45,6 @@ const StyledKey = styled.button`
 
   &[data-special="true"] {
     width: 6rem;
+    background-image: ;
   }
 `;

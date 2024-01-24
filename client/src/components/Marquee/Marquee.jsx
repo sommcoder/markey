@@ -3,6 +3,7 @@ import Block from "../Block/Block.jsx";
 import styled, { keyframes } from "styled-components";
 import SelectBtn from "../SelectBtn/SelectBtn.jsx";
 import { forwardRef } from "react";
+import ResetBtn from "../ResetBtn/ResetBtn.jsx";
 
 export default forwardRef(function Marquee(
   {
@@ -26,13 +27,21 @@ export default forwardRef(function Marquee(
       marqName={marqName}
       data-active={selectedMarq === marqName ? "true" : "false"}
     >
-      <SelectBtn
-        keysArr={keysArr}
-        marqName={marqName}
-        selectedMarq={selectedMarq}
-        switchSelectedMarq={switchSelectedMarq}
-        onBlur={(ev) => ev.preventDefault()}
-      />
+      <StyledBtnWrapper>
+        <SelectBtn
+          keysArr={keysArr}
+          marqName={marqName}
+          selectedMarq={selectedMarq}
+          switchSelectedMarq={switchSelectedMarq}
+          onBlur={(ev) => ev.preventDefault()}
+        />
+        <ResetBtn
+          data={data}
+          marqName={marqName}
+          appState={appState}
+          dispAppState={dispAppState}
+        />
+      </StyledBtnWrapper>
       {keysArr.map((row) => (
         <StyledMarqueeRow marqWidth={marqWidth} key={`${marqName}-${row}`}>
           {appState[marqName].rows[row].length > 0
@@ -74,8 +83,8 @@ const linearGradientMove = keyframes`
 
 const StyledMarquee = styled.div`
   margin: 0 auto 0rem auto;
-  max-width: ${(props) =>
-    props.marqSize * 1.5 + "rem" ? props.marqSize * 1.5 + "rem" : "350px"};
+  max-width: ${({ marqSize }) =>
+    marqSize * 1.5 + "rem" ? marqSize * 1.5 + "rem" : "350px"};
   align-items: center;
   justify-content: center;
   z-index: 1;
@@ -98,9 +107,13 @@ const StyledMarquee = styled.div`
   }
 `;
 
+const StyledBtnWrapper = styled.div`
+  position: relative;
+`;
+
 const StyledMarqueeRow = styled.div`
   display: flex;
-  width: ${(props) => (props.marqWidth ? props.marqWidth : "350px")};
+  width: ${({ marqWidth }) => (marqWidth ? marqWidth : "350px")};
   flex-direction: row;
   justify-content: center;
   background-color: rgb(253, 243, 229);

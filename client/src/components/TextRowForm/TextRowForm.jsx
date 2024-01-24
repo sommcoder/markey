@@ -1,18 +1,15 @@
 import styled from "styled-components";
-
 import ErrorMsg from "../ErrorMsg/ErrorMsg";
-import ResetBtn from "../ResetBtn/ResetBtn";
 
 import { forwardRef, useEffect } from "react";
 
 export default forwardRef(function TextRowForm(
   {
-    data,
     appState,
-    dispAppState,
     keysArr,
     marqName,
     formName,
+    marqSize,
     selectedMarq,
     selectedRow,
     switchSelectedRow,
@@ -49,6 +46,7 @@ export default forwardRef(function TextRowForm(
             isSelected={
               selectedMarq === marqName && selectedRow === row ? true : false
             }
+            marqSize={marqSize}
             marqSelected={selectedMarq === marqName}
             onClick={(ev) => handleClick(ev)}
             onKeyDown={(ev) => ev.preventDefault()}
@@ -56,14 +54,6 @@ export default forwardRef(function TextRowForm(
           />
         ))}
       </form>
-      <ResetBtn
-        data={data}
-        formName={formName}
-        marqName={marqName}
-        keysArr={keysArr}
-        appState={appState}
-        dispAppState={dispAppState}
-      />
       {appState[marqName].isError === true ? <ErrorMsg /> : ""}
     </>
   );
@@ -75,7 +65,8 @@ const StyledTextRow = styled.input`
   align-items: center;
   display: block;
   text-align: center;
-  width: 350px;
+  width: ${({ marqSize }) =>
+    marqSize * 0.95 + "rem" ? marqSize * 0.95 + "rem" : "350px"};
   margin: 0 auto;
   text-transform: uppercase;
   font-size: 1.6rem;

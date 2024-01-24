@@ -1,18 +1,9 @@
 import styled from "styled-components";
 
-export default function SelectBtn({
-  marqName,
-  selectedMarq,
-  switchSelectedMarq,
-}) {
+export default function SelectBtn({ marqName, switchSelectedMarq }) {
   function handleClick(ev) {
     ev.preventDefault();
     switchSelectedMarq(marqName);
-    // // null checK:
-    // if (!selectedMarq) switchSelectedMarq(marqName);
-    // selectedMarq === marqName
-    //   ? switchSelectedMarq(null) // reset to null
-    //   : switchSelectedMarq(marqName); // change to curr marquee
   }
 
   return (
@@ -27,7 +18,7 @@ export default function SelectBtn({
 }
 
 const StyledSelectBtn = styled.button`
-  display: block;
+  display: inline;
   position: relative;
   margin: 0 auto;
   width: 25rem;

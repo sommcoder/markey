@@ -186,67 +186,67 @@
       "size": 2
     },
     "-": {
-      "marqBlock": "9",
+      "marqBlock": "-",
       "stock": 10,
       "size": 2
     },
     ".": {
-      "marqBlock": "-",
+      "marqBlock": ".",
       "stock": 3,
       "size": 1.5
     },
     ";": {
-      "marqBlock": ".",
+      "marqBlock": ";",
       "stock": 4,
       "size": 1.5
     },
     ",": {
-      "marqBlock": ";",
+      "marqBlock": ",",
       "stock": 3,
       "size": 1.25
     },
     "!": {
-      "marqBlock": ",",
+      "marqBlock": "!",
       "stock": 9,
       "size": 1.25
     },
     "&": {
-      "marqBlock": "!",
+      "marqBlock": "&",
       "stock": 3,
       "size": 1.25
     },
     "$": {
-      "marqBlock": "&",
+      "marqBlock": "$",
       "stock": 6,
       "size": 2
     },
     "#": {
-      "marqBlock": "$",
+      "marqBlock": "#",
       "stock": 3,
       "size": 2
     },
     "/": {
-      "marqBlock": "#",
+      "marqBlock": "/",
       "stock": 11,
       "size": 2
     },
     "?": {
-      "marqBlock": "/",
+      "marqBlock": "?",
       "stock": 3,
       "size": 2
     },
     "+": {
-      "marqBlock": "?",
+      "marqBlock": "+",
       "stock": 6,
       "size": 1.5
     },
     ":": {
-      "marqBlock": "+",
+      "marqBlock": ":",
       "stock": 6,
       "size": 1.25
     },
     "@": {
-      "marqBlock": ":",
+      "marqBlock": "@",
       "stock": 3,
       "size": 3
     }
@@ -300,22 +300,22 @@
     "{paradiseonbloor.com}": {
       "marqBlock": "paradiseonbloor.com",
       "stock": 3,
-      "size": 12
+      "size": 16.5
     },
     "{osteriarialto.com}": {
       "marqBlock": "osteriarialto.com",
       "stock": 3,
-      "size": 11
+      "size": 13
     },
     "{osteria rialto}": {
       "marqBlock": "osteria rialto",
       "stock": 3,
-      "size": 10
+      "size": 11
     },
     "{dine at}": {
       "marqBlock": "dine at",
       "stock": 3,
-      "size": 8
+      "size": 6.5
     }
   }
 }

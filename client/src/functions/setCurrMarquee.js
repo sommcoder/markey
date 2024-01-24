@@ -12,61 +12,65 @@ export default function setCurrMarquee(keysArr, formEl, data, appState) {
     // we don't want empty row input
 
     // the pipe operator
-    let inputStr = formEl[row].value.trim();
+    let inputStrArr = formEl[row].value.trim().split("");
     let rowName = formEl[row].dataset.rowid;
     let rowArr = []; // sequence of characters
 
-    console.log("inputStr:", inputStr);
+    console.log("inputStrArr:", inputStrArr);
     console.log("rowName:", rowName);
 
     let inputTile; // gets assigned in the loop below
-    let inputTileObj;
-    let multiCharStr; // gets assigned in the loop below
+    let inputBlockObj;
+    let multiCharArr; // gets assigned in the loop below
     // INPUT Loop:
-    for (let ltr = 0; ltr < inputStr.length; ltr++) {
-      console.log("inputStr[ltr]:", inputStr[ltr]);
-
-      // special char?
-      if (inputStr[ltr] === "{") {
+    for (let ltr = 0; ltr < inputStrArr.length; ltr++) {
+      if (inputStrArr[ltr] === "_") continue; // blank skip
+      if (inputStrArr[ltr] === "{") {
+        // special char?
         console.log("special! we found a: { ");
-        let start = inputStr.indexOf("{") + 1;
-        let end = inputStr.indexOf("}");
+        // we want to splice out the { } as well
+        // new references created each time this is executed:
+        let start = inputStrArr.indexOf("{");
+        let end = inputStrArr.indexOf("}");
+        let diff = end + 1 - start; // + 1 to splice out the }
 
-        multiCharStr = inputStr.slice(start, end); // gets up UNTIL
-        // TODO: maybe we should look into splice as well since we need to modify the inputStr? The problem is when we HAVE multiple special characters on a single line
-        console.log("multiCharStr:", multiCharStr);
-        console.log("inputStr POST SLICE:", inputStr);
-        if (!data.special[`{${multiCharStr}}`]) return; // this is a double check.
-        inputTileObj = data.special[`{${multiCharStr}}`]; // needed for lookup
-        console.log("inputTileObj:", inputTileObj);
-        // push the whole string between { and } to the rowArr/
-        console.log("rowArr:", rowArr);
-        console.log("start:", start);
-        console.log("end:", end);
-        ltr += end - (start - 1); // iterate by the difference so we don't go each letter again and process the letter in the else block below.
-        // need to increment end since we don't want to iterate over the }
-        console.log("ltr:", ltr);
+        multiCharArr = inputStrArr.splice(start, diff);
 
+        multiCharArr.shift(); // get rid of the { at the start
+        multiCharArr.pop(); // get rid of the } at the end
+
+        let multiCharStr = multiCharArr.join("");
+
+        if (!data.special[`{${multiCharStr}}`]) {
+          return; // create an Error for this
+        }
+
+        // get block's Key Values:
+        inputBlockObj = data.special[`{${multiCharStr}}`];
+
+        // output tracking:
         if (!newInputObj.output[multiCharStr]) {
           newInputObj.output[multiCharStr] = 1; // assign to one
         } else {
           newInputObj.output[multiCharStr]++; // increment by one
         }
+        rowArr.push([inputBlockObj.marqBlock, inputBlockObj.size]);
 
-        // push to arr in this format: [[ltr, size], [ltr, size] ...]
-        rowArr.push([inputTileObj.marqBlock, inputTileObj.size]);
+        // cleanup:
+        multiCharArr = []; // reset the specialCharArr
+        inputStrArr.unshift("_"); // just a blank so that the next iteration of input won't be skipped now that we've mutated the input array.
       } else {
-        console.log("ELSE BLOCK: ltr:", inputStr[ltr]);
+        console.log("ELSE BLOCK: ltr:", inputStrArr[ltr]);
         // handle individual chars:
-        if (!data.regular[inputStr[ltr]]) return; // this is a double check.
+        if (!data.regular[inputStrArr[ltr]]) return; // this is a double check.
 
-        if (!newInputObj.output[inputStr[ltr]]) {
-          newInputObj.output[inputStr[ltr]] = 1; // assign to one
+        if (!newInputObj.output[inputStrArr[ltr]]) {
+          newInputObj.output[inputStrArr[ltr]] = 1; // assign to one
         } else {
-          newInputObj.output[inputStr[ltr]]++; // increment by one
+          newInputObj.output[inputStrArr[ltr]]++; // increment by one
         }
         // push to arr in this format: [[ltr, size], [ltr, size] ...]
-        inputTile = data.regular[inputStr[ltr]];
+        inputTile = data.regular[inputStrArr[ltr]];
         console.log("inputTile:", inputTile);
         rowArr.push([inputTile.marqBlock, inputTile.size]);
       }
