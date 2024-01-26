@@ -38,7 +38,7 @@ const StyledSetContainer = styled.div`
   width: 100%;
   box-shadow: inset 0px 0px 5px #c1c1c1;
   overflow: hidden;
-  z-index: 10;
+  z-index: 8;
 `;
 
 const StyledKeySetRow = styled.div`

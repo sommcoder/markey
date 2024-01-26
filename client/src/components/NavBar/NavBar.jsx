@@ -2,6 +2,9 @@ import styled from "styled-components";
 import HamburgerMenu from "../HamburgerMenu/HamburgerMenu";
 import SetCurrBtn from "../SetCurrBtn/SetCurrBtn";
 import DarkModeBtn from "../DarkModeBtn/DarkModeBtn";
+import InventoryOverlay from "../InventoryOverlay/InventoryOverlay";
+
+import { useState } from "react";
 
 export default function NavBar({
   data,
@@ -12,9 +15,10 @@ export default function NavBar({
   setTheme,
   theme,
   setOutputProcess,
-  menuState,
-  toggleMenuState,
 }) {
+  // inventory menu state:
+  const [menuState, toggleMenuState] = useState(false);
+  console.log("data:", data);
   return (
     <StyledNavBar>
       <StyledLeftNavArea>
@@ -41,6 +45,15 @@ export default function NavBar({
           toggleMenuState={toggleMenuState}
         />
       </StyledRightNavArea>
+      {menuState ? (
+        <InventoryOverlay
+          data={data}
+          menuState={menuState}
+          toggleMenuState={toggleMenuState}
+        />
+      ) : (
+        ""
+      )}
     </StyledNavBar>
   );
 }
@@ -49,7 +62,6 @@ const StyledNavBar = styled.nav`
   align-items: center;
   position: relative;
   display: block;
-  z-index: 4;
   width: 100%;
   font-size: 4rem;
   font-weight: 650;

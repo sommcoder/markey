@@ -14,11 +14,9 @@ export default forwardRef(function TableContainer(
     selectedRow,
     switchSelectedRow,
     keysArr,
-    theme,
   },
   ref
 ) {
-  console.log("theme:", theme);
   return (
     <StyledTableContainer>
       {marKeysArr.map((el) => (

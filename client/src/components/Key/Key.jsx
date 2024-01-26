@@ -9,13 +9,13 @@ export default function Key({ charObj, special }) {
     <StyledKey
       tabIndex={-1}
       value={special ? `{${charObj.marqBlock}}` : charObj.marqBlock}
-      data-special={special ? true : false}
+      data-special={special ? "true" : ""} // data- converts to string, can't use bool
       charObj={charObj}
     >
       <div
         tabIndex={-1}
         className="button-text"
-        data-special={special ? true : false}
+        data-special={special ? "true" : ""}
       >
         {charObj.marqBlock}
       </div>
@@ -27,7 +27,6 @@ export default function Key({ charObj, special }) {
 }
 
 const StyledKey = styled.button`
-  position: relative;
   text-transform: uppercase;
   border: none;
   font-weight: bold;
@@ -42,9 +41,9 @@ const StyledKey = styled.button`
   padding: 0;
   display: flex;
   justify-content: center;
+  opacity: 1;
 
   &[data-special="true"] {
     width: 6rem;
-    background-image: ;
   }
 `;

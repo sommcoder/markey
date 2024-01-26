@@ -47,7 +47,6 @@ export default forwardRef(function Marquee(
           {appState[marqName].rows[row].length > 0
             ? appState[marqName].rows[row].map((blockKey, i) => (
                 <Block
-                  appState={appState}
                   key={`${marqName}-${row}-${i}`}
                   block={blockKey[0]}
                   style={blockKey[1]}

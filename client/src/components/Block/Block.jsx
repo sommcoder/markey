@@ -2,7 +2,7 @@ import styled, { keyframes } from "styled-components";
 
 export default function Block({ block, style, delay }) {
   const blockWidth = style ? style + "rem" : "2rem"; // no style specified? 2 rem
-
+  console.log("block:", block);
   // TODO: may need to find a way to use a different font size for the "special components" so that they'll actually fit. They're also being considered as individual blocks by setCurrMarquee() function and I need a way for them to be interpreted as single tiles
 
   // TODO: determine which special blocks wrap text within them and which ones do not

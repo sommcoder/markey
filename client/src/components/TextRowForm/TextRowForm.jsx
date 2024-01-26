@@ -18,9 +18,7 @@ export default forwardRef(function TextRowForm(
 ) {
   // when selectedMarq changes, switch selectedRow to nextEl
   useEffect(() => {
-    if (selectedMarq === marqName) {
-      switchSelectedRow(0);
-    }
+    if (selectedMarq === marqName) switchSelectedRow(0);
   }, [selectedMarq]);
 
   function handleClick(ev) {

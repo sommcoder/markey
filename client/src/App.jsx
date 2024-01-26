@@ -15,16 +15,22 @@ import setCurrMarquee from "./functions/setCurrMarquee.js";
 import getNextElNum from "./functions/getNextElNum.js";
 import getTally from "./functions/getTally.js";
 import prepareKey from "./functions/prepareKey.js";
-import InventoryOverlay from "./components/InventoryOverlay/InventoryOverlay.jsx";
+/////////////////////////////////////////
+import firebase from "firebase";
+const firestore = firebase.firestore();
 /////////////////////////////////////////
 
 export default function App() {
-  const { isLoading, isSuccess, isError, data, error } = useQuery({
-    queryKey: ["get-characters"],
-    queryFn: getCharacterStock, // no parentheses!
-  }); // makes MULTIPLE retry queries automatically if query fails.
-
-  // TODO: the special characters don't have accurate blockWidths. You'll need to review the physical stock in the theatre.
+  useEffect(() => {
+    async () => {
+      const blocks = await firestore.collection("blocks").get();
+      console.log("blocks:", blocks);
+    };
+  });
+  // const { isLoading, isSuccess, isError, data, error } = useQuery({
+  //   queryKey: ["get-characters"],
+  //   queryFn: getCharacterStock, // no parentheses!
+  // }); // makes MULTIPLE retry queries automatically if query fails.
 
   // TODO: still need to figure out updating stockTracker and then also the side menu and how to adjust character sizing and stock in case the user gets more or some break/get lost
   // fetchOnWindowFocus();
@@ -73,8 +79,7 @@ export default function App() {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   // "light" or "dark"
   const [theme, setTheme] = useState("light");
-  // inventory menu state:
-  const [menuState, toggleMenuState] = useState(false);
+
   // form element reference Object. Populated via forwardRef() hook
   const refStateObj = {
     West: useRef(null),
@@ -91,6 +96,7 @@ export default function App() {
   const keysArr = [0, 1, 2]; // should probably be named to "rowsArr"
 
   // NOT state. Client-side validation via onKeyDown/onClick events:
+  // If user blurs, they need to click on the input field again to renable
   const inputValidationObj = { values: [], sizes: 0 };
 
   function inputValidation(ev) {
@@ -106,7 +112,6 @@ export default function App() {
       return;
     }
 
-    // so because of focus event. Enter is submitting the key, which is special, however, it isn't a 'click' event, therefore ev.key === 'Enter' which is why we're getting key = 'enter'
     const special = ev.target.dataset.special;
     const key = prepareKey(ev);
 
@@ -162,8 +167,13 @@ export default function App() {
       console.log("key does not exist in data regular or special");
       return;
     }
-
-    // 0.1 = accounts for block border size
+    console.log("key:", key);
+    console.log("typeof key:", typeof key);
+    console.log("special:", special);
+    console.log("typeof special:", typeof special);
+    console.log("data:", data);
+    console.log("data[special]", data[special ? "special" : "regular"][key]);
+    // 0.1(rem) accounts for block border size
     let currBlockSize = +data[special ? "special" : "regular"][key].size + 0.1;
     // Max capacity check:
     // existing width + current block size would be greater than the marqSize
@@ -217,89 +227,90 @@ export default function App() {
   }, [outputProcess, appState]);
 
   console.log("appState:", appState);
+  console.log("data:", data);
 
   return (
     // specifies which
     <ThemeProvider theme={theme === "dark" ? darkTheme : lightTheme}>
       <GlobalStyles />
-      {/* <div id="firebaseui-auth-container" /> */}
-      {windowWidth > 775 ? (
-        <StyledAppContainer
-          onKeyDown={(ev) => inputValidation(ev)}
-          onClick={(ev) => inputValidation(ev)}
-          onFocus={(ev) => ev.preventDefault()}
-        >
-          {toggleModal ? (
-            <Modal
-              modalState={modalState}
-              toggleModal={toggleModal}
-              appState={appState}
-              marKeysArr={marKeysArr}
+      {isSuccess ? ( // on data load: render app
+        windowWidth > 775 ? (
+          <StyledAppContainer
+            onKeyDown={(ev) => inputValidation(ev)}
+            onClick={(ev) => inputValidation(ev)}
+            onFocus={(ev) => ev.preventDefault()}
+          >
+            {toggleModal ? (
+              <Modal
+                modalState={modalState}
+                toggleModal={toggleModal}
+                appState={appState}
+                marKeysArr={marKeysArr}
+                data={data}
+                stateOutputObj={stateOutputObj}
+                outputProcess={outputProcess}
+              />
+            ) : (
+              ""
+            )}
+            <NavBar
               data={data}
+              refStateObj={refStateObj}
+              keysArr={keysArr}
+              appState={appState}
+              dispAppState={dispAppState}
+              selectedMarq={selectedMarq}
+              switchSelectedMarq={switchSelectedMarq}
+              selectedRow={selectedRow}
+              switchSelectedRow={switchSelectedRow}
               stateOutputObj={stateOutputObj}
-              outputProcess={outputProcess}
+              setStateOutputObj={setStateOutputObj}
+              setOutputProcess={setOutputProcess}
+              setTheme={setTheme}
+              theme={theme}
             />
-          ) : (
-            ""
-          )}
-          {menuState ? <InventoryOverlay /> : ""}
-          <NavBar
-            data={data}
-            refStateObj={refStateObj}
-            keysArr={keysArr}
-            appState={appState}
-            dispAppState={dispAppState}
-            selectedMarq={selectedMarq}
-            switchSelectedMarq={switchSelectedMarq}
-            selectedRow={selectedRow}
-            switchSelectedRow={switchSelectedRow}
-            stateOutputObj={stateOutputObj}
-            setStateOutputObj={setStateOutputObj}
-            setOutputProcess={setOutputProcess}
-            menuState={menuState}
-            toggleMenuState={toggleMenuState}
-            setTheme={setTheme}
-            theme={theme}
-          />
-          <TableContainer
-            ref={refStateObj}
-            data={data}
-            keysArr={keysArr}
-            marKeysArr={marKeysArr}
-            appState={appState}
-            dispAppState={dispAppState}
-            selectedRow={selectedRow}
-            switchSelectedRow={switchSelectedRow}
-            selectedMarq={selectedMarq}
-            switchSelectedMarq={switchSelectedMarq}
-            marqSizes={marqSizes}
-          />
-          {isSuccess ? <KeySet data={data} /> : ""}
-        </StyledAppContainer>
+            <TableContainer
+              ref={refStateObj}
+              data={data}
+              keysArr={keysArr}
+              marKeysArr={marKeysArr}
+              appState={appState}
+              dispAppState={dispAppState}
+              selectedRow={selectedRow}
+              switchSelectedRow={switchSelectedRow}
+              selectedMarq={selectedMarq}
+              switchSelectedMarq={switchSelectedMarq}
+              marqSizes={marqSizes}
+            />
+            <KeySet data={data} />
+          </StyledAppContainer>
+        ) : (
+          <StyledErrorContainer>
+            <StyledErrorComponent>
+              <h5
+                style={{
+                  textAlign: "center",
+                  fontWeight: "800",
+                  textDecoration: "underline",
+                  paddingBottom: "1rem",
+                  margin: "0 auto",
+                }}
+              >
+                Minimum Screen Size Error:
+              </h5>
+              <p
+                style={{
+                  textAlign: "center",
+                  margin: "0 auto",
+                }}
+              >
+                Your screen must be at least 775px wide
+              </p>
+            </StyledErrorComponent>
+          </StyledErrorContainer>
+        )
       ) : (
-        <StyledErrorContainer>
-          <StyledErrorComponent>
-            <h5
-              style={{
-                textAlign: "center",
-                fontWeight: "800",
-                textDecoration: "underline",
-                paddingBottom: "1rem",
-                margin: "0 auto",
-              }}
-            >
-              Minimum Screen Size Error:
-            </h5>
-            <p
-              style={{
-                textAlign: "center",
-                margin: "0 auto",
-              }}
-            >
-              Your screen must be at least 775px wide
-            </p>
-          </StyledErrorComponent>
-        </StyledErrorContainer>
+        ""
       )}
     </ThemeProvider>
   );

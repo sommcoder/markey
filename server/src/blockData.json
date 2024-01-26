@@ -1,137 +1,137 @@
 {
   "regular": {
-    " ": {
-      "marqBlock": " ",
+    "EMPTY_SPACE": {
+      "marqBlock": "EMPTY_SPACE",
       "stock": 100,
       "size": 1.5
     },
     "a": {
-      "marqBlock": "A",
+      "marqBlock": "a",
       "stock": 19,
       "size": 2.88
     },
     "b": {
-      "marqBlock": "B",
+      "marqBlock": "b",
       "stock": 10,
       "size": 2.39
     },
     "c": {
-      "marqBlock": "C",
+      "marqBlock": "c",
       "stock": 7,
       "size": 2.43
     },
     "d": {
-      "marqBlock": "D",
+      "marqBlock": "d",
       "stock": 8,
       "size": 2.43
     },
     "e": {
-      "marqBlock": "E",
+      "marqBlock": "e",
       "stock": 20,
       "size": 2.28
     },
     "f": {
-      "marqBlock": "F",
+      "marqBlock": "f",
       "stock": 7,
       "size": 2.28
     },
     "g": {
-      "marqBlock": "G",
+      "marqBlock": "g",
       "stock": 10,
       "size": 2.51
     },
     "h": {
-      "marqBlock": "H",
+      "marqBlock": "h",
       "stock": 9,
       "size": 2.51
     },
     "i": {
-      "marqBlock": "I",
+      "marqBlock": "i",
       "stock": 21,
       "size": 1.39
     },
     "j": {
-      "marqBlock": "J",
+      "marqBlock": "j",
       "stock": 6,
       "size": 2.43
     },
     "k": {
-      "marqBlock": "K",
+      "marqBlock": "k",
       "stock": 6,
       "size": 2.58
     },
     "l": {
-      "marqBlock": "L",
+      "marqBlock": "l",
       "stock": 16,
       "size": 2.43
     },
     "m": {
-      "marqBlock": "M",
+      "marqBlock": "m",
       "stock": 10,
       "size": 3.03
     },
     "n": {
-      "marqBlock": "N",
+      "marqBlock": "n",
       "stock": 15,
       "size": 2.55
     },
     "o": {
-      "marqBlock": "O",
+      "marqBlock": "o",
       "stock": 32,
       "size": 2.55
     },
     "p": {
-      "marqBlock": "P",
+      "marqBlock": "p",
       "stock": 13,
       "size": 2.36
     },
     "q": {
-      "marqBlock": "Q",
+      "marqBlock": "q",
       "stock": 3,
       "size": 2.58
     },
     "r": {
-      "marqBlock": "R",
+      "marqBlock": "r",
       "stock": 14,
       "size": 2.51
     },
     "s": {
-      "marqBlock": "S",
+      "marqBlock": "s",
       "stock": 14,
       "size": 2.51
     },
     "t": {
-      "marqBlock": "T",
+      "marqBlock": "t",
       "stock": 18,
       "size": 2.43
     },
     "u": {
-      "marqBlock": "U",
+      "marqBlock": "u",
       "stock": 22,
       "size": 2.51
     },
     "v": {
-      "marqBlock": "V",
+      "marqBlock": "v",
       "stock": 5,
       "size": 2.76
     },
     "w": {
-      "marqBlock": "W",
+      "marqBlock": "w",
       "stock": 6,
       "size": 2.95
     },
     "x": {
-      "marqBlock": "X",
+      "marqBlock": "x",
       "stock": 2,
       "size": 2.58
     },
     "y": {
-      "marqBlock": "Y",
+      "marqBlock": "y",
       "stock": 5,
       "size": 2.76
     },
     "z": {
-      "marqBlock": "Z",
+      "marqBlock": "z",
       "stock": 4,
       "size": 2.39
     },
@@ -190,7 +190,7 @@
       "stock": 10,
       "size": 2
     },
-    ".": {
+    "PERIOD": {
       "marqBlock": ".",
       "stock": 3,
       "size": 1.5
@@ -213,22 +213,22 @@
     "&": {
       "marqBlock": "&",
       "stock": 3,
-      "size": 1.25
+      "size": 2
     },
-    "$": {
-      "marqBlock": "$",
+    "DOLLAR_SIGN": {
+      "marqBlock": "DOLLAR_SIGN",
       "stock": 6,
-      "size": 2
+      "size": 2.28
     },
-    "#": {
-      "marqBlock": "#",
+    "NUMBER_SIGN": {
+      "marqBlock": "NUMBER_SIGN",
       "stock": 3,
-      "size": 2
+      "size": 3.47
     },
-    "/": {
-      "marqBlock": "/",
+    "FORWARD_SLASH": {
+      "marqBlock": "FORWARD_SLASH",
       "stock": 11,
-      "size": 2
+      "size": 2.28
     },
     "?": {
       "marqBlock": "?",
@@ -255,22 +255,22 @@
     "{am}": {
       "marqBlock": "am",
       "stock": 6,
-      "size": 3
+      "size": 2.65
     },
     "{pm}": {
       "marqBlock": "pm",
       "stock": 8,
-      "size": 3
+      "size": 2.65
     },
     "{presents}": {
       "marqBlock": "presents",
       "stock": 3,
-      "size": 7
+      "size": 7.48
     },
     "{sold out}": {
       "marqBlock": "sold out",
       "stock": 4,
-      "size": 8
+      "size": 7.41
     },
     "{free}": {
       "marqBlock": "free",
@@ -292,17 +292,17 @@
       "stock": 3,
       "size": 4
     },
-    "{.com}": {
+    "{com}": {
       "marqBlock": ".com",
       "stock": 3,
       "size": 4
     },
-    "{paradiseonbloor.com}": {
+    "{paradiseonbloorcom}": {
       "marqBlock": "paradiseonbloor.com",
       "stock": 3,
       "size": 16.5
     },
-    "{osteriarialto.com}": {
+    "{osteriarialtocom}": {
       "marqBlock": "osteriarialto.com",
       "stock": 3,
       "size": 13
