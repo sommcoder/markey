@@ -7,33 +7,52 @@ import { useState, useReducer, useRef, useEffect } from "react";
 import styled, { ThemeProvider } from "styled-components";
 import { GlobalStyles, darkTheme, lightTheme } from "./GlobalStyles";
 /////////////////////////////////////////
-import { useQuery } from "@tanstack/react-query";
-/////////////////////////////////////////
-import { getCharacterStock } from "./api/api.js";
-/////////////////////////////////////////
 import setCurrMarquee from "./functions/setCurrMarquee.js";
 import getNextElNum from "./functions/getNextElNum.js";
 import getTally from "./functions/getTally.js";
 import prepareKey from "./functions/prepareKey.js";
 /////////////////////////////////////////
-import firebase from "firebase";
-const firestore = firebase.firestore();
-/////////////////////////////////////////
+import { getDatabase, ref, child, get } from "firebase/database";
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
 
 export default function App() {
+  const firebaseConfig = {
+    apiKey: "AIzaSyD5hAef20CWn1hyUDbpj97to9xQYEZUEBs",
+    authDomain: "mar-key-26942.firebaseapp.com",
+    projectId: "mar-key-26942",
+    storageBucket: "mar-key-26942.appspot.com",
+    messagingSenderId: "68358579764",
+    appId: "1:68358579764:web:693fe73219afc486724c61",
+    measurementId: "G-NE3ZSBCMX7",
+    databaseURL: "https://mar-key-26942-default-rtdb.firebaseio.com/",
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const database = getDatabase(app);
+  const analytics = getAnalytics(app);
+
+  // should just get data onLoad.
+  const ref = database.ref(
+    "https://mar-key-26942-default-rtdb.firebaseio.com/"
+  );
+
   useEffect(() => {
     async () => {
-      const blocks = await firestore.collection("blocks").get();
-      console.log("blocks:", blocks);
+      ref.on(
+        "value",
+        (snapshot) => {
+          console.log(snapshot.val());
+        },
+        (errorObject) => {
+          console.log("The read failed: " + errorObject.name);
+        }
+      );
     };
   });
-  // const { isLoading, isSuccess, isError, data, error } = useQuery({
-  //   queryKey: ["get-characters"],
-  //   queryFn: getCharacterStock, // no parentheses!
-  // }); // makes MULTIPLE retry queries automatically if query fails.
 
   // TODO: still need to figure out updating stockTracker and then also the side menu and how to adjust character sizing and stock in case the user gets more or some break/get lost
-  // fetchOnWindowFocus();
 
   const InitAppState = {
     West: {
