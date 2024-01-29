@@ -12,48 +12,23 @@ import getNextElNum from "./functions/getNextElNum.js";
 import getTally from "./functions/getTally.js";
 import prepareKey from "./functions/prepareKey.js";
 /////////////////////////////////////////
-import { getDatabase, ref, child, get } from "firebase/database";
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
+import { onValue, ref } from "firebase/database";
+import { db } from "./firebase.js"; // our SDK instance
 
 export default function App() {
-  const firebaseConfig = {
-    apiKey: "AIzaSyD5hAef20CWn1hyUDbpj97to9xQYEZUEBs",
-    authDomain: "mar-key-26942.firebaseapp.com",
-    projectId: "mar-key-26942",
-    storageBucket: "mar-key-26942.appspot.com",
-    messagingSenderId: "68358579764",
-    appId: "1:68358579764:web:693fe73219afc486724c61",
-    measurementId: "G-NE3ZSBCMX7",
-    databaseURL: "https://mar-key-26942-default-rtdb.firebaseio.com/",
-  };
+  // data state:
+  const [data, updateData] = useState();
 
-  // recaptcha: 6Le7AmApAAAAALFa7DxsFlvP4syuJnGSRPR4Dn33
+  const allDataRef = ref(db, "/");
 
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const database = getDatabase(app);
-  const analytics = getAnalytics(app);
-
-  // should just get data onLoad.
-  const ref = database.ref(
-    "https://mar-key-26942-default-rtdb.firebaseio.com/"
-  );
-
-  useEffect(() => {
-    async () => {
-      ref.on(
-        "value",
-        (snapshot) => {
-          console.log(snapshot.val());
-        },
-        (errorObject) => {
-          console.log("The read failed: " + errorObject.name);
-        }
-      );
-    };
+  // onValue is called every time data is changed at the specified db reference, including changes to children.
+  onValue(allDataRef, (snapshot) => {
+    const data = snapshot.val(); // You can retrieve the data in the snapshot with the val() method.
+    updateData(data);
   });
 
+  // write data:
+  //  set(ref(db, '/'))
   // TODO: still need to figure out updating stockTracker and then also the side menu and how to adjust character sizing and stock in case the user gets more or some break/get lost
 
   const InitAppState = {
