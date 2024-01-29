@@ -8,13 +8,13 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
-server/node_modules/
+server/node_modules
 dist
 dist-ssr
 *.local
 
 #quick component shell script
-src/components/newReactComponent
+client/src/components/newReactComponent
 
 # Editor directories and files
 .vscode/*

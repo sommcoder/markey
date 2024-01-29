@@ -28,6 +28,8 @@ export default function App() {
     databaseURL: "https://mar-key-26942-default-rtdb.firebaseio.com/",
   };
 
+  // recaptcha: 6Le7AmApAAAAALFa7DxsFlvP4syuJnGSRPR4Dn33
+
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
   const database = getDatabase(app);
