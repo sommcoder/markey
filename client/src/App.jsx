@@ -229,59 +229,57 @@ export default function App() {
     // specifies which
     <ThemeProvider theme={theme === "dark" ? darkTheme : lightTheme}>
       <GlobalStyles />
-      {isSuccess ? ( // on data load: render app
-        windowWidth > 775 ? (
-          <StyledAppContainer
-            onKeyDown={(ev) => inputValidation(ev)}
-            onClick={(ev) => inputValidation(ev)}
-            onFocus={(ev) => ev.preventDefault()}
-          >
-            {toggleModal ? (
-              <Modal
-                modalState={modalState}
-                toggleModal={toggleModal}
-                appState={appState}
-                marKeysArr={marKeysArr}
-                data={data}
-                stateOutputObj={stateOutputObj}
-                outputProcess={outputProcess}
-              />
-            ) : (
-              ""
-            )}
-            <NavBar
-              data={data}
-              refStateObj={refStateObj}
-              keysArr={keysArr}
-              appState={appState}
-              dispAppState={dispAppState}
-              selectedMarq={selectedMarq}
-              switchSelectedMarq={switchSelectedMarq}
-              selectedRow={selectedRow}
-              switchSelectedRow={switchSelectedRow}
-              stateOutputObj={stateOutputObj}
-              setStateOutputObj={setStateOutputObj}
-              setOutputProcess={setOutputProcess}
-              setTheme={setTheme}
-              theme={theme}
-            />
-            <TableContainer
-              ref={refStateObj}
-              data={data}
-              keysArr={keysArr}
-              marKeysArr={marKeysArr}
-              appState={appState}
-              dispAppState={dispAppState}
-              selectedRow={selectedRow}
-              switchSelectedRow={switchSelectedRow}
-              selectedMarq={selectedMarq}
-              switchSelectedMarq={switchSelectedMarq}
-              marqSizes={marqSizes}
-            />
-            <KeySet data={data} />
-          </StyledAppContainer>
+      <StyledAppContainer
+        onKeyDown={(ev) => inputValidation(ev)}
+        onClick={(ev) => inputValidation(ev)}
+        onFocus={(ev) => ev.preventDefault()}
+      >
+        {toggleModal ? (
+          <Modal
+            modalState={modalState}
+            toggleModal={toggleModal}
+            appState={appState}
+            marKeysArr={marKeysArr}
+            data={data}
+            stateOutputObj={stateOutputObj}
+            outputProcess={outputProcess}
+          />
         ) : (
-          <StyledErrorContainer>
+          ""
+        )}
+        <NavBar
+          data={data}
+          refStateObj={refStateObj}
+          keysArr={keysArr}
+          appState={appState}
+          dispAppState={dispAppState}
+          selectedMarq={selectedMarq}
+          switchSelectedMarq={switchSelectedMarq}
+          selectedRow={selectedRow}
+          switchSelectedRow={switchSelectedRow}
+          stateOutputObj={stateOutputObj}
+          setStateOutputObj={setStateOutputObj}
+          setOutputProcess={setOutputProcess}
+          setTheme={setTheme}
+          theme={theme}
+        />
+        <TableContainer
+          ref={refStateObj}
+          data={data}
+          keysArr={keysArr}
+          marKeysArr={marKeysArr}
+          appState={appState}
+          dispAppState={dispAppState}
+          selectedRow={selectedRow}
+          switchSelectedRow={switchSelectedRow}
+          selectedMarq={selectedMarq}
+          switchSelectedMarq={switchSelectedMarq}
+          marqSizes={marqSizes}
+        />
+        <KeySet data={data} />
+      </StyledAppContainer>
+
+      {/* <StyledErrorContainer>
             <StyledErrorComponent>
               <h5
                 style={{
@@ -303,11 +301,7 @@ export default function App() {
                 Your screen must be at least 775px wide
               </p>
             </StyledErrorComponent>
-          </StyledErrorContainer>
-        )
-      ) : (
-        ""
-      )}
+          </StyledErrorContainer> */}
     </ThemeProvider>
   );
 }
@@ -359,25 +353,25 @@ const StyledAppContainer = styled.div`
   overflow-x: scroll;
 `;
 
-const StyledErrorContainer = styled.div`
-  position: relative;
-  width: 100%;
-  height: 100%;
-  opacity: 0.5;
-  margin: 0 auto;
-  background-image: url("/paradise-vintage.jpeg");
-`;
+// const StyledErrorContainer = styled.div`
+//   position: relative;
+//   width: 100%;
+//   height: 100%;
+//   opacity: 0.5;
+//   margin: 0 auto;
+//   background-image: url("/paradise-vintage.jpeg");
+// `;
 
-const StyledErrorComponent = styled.div`
-  position: absolute;
-  top: 50%;
-  right: 0;
-  left: 0;
-  padding: 2rem;
-  display: grid;
-  text-align: center;
-  font-size: 2rem;
-  transform: translateY(-50%);
-  background-color: white;
-  border-radius: 30px;
-`;
+// const StyledErrorComponent = styled.div`
+//   position: absolute;
+//   top: 50%;
+//   right: 0;
+//   left: 0;
+//   padding: 2rem;
+//   display: grid;
+//   text-align: center;
+//   font-size: 2rem;
+//   transform: translateY(-50%);
+//   background-color: white;
+//   border-radius: 30px;
+// `;

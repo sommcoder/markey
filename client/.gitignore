@@ -13,6 +13,8 @@ dist
 dist-ssr
 *.local
 
+src/data.json
+
 #quick component shell script
 client/src/components/newReactComponent
 
