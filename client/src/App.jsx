@@ -12,20 +12,23 @@ import getNextElNum from "./functions/getNextElNum.js";
 import getTally from "./functions/getTally.js";
 import prepareKey from "./functions/prepareKey.js";
 /////////////////////////////////////////
-import { onValue, ref } from "firebase/database";
-import { db } from "./firebase.js"; // our SDK instance
+// import { onValue, ref } from "firebase/database";
+// import { db } from "./firebase.js"; // our SDK instance
+
+// our mock db:
+import data from "./data.json";
 
 export default function App() {
   // data state:
-  const [data, updateData] = useState();
+  // const [data, updateData] = useState();
 
-  const allDataRef = ref(db, "/");
+  // const allDataRef = ref(db, "/");
 
-  // onValue is called every time data is changed at the specified db reference, including changes to children.
-  onValue(allDataRef, (snapshot) => {
-    const data = snapshot.val(); // You can retrieve the data in the snapshot with the val() method.
-    updateData(data);
-  });
+  // // onValue is called every time data is changed at the specified db reference, including changes to children.
+  // onValue(allDataRef, (snapshot) => {
+  //   const data = snapshot.val(); // You can retrieve the data in the snapshot with the val() method.
+  //   updateData(data);
+  // });
 
   // write data:
   //  set(ref(db, '/'))
@@ -57,8 +60,8 @@ export default function App() {
       output: {},
     },
   };
-  // * Main App State *: //
   /////////////////////////////////////////////
+  // * Main App State *: //
   // popup modal = the apps output
   const [modalState, toggleModal] = useState(false);
   // String state that gets set by switchSelectedMarq(marqName)
