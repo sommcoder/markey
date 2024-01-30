@@ -1,4 +1,4 @@
-# MARKEY
+# MAR-KEY
 Mar-key is a handy tool for the employees of Paradise Theatre and a unique idea to help make manually adjusting the tiles on their analogue marquee display just a little bit easier! Mar-key stores the width and stock of each marquee block/tile and can allow the user to update this if block/tiles break, are lost or new block/tiles are acquired.
 
 It has a few use cases:
