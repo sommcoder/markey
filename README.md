@@ -14,7 +14,7 @@ Mar-key will provide immediate validation BEFORE you submit your entry. So if yo
 - UseRef with an array of values assigned from mapping a List
 - Client-side validation
 - Staggered css animations
-- Styled-components
+- Styled-components (global styling, variables, nested selector styling)
 - Used native HTML to create essentially a unique mini game/tool with custom components and logic
 - Firebase deployment, auth and their realtime database.
 - Learned that I should spend much more time in design before starting projects ;)
