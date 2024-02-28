@@ -17,6 +17,7 @@ export default forwardRef(function Marquee(
     switchSelectedMarq,
     selectedRow,
     switchSelectedRow,
+    inputValidationObj,
   },
   ref
 ) {
@@ -35,12 +36,7 @@ export default forwardRef(function Marquee(
           switchSelectedMarq={switchSelectedMarq}
           onBlur={(ev) => ev.preventDefault()}
         />
-        <ResetBtn
-          data={data}
-          marqName={marqName}
-          appState={appState}
-          dispAppState={dispAppState}
-        />
+        <ResetBtn marqName={marqName} />
       </StyledBtnWrapper>
       {keysArr.map((row) => (
         <StyledMarqueeRow marqWidth={marqWidth} key={`${marqName}-${row}`}>
@@ -69,6 +65,7 @@ export default forwardRef(function Marquee(
         switchSelectedMarq={switchSelectedMarq}
         selectedRow={selectedRow}
         switchSelectedRow={switchSelectedRow}
+        inputValidationObj={inputValidationObj}
       />
     </StyledMarquee>
   );

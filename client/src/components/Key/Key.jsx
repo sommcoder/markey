@@ -2,27 +2,20 @@ import styled from "styled-components";
 // import StockTracker from "../StockTracker/StockTracker";
 
 export default function Key({ charObj, special }) {
-  // console.log("charObj:", charObj);
-
-  // better to add the { } in the Key, so that they appear in input fields and can then be processed by setCurrMarquee
-  return charObj.marqBlock !== " " ? (
+  return (
     <StyledKey
       tabIndex={-1}
-      value={special ? `{${charObj.marqBlock}}` : charObj.marqBlock}
-      data-special={special ? "true" : ""} // data- converts to string, can't use bool
+      data-special={special}
+      // data- converts to string
       charObj={charObj}
+      data-id={charObj.id}
+      // id will now be used to look up for keydown events
     >
-      <div
-        tabIndex={-1}
-        className="button-text"
-        data-special={special ? "true" : ""}
-      >
+      <div tabIndex={-1} className="button-text" data-special={special}>
         {charObj.marqBlock}
       </div>
       {/* <StockTracker charObj={charObj} /> */}
     </StyledKey>
-  ) : (
-    ""
   );
 }
 
@@ -36,7 +29,7 @@ const StyledKey = styled.button`
   height: 5rem;
   color: black;
   text-align: center;
-  border-radius: 15%;
+  border-radius: 15%; // TODO: change to rem
   box-shadow: none;
   padding: 0;
   display: flex;

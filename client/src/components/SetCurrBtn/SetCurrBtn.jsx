@@ -19,7 +19,7 @@ export default function SetCurrBtn({
       type: "SET_APP",
       updatedState: setAllMarquee(keysArr, refStateObj, data, appState),
     });
-    setOutputProcess("set"); // will this work?
+    setOutputProcess("set");
   }
 
   return (

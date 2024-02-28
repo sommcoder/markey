@@ -19,11 +19,7 @@ export default function ModalTable({ data, appState, stateOutputObj }) {
                 block={char}
                 key={`Modal-${char}`}
                 delay={i + 1}
-                style={
-                  data[char.length > 1 ? "special" : "regular"][
-                    `${char.length > 1 ? `{${char}}` : char}`
-                  ].size
-                }
+                style={data[char].size}
               />
               <StyledBlockTally>x{stateOutputObj[char]}</StyledBlockTally>
             </StyledModalBlockContainer>

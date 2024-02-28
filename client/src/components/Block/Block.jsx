@@ -1,11 +1,7 @@
 import styled, { keyframes } from "styled-components";
 
 export default function Block({ block, style, delay }) {
-  const blockWidth = style ? style + "rem" : "2rem"; // no style specified? 2 rem
-  console.log("block:", block);
-  // TODO: may need to find a way to use a different font size for the "special components" so that they'll actually fit. They're also being considered as individual blocks by setCurrMarquee() function and I need a way for them to be interpreted as single tiles
-
-  // TODO: determine which special blocks wrap text within them and which ones do not
+  const blockWidth = style ? style + "rem" : "2rem";
 
   if (block === " ") {
     return <StyledEmptySpace blockWidth={blockWidth} />;
@@ -72,4 +68,5 @@ const StyledEmptySpace = styled.span`
   height: 100%;
   width: ${({ blockWidth }) => blockWidth};
   border-left: 0.1rem solid grey; // <--- need this
+  // There should never be two spaces together so this is fine
 `;

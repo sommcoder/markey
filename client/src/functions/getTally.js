@@ -1,4 +1,4 @@
-export default function getTally(appState) {
+export default function getTally(appState, data) {
   const tallyObj = {};
   let marKeysArr = Object.keys(appState);
   // Double for loop, through marquees, then through their output chars
@@ -14,5 +14,19 @@ export default function getTally(appState) {
       }
     }
   }
+
+  console.log("tallyObj:", tallyObj);
+
+  Object.keys(tallyObj).forEach((char) => {
+    if (tallyObj[char] > data[char]) {
+      // Throw error: not enough ${char} blocks! Reconfigure your
+    }
+  });
+  /*
+   
+  should compare the output tally to data
+   
+  */
+
   return tallyObj;
 }

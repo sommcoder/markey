@@ -1,11 +1,9 @@
 import styled from "styled-components";
-import ErrorMsg from "../ErrorMsg/ErrorMsg";
 
 import { forwardRef, useEffect } from "react";
 
 export default forwardRef(function TextRowForm(
   {
-    appState,
     keysArr,
     marqName,
     formName,
@@ -13,6 +11,7 @@ export default forwardRef(function TextRowForm(
     selectedMarq,
     selectedRow,
     switchSelectedRow,
+    inputValidationObj,
   },
   ref
 ) {
@@ -30,30 +29,30 @@ export default forwardRef(function TextRowForm(
     switchSelectedRow(+ev.target.name);
   }
 
+  // input rows are now adjusted based on the inputValidationState in App
   return (
-    <>
-      <form id={formName} ref={ref[marqName]}>
-        {keysArr.map((row) => (
-          <StyledTextRow
-            form={formName}
-            key={`${marqName}-${row}`}
-            readOnly
-            data-rowid={row}
-            type="text"
-            name={row}
-            isSelected={
-              selectedMarq === marqName && selectedRow === row ? true : false
-            }
-            marqSize={marqSize}
-            marqSelected={selectedMarq === marqName}
-            onClick={(ev) => handleClick(ev)}
-            onKeyDown={(ev) => ev.preventDefault()}
-            onBlur={(ev) => ev.preventDefault()}
-          />
-        ))}
-      </form>
-      {appState[marqName].isError === true ? <ErrorMsg /> : ""}
-    </>
+    <form id={formName} ref={ref[marqName]}>
+      {Object.keys(inputValidationObj[marqName]).map((row) => (
+        <StyledTextRow
+          form={formName}
+          key={`${marqName}-${row}`}
+          readOnly
+          disabled
+          data-rowid={row}
+          type="text"
+          name={row}
+          isselected={
+            selectedMarq === marqName && selectedRow === row ? true : false
+          }
+          value={inputValidationObj[marqName][row].values.join("")}
+          marqSize={marqSize}
+          marqSelected={selectedMarq === marqName}
+          onClick={(ev) => handleClick(ev)}
+          onKeyDown={(ev) => ev.preventDefault()}
+          onBlur={(ev) => ev.preventDefault()}
+        />
+      ))}
+    </form>
   );
 });
 
@@ -81,10 +80,10 @@ const StyledTextRow = styled.input`
 
   &:hover {
     background-color: ${(props) =>
-      props.marqSelected ? "rgba(176, 224, 230, 0.473)" : ""};
+      props.marqselected ? "rgba(176, 224, 230, 0.473)" : ""};
   }
 
   outline: none;
   background-color: ${(props) =>
-    props.isSelected ? "rgba(176, 224, 230, 0.75)" : "white"};
+    props.isselected ? "rgba(176, 224, 230, 0.75)" : "white"};
 `;

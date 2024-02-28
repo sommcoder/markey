@@ -10,8 +10,8 @@ export default function KeySet({ data }) {
           {row.map((char, i) => (
             <Key
               special={false}
-              charObj={data.regular[char]}
-              key={`${data.regular[char]}-${i}`}
+              charObj={data[char]}
+              key={`${data[char]}-${i}`}
             />
           ))}
         </StyledKeySetRow>
@@ -21,8 +21,8 @@ export default function KeySet({ data }) {
           {row.map((char, i) => (
             <Key
               special={true}
-              charObj={data.special[`{${char}}`]}
-              key={`${data.special[`{${char}}`]}-${i}`}
+              charObj={data[char]}
+              key={`${data[char]}-${i}`}
             />
           ))}
         </StyledKeySetRow>

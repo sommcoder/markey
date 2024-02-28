@@ -14,6 +14,7 @@ export default forwardRef(function TableContainer(
     selectedRow,
     switchSelectedRow,
     keysArr,
+    inputValidationObj,
   },
   ref
 ) {
@@ -34,6 +35,7 @@ export default forwardRef(function TableContainer(
             switchSelectedMarq={switchSelectedMarq}
             selectedRow={selectedRow}
             switchSelectedRow={switchSelectedRow}
+            inputValidationObj={inputValidationObj}
           />
         </StyledMarqueeWrapper>
       ))}

@@ -9,6 +9,9 @@ export default function ModalWindow({
   data,
   stateOutputObj,
   outputProcess,
+  dispAppState,
+  setOutputProcess,
+  setStateOutputObj,
 }) {
   console.log("modalWindow Component modalState:", modalState);
   console.log("stateOutputObj:", stateOutputObj);
@@ -39,6 +42,20 @@ user needs to see:
   //   // else do nothing
   // }, [stateOutputObj, outputProcess]);
 
+  function handleModalReset() {
+    toggleModal(false);
+    setStateOutputObj(() => {
+      return {
+        currOutput: {},
+        newOutput: {},
+      };
+    });
+    setOutputProcess(null);
+    dispAppState({
+      type: "RESET_APP",
+    });
+  }
+
   return (
     <StyledOverlay modalState={modalState}>
       {modalState ? (
@@ -57,9 +74,15 @@ user needs to see:
               characters, then click: &apos;Set Current&apos;
             </div>
           )}
-          <StyledModalBtn onClick={() => toggleModal(false)}>
-            Close
-          </StyledModalBtn>
+          <div>
+            <StyledModalBtn onClick={() => toggleModal(false)}>
+              Adjust
+            </StyledModalBtn>
+
+            <StyledModalBtn onClick={handleModalReset}>
+              Reset App
+            </StyledModalBtn>
+          </div>
         </StyledModalWindow>
       ) : (
         ""
@@ -67,6 +90,10 @@ user needs to see:
     </StyledOverlay>
   );
 }
+
+// TODO: Edit btn will allow user to add or change the current setup.
+
+// TODO: Reset btn is a quick way to refresh the app and it's state
 
 const slideDown = keyframes`
   0% {
@@ -85,7 +112,7 @@ const StyledOverlay = styled.div`
   width: 100%;
   z-index: 12;
   overflow-y: hidden;
-  animation-name: ${slideDown};
+  animation-name: ${slideDown}; // TODO: this isn't working as desired
 `;
 
 const StyledModalWindow = styled.div`

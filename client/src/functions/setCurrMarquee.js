@@ -4,8 +4,9 @@ export default function setCurrMarquee(keysArr, formEl, data, appState) {
   const newInputObj = appState;
   console.log("newInputObj:", newInputObj);
 
-  // TODO: how are we going to handle the "{special keys}"???
-  // ROW Loop:
+  // TODO: maybe we lookup based on
+
+  // ! ROW Loop:
   for (let row = 0; row < keysArr.length; row++) {
     // no value clause:
     if (!formEl[row].value) continue;
@@ -22,32 +23,33 @@ export default function setCurrMarquee(keysArr, formEl, data, appState) {
     let inputTile; // gets assigned in the loop below
     let inputBlockObj;
     let multiCharArr; // gets assigned in the loop below
-    // INPUT Loop:
+
+    // ! INPUT Loop:
     for (let ltr = 0; ltr < inputStrArr.length; ltr++) {
-      if (inputStrArr[ltr] === "_") continue; // blank skip
+      // filler skip:
+      if (inputStrArr[ltr] === "_") continue;
+
       if (inputStrArr[ltr] === "{") {
-        // special char?
         console.log("special! we found a: { ");
         // we want to splice out the { } as well
         // new references created each time this is executed:
         let start = inputStrArr.indexOf("{");
         let end = inputStrArr.indexOf("}");
-        let diff = end + 1 - start; // + 1 to splice out the }
+        let diff = end - start + 1;
 
         multiCharArr = inputStrArr.splice(start, diff);
+        console.log("multiCharArr:", multiCharArr);
 
-        multiCharArr.shift(); // get rid of the { at the start
-        multiCharArr.pop(); // get rid of the } at the end
+        multiCharArr.shift();
+        multiCharArr.pop();
 
+        console.log("inputStrArr:", inputStrArr);
         let multiCharStr = multiCharArr.join("");
 
-        if (!data.special[`{${multiCharStr}}`]) {
-          return; // create an Error for this
-        }
-
         // get block's Key Values:
-        inputBlockObj = data.special[`{${multiCharStr}}`];
+        inputBlockObj = data[multiCharStr];
 
+        console.log("inputBlockObj:", inputBlockObj);
         // output tracking:
         if (!newInputObj.output[multiCharStr]) {
           newInputObj.output[multiCharStr] = 1; // assign to one
@@ -62,7 +64,7 @@ export default function setCurrMarquee(keysArr, formEl, data, appState) {
       } else {
         console.log("ELSE BLOCK: ltr:", inputStrArr[ltr]);
         // handle individual chars:
-        if (!data.regular[inputStrArr[ltr]]) return; // this is a double check.
+        if (!data[inputStrArr[ltr]]) return; // this is a double check.
 
         if (!newInputObj.output[inputStrArr[ltr]]) {
           newInputObj.output[inputStrArr[ltr]] = 1; // assign to one
@@ -70,7 +72,7 @@ export default function setCurrMarquee(keysArr, formEl, data, appState) {
           newInputObj.output[inputStrArr[ltr]]++; // increment by one
         }
         // push to arr in this format: [[ltr, size], [ltr, size] ...]
-        inputTile = data.regular[inputStrArr[ltr]];
+        inputTile = data[inputStrArr[ltr]];
         console.log("inputTile:", inputTile);
         rowArr.push([inputTile.marqBlock, inputTile.size]);
       }

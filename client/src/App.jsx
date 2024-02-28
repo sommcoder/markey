@@ -2,6 +2,7 @@ import NavBar from "./components/NavBar/NavBar.jsx";
 import TableContainer from "./components/TableContainer/TableContainer.jsx";
 import KeySet from "./components/KeySet/KeySet.jsx";
 import Modal from "./components/Modal/Modal.jsx";
+import ErrorMsg from "./components/ErrorMsg/ErrorMsg.jsx";
 /////////////////////////////////////////
 import { useState, useReducer, useRef, useEffect } from "react";
 import styled, { ThemeProvider } from "styled-components";
@@ -12,31 +13,62 @@ import getNextElNum from "./functions/getNextElNum.js";
 import getTally from "./functions/getTally.js";
 import prepareKey from "./functions/prepareKey.js";
 /////////////////////////////////////////
+// our mock db:
+import rawData from "./data.json";
+
 // import { onValue, ref } from "firebase/database";
 // import { db } from "./firebase.js"; // our SDK instance
 
-// our mock db:
-import data from "./data.json";
+// ! TODO: THE MAIN THING TO REMEMBER HERE IS NOW OUR DATA IS REORGANIZED TO FIT OUR NEEDS BUT ALL OF THE CODE IN THE CLIENT VALIDATION WILL NEED TO CHANGE!
+function reorganizeData(rawData) {
+  const newData = {};
+  Object.keys(rawData).forEach((key) => {
+    // Firebase can't have an empty string as a key/value so we're using an underscore but we need to use the empty string
+    newData[rawData[key].marqBlock === "_" ? " " : rawData[key].marqBlock] = {
+      id: key,
+      size: rawData[key].size,
+      stock: rawData[key].stock,
+      marqBlock: rawData[key].marqBlock === "_" ? " " : rawData[key].marqBlock,
+    };
+  });
+  return newData;
+}
+/*
+ 
+TODO: client should GET the data and cache result
+TODO: client should reorganize the data so that the parent of each item is the blockName
+
+
+ 
+*/
 
 export default function App() {
-  // data state:
-  // const [data, updateData] = useState();
+  // TODO: still need to figure out the side menu and how to adjust character sizing and stock in case the user gets more or some break/get lost
 
-  // const allDataRef = ref(db, "/");
+  // TODO: should this be handled by caching and working with Firebase?
+  const [data, setData] = useState(reorganizeData(rawData));
 
-  // // onValue is called every time data is changed at the specified db reference, including changes to children.
-  // onValue(allDataRef, (snapshot) => {
-  //   const data = snapshot.val(); // You can retrieve the data in the snapshot with the val() method.
-  //   updateData(data);
-  // });
-
-  // write data:
-  //  set(ref(db, '/'))
-  // TODO: still need to figure out updating stockTracker and then also the side menu and how to adjust character sizing and stock in case the user gets more or some break/get lost
-
+  const initValidationState = {
+    West: {
+      0: { values: [], size: 0 },
+      1: { values: [], size: 0 },
+      2: { values: [], size: 0 },
+    },
+    East: {
+      0: { values: [], size: 0 },
+      1: { values: [], size: 0 },
+      2: { values: [], size: 0 },
+    },
+    South: {
+      0: { values: [], size: 0 },
+      1: { values: [], size: 0 },
+      2: { values: [], size: 0 },
+    },
+  };
   const InitAppState = {
     West: {
       rows: {
+        // we care about the SEQUENCE here:
         0: [], // [[ltr, size], [ltr, size]...]
         1: [],
         2: [],
@@ -62,20 +94,28 @@ export default function App() {
   };
   /////////////////////////////////////////////
   // * Main App State *: //
-  // popup modal = the apps output
+  // Popup modal = the apps output
   const [modalState, toggleModal] = useState(false);
-  // String state that gets set by switchSelectedMarq(marqName)
-  const [selectedMarq, switchSelectedMarq] = useState(null);
-  // we can then concat and coerce with 'row': 0, 1, 2
+  // We can then concat and coerce with 'row': 0, 1, 2
   const [selectedRow, switchSelectedRow] = useState(null);
-  // null until user submits something:
+  // String state that gets set by switchSelectedMarq(marqName):
+  const [selectedMarq, switchSelectedMarq] = useState(null);
+  // Null until user submits something:
   const [stateOutputObj, setStateOutputObj] = useState(null);
-  // "set" or "compare" or "input" or null
+  // "set" or "compare" or "input" or null:
   const [outputProcess, setOutputProcess] = useState(null);
-  // primary state control:
+  // Staging/Validation State for input fields:
+  const [inputValidationObj, setValidationObj] = useState(initValidationState);
+  // Primary state control:
   const [appState, dispAppState] = useReducer(reducer, InitAppState);
-  // window Sizing Check:
+  // Window Sizing Check:
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  // Error message state:
+  const [error, setError] = useState({
+    type: "",
+    render: false,
+    char: "",
+  });
   // "light" or "dark"
   const [theme, setTheme] = useState("light");
 
@@ -94,15 +134,17 @@ export default function App() {
   const marKeysArr = Object.keys(appState);
   const keysArr = [0, 1, 2]; // should probably be named to "rowsArr"
 
-  // NOT state. Client-side validation via onKeyDown/onClick events:
-  // If user blurs, they need to click on the input field again to renable
-  const inputValidationObj = { values: [], sizes: 0 };
-
-  function inputValidation(ev) {
+  function handleInputValidation(ev) {
     ev.preventDefault(); // prevents the Enter key from "clicking" the focused KeySet Key
-    if (!selectedMarq) return; // no selected marq?
+    if (!selectedMarq) {
+      return;
+      // ! no selected marq!
+      // might be good to have an error message here. It's not apparent that one should click on the button to enable the marquee first
+    }
 
     if (ev.target.type === "reset") {
+      refStateObj[selectedMarq].current[selectedRow].value = "";
+
       dispAppState({
         type: "RESET_MARQUEE",
         currState: appState,
@@ -111,16 +153,15 @@ export default function App() {
       return;
     }
 
-    const special = ev.target.dataset.special;
-    const key = prepareKey(ev);
+    let key = prepareKey(ev);
 
     if (!key) return;
 
+    // input field values:
     let formEl = refStateObj[selectedMarq].current;
-    // const rowEl = refStateObj[selectedMarq].current[selectedRow];
     let rowName = refStateObj[selectedMarq].current[selectedRow].name;
 
-    if (key === " ") ev.preventDefault(); // is this right?
+    // ! Command Key Handling:
     if (key === "CapsLock") {
       // popup warning indicating that the CAPSLOCK is on
     }
@@ -129,12 +170,19 @@ export default function App() {
       dispAppState({
         type: "INPUT_MARQUEE",
         marq: selectedMarq,
-        payload: setCurrMarquee(
-          keysArr,
-          formEl,
-          data,
-          appState[selectedMarq] // no marqName just the obj contents
-        ),
+        payload: setCurrMarquee(keysArr, formEl, data, appState[selectedMarq]),
+      });
+      // Reset the validation State Object on 'Enter'
+      setValidationObj((prevState) => {
+        return {
+          [selectedMarq]: {
+            [selectedRow]: {
+              sizes: 0,
+              values: [],
+            },
+          },
+          ...prevState,
+        };
       });
       setOutputProcess("input");
       switchSelectedRow(getNextElNum(rowName, selectedRow));
@@ -149,34 +197,52 @@ export default function App() {
     if (key === "Backspace" || key === "Delete") {
       // No element in the array, assign to 0 and return
       if (!inputValidationObj.values.at(-1)) {
-        inputValidationObj.sizes = 0;
+        setValidationObj((prevState) => {
+          return {
+            sizes: 0,
+            ...prevState,
+          };
+        });
+        // inputValidationObj.sizes = 0;
         return;
       }
-      inputValidationObj.sizes -=
-        +data[special ? "special" : "regular"][inputValidationObj.values.at(-1)]
-          .size;
+      setValidationObj((prevState) => {
+        return {
+          // subtract the last
+          sizes:
+            data[inputValidationObj[selectedMarq][selectedRow].values.at(-1)]
+              .size,
+          //
+          values: inputValidationObj[selectedMarq][selectedRow].values.pop(),
+        };
+      });
+      // inputValidationObj.sizes -= data[inputValidationObj.values.at(-1)].size;
       // pop from sequence:
-      inputValidationObj.values.pop();
+      // inputValidationObj.values.pop();
       // update the selected input field:
-      refStateObj[selectedMarq].current[selectedRow].value =
-        inputValidationObj.values.join("");
       return;
     }
-    if (!data.regular[key] && !data.special[key]) {
-      console.log("key does not exist in data regular or special");
-      return;
+
+    // ! Regular/Special Key Handling:
+    let keyObj = {};
+    if (ev.type === "click") {
+      // onClicks are looked up by id in the rawData set
+      keyObj = rawData[key];
+    } else {
+      // keyDowns are looked up by 'marqBlock' in the reconfigured data set
+      keyObj = data[key];
     }
+
+    console.log("keyObj:", keyObj);
     console.log("key:", key);
-    console.log("typeof key:", typeof key);
-    console.log("special:", special);
-    console.log("typeof special:", typeof special);
-    console.log("data:", data);
-    console.log("data[special]", data[special ? "special" : "regular"][key]);
+
     // 0.1(rem) accounts for block border size
-    let currBlockSize = +data[special ? "special" : "regular"][key].size + 0.1;
+
+    let currBlockSize = keyObj.size + 0.1;
     // Max capacity check:
     // existing width + current block size would be greater than the marqSize
     if (inputValidationObj.sizes + currBlockSize > marqSizes[selectedMarq]) {
+      // animate the currently selected row:
       refStateObj[selectedMarq].current[rowName].animate(
         [
           {
@@ -190,16 +256,42 @@ export default function App() {
         ],
         { duration: 150, iterations: 3 }
       );
+
+      refStateObj[selectedMarq].current.insertAdjacentElement(
+        "afterend",
+        ErrorMsg
+      );
+
+      // setError(() => {
+      //   return {
+      //     type: "message_too_large",
+      //     render: true,
+      //     char: "",
+      //   };
+      // });
       return;
     }
-    // append validation object:
-    inputValidationObj.sizes += currBlockSize;
-    // push to sequence:
-    inputValidationObj.values.push(key);
-    // update input field:
-    refStateObj[selectedMarq].current[selectedRow].value =
-      inputValidationObj.values.join("");
-    console.log("inputValidationObj:", inputValidationObj);
+
+    console.log("currBlockSize:", currBlockSize);
+
+    // TODO: we're still getting two entries for each key
+    setValidationObj((prevState) => {
+      // if special, add curly braces wrapper to indicate that this is ONE block to setCurrMarquee() and not individual strings
+      // special blocks have a length > 1
+      const updatedArr = prevState[selectedMarq][selectedRow].values.push(
+        keyObj.marqBlock.length > 1 ? `{${keyObj.marqBlock}}` : keyObj.marqBlock
+      );
+      return {
+        [selectedMarq]: {
+          [selectedRow]: {
+            values: updatedArr,
+            // append currBlockSize to the validationState:
+            size: (prevState[selectedMarq][selectedRow].size += currBlockSize),
+          },
+        },
+        ...prevState,
+      };
+    });
   }
 
   // SCREEN SIZE:
@@ -214,9 +306,11 @@ export default function App() {
   // OUTPUT PROCESS SIDE-EFFECTS:
   useEffect(() => {
     if (outputProcess === "set") {
-      setStateOutputObj({
-        currOutput: getTally(appState),
-        newOutput: {},
+      setStateOutputObj(() => {
+        return {
+          currOutput: getTally(appState, data),
+          newOutput: {},
+        };
       });
       // reset:
       switchSelectedMarq(null);
@@ -225,18 +319,18 @@ export default function App() {
     }
   }, [outputProcess, appState]);
 
-  console.log("appState:", appState);
-  console.log("data:", data);
+  console.log("inputValidationObj:", inputValidationObj);
 
   return (
     // specifies which
     <ThemeProvider theme={theme === "dark" ? darkTheme : lightTheme}>
       <GlobalStyles />
       <StyledAppContainer
-        onKeyDown={(ev) => inputValidation(ev)}
-        onClick={(ev) => inputValidation(ev)}
+        onKeyDown={(ev) => handleInputValidation(ev)}
+        onClick={(ev) => handleInputValidation(ev)}
         onFocus={(ev) => ev.preventDefault()}
       >
+        {error.render ? <ErrorMsg type={error.type} char={error.char} /> : ""}
         {toggleModal ? (
           <Modal
             modalState={modalState}
@@ -246,6 +340,9 @@ export default function App() {
             data={data}
             stateOutputObj={stateOutputObj}
             outputProcess={outputProcess}
+            dispAppState={dispAppState}
+            setStateOutputObj={setStateOutputObj}
+            setOutputProcess={setOutputProcess}
           />
         ) : (
           ""
@@ -267,6 +364,7 @@ export default function App() {
           theme={theme}
         />
         <TableContainer
+          inputValidationObj={inputValidationObj}
           ref={refStateObj}
           data={data}
           keysArr={keysArr}
@@ -281,30 +379,29 @@ export default function App() {
         />
         <KeySet data={data} />
       </StyledAppContainer>
-
-      {/* <StyledErrorContainer>
-            <StyledErrorComponent>
-              <h5
-                style={{
-                  textAlign: "center",
-                  fontWeight: "800",
-                  textDecoration: "underline",
-                  paddingBottom: "1rem",
-                  margin: "0 auto",
-                }}
-              >
-                Minimum Screen Size Error:
-              </h5>
-              <p
-                style={{
-                  textAlign: "center",
-                  margin: "0 auto",
-                }}
-              >
-                Your screen must be at least 775px wide
-              </p>
-            </StyledErrorComponent>
-          </StyledErrorContainer> */}
+      <StyledErrorContainer>
+        <StyledErrorComponent>
+          <h5
+            style={{
+              textAlign: "center",
+              fontWeight: "800",
+              textDecoration: "underline",
+              paddingBottom: "1rem",
+              margin: "0 auto",
+            }}
+          >
+            Minimum Screen Size Error:
+          </h5>
+          <p
+            style={{
+              textAlign: "center",
+              margin: "0 auto",
+            }}
+          >
+            Your screen must be at least 775px wide
+          </p>
+        </StyledErrorComponent>
+      </StyledErrorContainer>
     </ThemeProvider>
   );
 }
@@ -323,22 +420,34 @@ function reducer(state, action) {
         [action.marq]: { output: {}, rows: { 0: [], 1: [], 2: [] } },
       };
     }
-    // case "COMPARE_PREVIOUS_STATE": {
-    //   console.log("REDUCER action.payload:", action.payload);
-    //   const tallyObj = getTally(action.payload);
-    //   // "compare" sets to newOutput and
-    //   // currOutput would stay the same
-    //   setStateOutputObj({
-    //     currOutput: stateOutputObj.currOutput,
-    //     newOutput: tallyObj,
-    //   });
-    //   setOutputProcess("compare");
-    //   switchSelectedMarq(null);
-    //   switchSelectedRow(null);
-    //   toggleModal(true);
-
-    //   return { ...state, ...action.payload.count };
-    // }
+    case "RESET_APP": {
+      return {
+        West: {
+          rows: {
+            0: [],
+            1: [],
+            2: [],
+          },
+          output: {},
+        },
+        East: {
+          rows: {
+            0: [],
+            1: [],
+            2: [],
+          },
+          output: {},
+        },
+        South: {
+          rows: {
+            0: [],
+            1: [],
+            2: [],
+          },
+          output: {},
+        },
+      };
+    }
     default:
       return state;
   }
@@ -346,35 +455,36 @@ function reducer(state, action) {
 
 const StyledAppContainer = styled.div`
   margin: 0 auto;
+  position: relative;
   display: grid;
   grid-template-rows: repeat(3, auto);
   align-content: baseline;
   align-items: center;
-  height: 100%; // look into svh and dvh for mobile
+  max-height: 150rem; // look into svh and dvh for mobile
   width: 100%;
   background-color: white;
   overflow-x: scroll;
 `;
 
-// const StyledErrorContainer = styled.div`
-//   position: relative;
-//   width: 100%;
-//   height: 100%;
-//   opacity: 0.5;
-//   margin: 0 auto;
-//   background-image: url("/paradise-vintage.jpeg");
-// `;
+const StyledErrorContainer = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100%;
+  opacity: 0.5;
+  margin: 0 auto;
+  background-image: url("/paradise-vintage.jpeg");
+`;
 
-// const StyledErrorComponent = styled.div`
-//   position: absolute;
-//   top: 50%;
-//   right: 0;
-//   left: 0;
-//   padding: 2rem;
-//   display: grid;
-//   text-align: center;
-//   font-size: 2rem;
-//   transform: translateY(-50%);
-//   background-color: white;
-//   border-radius: 30px;
-// `;
+const StyledErrorComponent = styled.div`
+  position: absolute;
+  top: 50%;
+  right: 0;
+  left: 0;
+  padding: 2rem;
+  display: grid;
+  text-align: center;
+  font-size: 2rem;
+  transform: translateY(-50%);
+  background-color: white;
+  border-radius: 30px;
+`;
