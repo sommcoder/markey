@@ -15,7 +15,6 @@ import prepareKey from "./functions/prepareKey.js";
 /////////////////////////////////////////
 // our mock db:
 import rawData from "./data.json";
-
 // import { onValue, ref } from "firebase/database";
 // import { db } from "./firebase.js"; // our SDK instance
 
@@ -136,6 +135,8 @@ export default function App() {
 
   function handleInputValidation(ev) {
     ev.preventDefault(); // prevents the Enter key from "clicking" the focused KeySet Key
+
+    console.log("ev:", ev);
     if (!selectedMarq) {
       return;
       // ! no selected marq!
@@ -154,6 +155,7 @@ export default function App() {
     }
 
     let key = prepareKey(ev);
+    console.log("key:", key);
 
     if (!key) return;
 
@@ -196,7 +198,7 @@ export default function App() {
 
     if (key === "Backspace" || key === "Delete") {
       // No element in the array, assign to 0 and return
-      if (!inputValidationObj.values.at(-1)) {
+      if (!inputValidationObj[selectedMarq][selectedRow].values.at(-1)) {
         setValidationObj((prevState) => {
           return {
             sizes: 0,
@@ -207,19 +209,28 @@ export default function App() {
         return;
       }
       setValidationObj((prevState) => {
+        // if special, add curly braces wrapper to indicate that this is ONE block to setCurrMarquee() and not individual strings
+        // special blocks have a length > 1
+        const newArr = [...prevState[selectedMarq][selectedRow].values];
+        console.log("newArr:", newArr);
+        const lastIndexSize = data[newArr.at(-1)].size;
+
+        newArr.pop();
+
         return {
-          // subtract the last
-          sizes:
-            data[inputValidationObj[selectedMarq][selectedRow].values.at(-1)]
-              .size,
-          //
-          values: inputValidationObj[selectedMarq][selectedRow].values.pop(),
+          ...prevState,
+          [selectedMarq]: {
+            ...prevState[selectedMarq],
+            [selectedRow]: {
+              ...prevState[selectedMarq][selectedRow],
+              values: newArr,
+              // subtract the last index
+              size: (prevState[selectedMarq][selectedRow].size -=
+                lastIndexSize),
+            },
+          },
         };
       });
-      // inputValidationObj.sizes -= data[inputValidationObj.values.at(-1)].size;
-      // pop from sequence:
-      // inputValidationObj.values.pop();
-      // update the selected input field:
       return;
     }
 
@@ -257,10 +268,10 @@ export default function App() {
         { duration: 150, iterations: 3 }
       );
 
-      refStateObj[selectedMarq].current.insertAdjacentElement(
-        "afterend",
-        ErrorMsg
-      );
+      // refStateObj[selectedMarq].current.insertAdjacentElement(
+      //   "afterend",
+      //   ErrorMsg
+      // );
 
       // setError(() => {
       //   return {
@@ -272,24 +283,26 @@ export default function App() {
       return;
     }
 
-    console.log("currBlockSize:", currBlockSize);
-
     // TODO: we're still getting two entries for each key
     setValidationObj((prevState) => {
       // if special, add curly braces wrapper to indicate that this is ONE block to setCurrMarquee() and not individual strings
       // special blocks have a length > 1
-      const updatedArr = prevState[selectedMarq][selectedRow].values.push(
+      const updatedArr = [...prevState[selectedMarq][selectedRow].values];
+      updatedArr.push(
         keyObj.marqBlock.length > 1 ? `{${keyObj.marqBlock}}` : keyObj.marqBlock
       );
+
       return {
+        ...prevState,
         [selectedMarq]: {
+          ...prevState[selectedMarq],
           [selectedRow]: {
+            ...prevState[selectedMarq][selectedRow],
             values: updatedArr,
             // append currBlockSize to the validationState:
             size: (prevState[selectedMarq][selectedRow].size += currBlockSize),
           },
         },
-        ...prevState,
       };
     });
   }
@@ -317,7 +330,7 @@ export default function App() {
       switchSelectedRow(null);
       toggleModal(true);
     }
-  }, [outputProcess, appState]);
+  }, [outputProcess, appState, data]);
 
   console.log("inputValidationObj:", inputValidationObj);
 

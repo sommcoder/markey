@@ -4,7 +4,6 @@ import { forwardRef, useEffect } from "react";
 
 export default forwardRef(function TextRowForm(
   {
-    keysArr,
     marqName,
     formName,
     marqSize,

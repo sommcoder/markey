@@ -18,7 +18,7 @@ export default function NavBar({
 }) {
   // inventory menu state:
   const [menuState, toggleMenuState] = useState(false);
-  console.log("data:", data);
+  // console.log("data:", data);
   return (
     <StyledNavBar>
       <StyledLeftNavArea>
