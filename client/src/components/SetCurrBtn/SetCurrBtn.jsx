@@ -8,11 +8,35 @@ export default function SetCurrBtn({
   appState,
   dispAppState,
   setOutputProcess,
+  setValidationObj,
 }) {
   function handleSubmit(ev) {
     // this button now submits the entire Marquee range!
     ev.preventDefault();
     console.log("ev:", ev);
+
+    // reset to initial state:
+    // this is in case text forms will filled out but not submitted.
+    // setting appState sets the text and therefore we need to clear the validation object too
+    setValidationObj(() => {
+      return {
+        West: {
+          0: { values: [], size: 0 },
+          1: { values: [], size: 0 },
+          2: { values: [], size: 0 },
+        },
+        East: {
+          0: { values: [], size: 0 },
+          1: { values: [], size: 0 },
+          2: { values: [], size: 0 },
+        },
+        South: {
+          0: { values: [], size: 0 },
+          1: { values: [], size: 0 },
+          2: { values: [], size: 0 },
+        },
+      };
+    });
 
     // dispatch reducer:
     dispAppState({

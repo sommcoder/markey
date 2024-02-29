@@ -1,5 +1,7 @@
 ﻿import styled from "styled-components";
 import Marquee from "../Marquee/Marquee";
+import InventoryOverlay from "../InventoryOverlay/InventoryOverlay";
+
 import { forwardRef } from "react";
 
 export default forwardRef(function TableContainer(
@@ -15,6 +17,8 @@ export default forwardRef(function TableContainer(
     switchSelectedRow,
     keysArr,
     inputValidationObj,
+    menuState,
+    toggleMenuState,
   },
   ref
 ) {
@@ -49,7 +53,6 @@ const StyledTableContainer = styled.div`
   display: grid;
   align-items: center;
   justify-content: center;
-  padding: 3rem 0rem 5rem 0rem;
 `;
 
 const StyledMarqueeWrapper = styled.div`

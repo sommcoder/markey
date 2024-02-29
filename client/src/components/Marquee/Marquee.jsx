@@ -78,7 +78,7 @@ const linearGradientMove = keyframes`
 `;
 
 const StyledMarquee = styled.div`
-  margin: 0 auto 0rem auto;
+  margin: 2rem auto 0rem auto;
   max-width: ${({ marqSize }) =>
     marqSize * 1.5 + "rem" ? marqSize * 1.5 + "rem" : "350px"};
   align-items: center;

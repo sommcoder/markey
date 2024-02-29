@@ -2,17 +2,15 @@
 import styled from "styled-components";
 
 export default function HamburgerMenu({ menuState, toggleMenuState }) {
-  const lineRefs = useRef([]);
-
   function handleMenuClick() {
-    menuState ? toggleMenuState(false) : toggleMenuState(true);
+    toggleMenuState((prevState) => !prevState);
   }
 
   return (
-    <StyledHamburgerMenu onClick={handleMenuClick} clicked={menuState}>
-      {[0, 1, 2].map((el, i) => (
-        <span key={i} ref={(el) => (lineRefs.current[i] = el)}></span>
-      ))}
+    <StyledHamburgerMenu onClick={handleMenuClick} menuState={menuState}>
+      <span className="top-line"></span>
+      <span className="middle-line"></span>
+      <span className="bottom-line"></span>
     </StyledHamburgerMenu>
   );
 }
@@ -44,19 +42,25 @@ const StyledHamburgerMenu = styled.span`
     border-radius: 5px;
     width: 30px;
     z-index: 20;
+
+    transition: all linear 300ms;
+    ${({ menuState }) =>
+      menuState &&
+      `
+  &.top-line {
+    transform: rotate(45deg) translateY(0.65rem) translateX(0.5rem);
   }
 
-  .clicked:nth-child(0) {
-    transform: rotate(45deg);
-    transition: ease-out 0.5s;
+   &.middle-line {
+    transform: scaleX(0);
   }
-  .clicked:nth-child(1) {
-    transform: scale(0.1);
-    transition: ease-out 0.5s;
+
+  &.bottom-line {
+    transform: rotate(-45deg) translateY(-0.65rem) translateX(0.5rem);
   }
-  .clicked:nth-child(2) {
-    transform: rotate(135deg);
-    transition: ease-out 0.5s;
+
+
+  `}
   }
 `;
 

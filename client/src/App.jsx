@@ -2,6 +2,7 @@ import NavBar from "./components/NavBar/NavBar.jsx";
 import TableContainer from "./components/TableContainer/TableContainer.jsx";
 import KeySet from "./components/KeySet/KeySet.jsx";
 import Modal from "./components/Modal/Modal.jsx";
+import InventoryOverlay from "./components/InventoryOverlay/InventoryOverlay.jsx";
 import ErrorMsg from "./components/ErrorMsg/ErrorMsg.jsx";
 /////////////////////////////////////////
 import { useState, useReducer, useRef, useEffect } from "react";
@@ -93,6 +94,8 @@ export default function App() {
   };
   /////////////////////////////////////////////
   // * Main App State *: //
+  // inventory menu state:
+  const [menuState, toggleMenuState] = useState(false);
   // Popup modal = the apps output
   const [modalState, toggleModal] = useState(false);
   // We can then concat and coerce with 'row': 0, 1, 2
@@ -143,14 +146,28 @@ export default function App() {
       // might be good to have an error message here. It's not apparent that one should click on the button to enable the marquee first
     }
 
+    // individual reset button:
     if (ev.target.type === "reset") {
       refStateObj[selectedMarq].current[selectedRow].value = "";
 
+      // reset the app state of marqName clicked:
+      setValidationObj((prevState) => {
+        return {
+          [selectedMarq]: {
+            [selectedRow]: {
+              size: 0,
+              values: [],
+            },
+          },
+          ...prevState,
+        };
+      });
       dispAppState({
         type: "RESET_MARQUEE",
         currState: appState,
         marq: ev.target.value,
       });
+
       return;
     }
 
@@ -177,13 +194,15 @@ export default function App() {
       // Reset the validation State Object on 'Enter'
       setValidationObj((prevState) => {
         return {
+          ...prevState,
           [selectedMarq]: {
+            ...prevState[selectedMarq],
             [selectedRow]: {
-              sizes: 0,
+              ...prevState[selectedMarq][selectedRow],
+              size: 0,
               values: [],
             },
           },
-          ...prevState,
         };
       });
       setOutputProcess("input");
@@ -201,20 +220,17 @@ export default function App() {
       if (!inputValidationObj[selectedMarq][selectedRow].values.at(-1)) {
         setValidationObj((prevState) => {
           return {
-            sizes: 0,
+            size: 0,
             ...prevState,
           };
         });
-        // inputValidationObj.sizes = 0;
         return;
       }
       setValidationObj((prevState) => {
         // if special, add curly braces wrapper to indicate that this is ONE block to setCurrMarquee() and not individual strings
         // special blocks have a length > 1
         const newArr = [...prevState[selectedMarq][selectedRow].values];
-        console.log("newArr:", newArr);
         const lastIndexSize = data[newArr.at(-1)].size;
-
         newArr.pop();
 
         return {
@@ -224,7 +240,6 @@ export default function App() {
             [selectedRow]: {
               ...prevState[selectedMarq][selectedRow],
               values: newArr,
-              // subtract the last index
               size: (prevState[selectedMarq][selectedRow].size -=
                 lastIndexSize),
             },
@@ -250,11 +265,21 @@ export default function App() {
     // 0.1(rem) accounts for block border size
 
     let currBlockSize = keyObj.size + 0.1;
+    console.log("currBlockSize:", currBlockSize);
     // Max capacity check:
     // existing width + current block size would be greater than the marqSize
-    if (inputValidationObj.sizes + currBlockSize > marqSizes[selectedMarq]) {
+    if (
+      inputValidationObj[selectedMarq][selectedRow].size + currBlockSize >
+      marqSizes[selectedMarq]
+    ) {
+      console.log("too large!");
+      console.log(
+        "inputValidationObj[selectedMarq][selectedRow].size:",
+        inputValidationObj[selectedMarq][selectedRow].size + currBlockSize
+      );
+      console.log("marqSizes[selectedMarq]:", marqSizes[selectedMarq]);
       // animate the currently selected row:
-      refStateObj[selectedMarq].current[rowName].animate(
+      refStateObj[selectedMarq].current[selectedRow].animate(
         [
           {
             transform: "translateX(-0.33%)",
@@ -300,7 +325,7 @@ export default function App() {
             ...prevState[selectedMarq][selectedRow],
             values: updatedArr,
             // append currBlockSize to the validationState:
-            size: (prevState[selectedMarq][selectedRow].size += currBlockSize),
+            size: prevState[selectedMarq][selectedRow].size + currBlockSize,
           },
         },
       };
@@ -343,7 +368,6 @@ export default function App() {
         onClick={(ev) => handleInputValidation(ev)}
         onFocus={(ev) => ev.preventDefault()}
       >
-        {error.render ? <ErrorMsg type={error.type} char={error.char} /> : ""}
         {toggleModal ? (
           <Modal
             modalState={modalState}
@@ -360,6 +384,7 @@ export default function App() {
         ) : (
           ""
         )}
+        {error.render ? <ErrorMsg type={error.type} char={error.char} /> : ""}
         <NavBar
           data={data}
           refStateObj={refStateObj}
@@ -375,6 +400,14 @@ export default function App() {
           setOutputProcess={setOutputProcess}
           setTheme={setTheme}
           theme={theme}
+          setValidationObj={setValidationObj}
+          menuState={menuState}
+          toggleMenuState={toggleMenuState}
+        />
+        <InventoryOverlay
+          data={data}
+          menuState={menuState}
+          toggleMenuState={toggleMenuState}
         />
         <TableContainer
           inputValidationObj={inputValidationObj}
@@ -389,11 +422,13 @@ export default function App() {
           selectedMarq={selectedMarq}
           switchSelectedMarq={switchSelectedMarq}
           marqSizes={marqSizes}
+          menuState={menuState}
+          toggleMenuState={toggleMenuState}
         />
         <KeySet data={data} />
       </StyledAppContainer>
       <StyledErrorContainer>
-        <StyledErrorComponent>
+        {/* <StyledErrorComponent>
           <h5
             style={{
               textAlign: "center",
@@ -413,7 +448,7 @@ export default function App() {
           >
             Your screen must be at least 775px wide
           </p>
-        </StyledErrorComponent>
+        </StyledErrorComponent> */}
       </StyledErrorContainer>
     </ThemeProvider>
   );
@@ -473,10 +508,10 @@ const StyledAppContainer = styled.div`
   grid-template-rows: repeat(3, auto);
   align-content: baseline;
   align-items: center;
-  max-height: 150rem; // look into svh and dvh for mobile
+  max-height: 108rem; // look into svh and dvh for mobile
   width: 100%;
   background-color: white;
-  overflow-x: scroll;
+  overflow-x: hidden;
 `;
 
 const StyledErrorContainer = styled.div`

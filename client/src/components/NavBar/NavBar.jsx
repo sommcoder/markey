@@ -1,8 +1,9 @@
 import styled from "styled-components";
+import DarkModeBtn from "../DarkModeBtn/DarkModeBtn";
+import InformationBtn from "../InformationBtn/InformationBtn";
+
 import HamburgerMenu from "../HamburgerMenu/HamburgerMenu";
 import SetCurrBtn from "../SetCurrBtn/SetCurrBtn";
-import DarkModeBtn from "../DarkModeBtn/DarkModeBtn";
-import InventoryOverlay from "../InventoryOverlay/InventoryOverlay";
 
 import { useState } from "react";
 
@@ -15,14 +16,16 @@ export default function NavBar({
   setTheme,
   theme,
   setOutputProcess,
+  setValidationObj,
+  menuState,
+  toggleMenuState,
 }) {
-  // inventory menu state:
-  const [menuState, toggleMenuState] = useState(false);
   // console.log("data:", data);
   return (
     <StyledNavBar>
       <StyledLeftNavArea>
         <DarkModeBtn setTheme={setTheme} theme={theme} />
+        <InformationBtn />
       </StyledLeftNavArea>
       <StyledHeader
         src="/mar-key logo.svg"
@@ -39,21 +42,13 @@ export default function NavBar({
           appState={appState}
           dispAppState={dispAppState}
           setOutputProcess={setOutputProcess}
+          setValidationObj={setValidationObj}
         />
         <HamburgerMenu
           menuState={menuState}
           toggleMenuState={toggleMenuState}
         />
       </StyledRightNavArea>
-      {menuState ? (
-        <InventoryOverlay
-          data={data}
-          menuState={menuState}
-          toggleMenuState={toggleMenuState}
-        />
-      ) : (
-        ""
-      )}
     </StyledNavBar>
   );
 }
@@ -92,8 +87,12 @@ const StyledRightNavArea = styled.span`
 const StyledLeftNavArea = styled.span`
   position: absolute;
   display: flex;
+  margin-left: 4rem;
   flex-direction: row;
-  width: 40rem;
+  gap: 4.5rem;
+  width: 30rem;
+  left: 0%;
   top: 30%;
+  align-items: center;
   align-items: left;
 `;

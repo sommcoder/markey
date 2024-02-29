@@ -39,8 +39,6 @@ const StyledDarkModeBtn = styled.div`
   border-radius: 30px;
   width: 5.25rem;
   height: 2.5rem;
-  left: 4rem;
-  top: 30%;
   &:hover {
     cursor: pointer;
   }
