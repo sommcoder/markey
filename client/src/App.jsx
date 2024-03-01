@@ -508,10 +508,10 @@ const StyledAppContainer = styled.div`
   grid-template-rows: repeat(3, auto);
   align-content: baseline;
   align-items: center;
-  max-height: 108rem; // look into svh and dvh for mobile
+  height: 108rem; // look into svh and dvh for mobile
   width: 100%;
   background-color: white;
-  overflow-x: hidden;
+  overflow: hidden;
 `;
 
 const StyledErrorContainer = styled.div`

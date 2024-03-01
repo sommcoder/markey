@@ -27,7 +27,7 @@ export default function InformationBtn() {
           5) Set Marquee produces your block tally
           <br />
           <br />
-          6) Block inventory and widths can be adjusted in the nav menu
+          6) Adjust block stock & width in the menu
         </StyledTooltip>
       ) : (
         ""
@@ -57,6 +57,7 @@ const StyledInformationBtn = styled.span`
 const StyledTooltip = styled.div`
   position: absolute;
   display: flex;
+  width: 30rem;
   gap: 0.5rem;
   font-size: 1.6rem;
   color: black;
@@ -74,8 +75,8 @@ const StyledTooltip = styled.div`
   &::after {
     content: "";
     position: absolute;
-    top: -3.5%;
-    left: 9%;
+    top: -4.5%;
+    left: 6%;
     margin-left: -5px;
     border-width: 5px;
     border-style: solid;
