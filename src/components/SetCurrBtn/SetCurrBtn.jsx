@@ -60,5 +60,6 @@ export default function SetCurrBtn({
 
 const StyledSetCurrBtn = styled.button`
   border-radius: 30px;
-  width: 15rem;
+  min-width: 12rem;
+  max-width: 15rem;
 `;

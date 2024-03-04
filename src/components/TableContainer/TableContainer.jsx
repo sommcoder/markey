@@ -49,7 +49,7 @@ export default forwardRef(function TableContainer(
 
 const StyledTableContainer = styled.div`
   width: 100%;
-  height: 100%;
+  height: auto;
   display: grid;
   align-items: center;
   justify-content: center;
@@ -65,7 +65,7 @@ const StyledMarqueeWrapper = styled.div`
   grid-row: "span 2";
 
   // DESKTOP/TABLET:
-  @media (min-width: 820px) {
+  @media (min-width: 900px) {
     grid-column: ${(props) =>
       props.marqName === "South" ? "span 2" : "span 1"}; // if South, span 2
   }

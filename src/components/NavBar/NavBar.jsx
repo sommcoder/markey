@@ -31,7 +31,7 @@ export default function NavBar({
         src="/mar-key logo.svg"
         style={{
           height: "6rem",
-          width: "30rem",
+          maxWidth: "25rem",
         }}
       />
       <StyledRightNavArea>
@@ -56,11 +56,10 @@ export default function NavBar({
 const StyledNavBar = styled.nav`
   align-items: center;
   display: grid;
-  grid-template-columns: auto auto auto;
+  grid-template-columns: repeat(3, 1fr);
   width: 100%;
   font-size: 4rem;
   font-weight: 650;
-  margin: 0 auto;
   text-align: center;
   border-bottom: 0.1rem solid lightgrey;
   height: 6rem;
@@ -69,26 +68,23 @@ const StyledNavBar = styled.nav`
 
 const StyledHeader = styled.img`
   height: 100%;
-  width: 20rem;
   justify-self: center;
 `;
 
 const StyledLeftNavArea = styled.span`
   display: flex;
   margin-left: 4rem;
-  flex-direction: row;
-  gap: 4.5rem;
-  width: 30rem;
-  align-items: center;
+  gap: 3rem;
+  justify-content: start;
   align-items: left;
 `;
 
 const StyledRightNavArea = styled.span`
-  right: 2rem;
   display: flex;
-  flex-direction: row;
-  width: 40rem;
+  margin-right: 4rem;
+  gap: 3rem;
   justify-content: end;
-  gap: 5rem;
-  align-items: right;
+  justify-items: center;
+  align-content: center;
+  justify-items: center;
 `;

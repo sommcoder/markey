@@ -33,9 +33,9 @@ const populateMarquee = keyframes`
 `;
 
 const StyledBlock = styled.input`
-  font-size: 2.8rem;
+  font-size: 2.8vw; // font changes to the viewport width
   user-select: none;
-  width: ${(props) => (props.blockwidth ? props.blockwidth : "2rem")};
+  max-width: ${(props) => (props.blockwidth ? props.blockwidth : "2rem")};
   -webkit-user-select: none;
   text-transform: uppercase;
   text-decoration: none;
@@ -44,9 +44,9 @@ const StyledBlock = styled.input`
   user-select: none;
   background-color: white;
   caret-color: transparent;
-  animation: 0.5s linear ${(props) => (props.delay * 90).toString() + "ms"} 1
-    ${populateMarquee};
-  height: 4.8rem; // marq rows are 5rem
+  animation: 0.5s linear ${populateMarquee}
+    ${(props) => (props.delay * 90).toString() + "ms"} 1;
+  min-height: 4.8rem; // marq rows are 5rem
 
   &[data-special="true"] {
     font-size: 1.2rem;
@@ -54,6 +54,7 @@ const StyledBlock = styled.input`
   }
 
   // prevents border layering:
+  // last element needs the right border though!
   &:not(:last-of-type) {
     border-right: 0;
   }
@@ -64,6 +65,7 @@ const StyledBlock = styled.input`
   }
 `;
 
+// TODO: now the left border here isn't working ...????
 const StyledEmptySpace = styled.span`
   height: 100%;
   width: ${({ blockWidth }) => blockWidth};

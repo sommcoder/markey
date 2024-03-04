@@ -69,10 +69,20 @@ const StyledInventoryOverlay = styled.div`
   height: 100%;
   background-color: rgba(198, 219, 230, 0.9);
   z-index: 9;
-  display: grid;
   align-items: center;
   position: absolute;
-  right: ${({ menuState }) => (menuState ? "0rem" : "-40rem")};
+  ${({ menuState }) =>
+    menuState
+      ? `
+    right: 0rem;
+    display: grid;
+    opacity: 1;
+    `
+      : `
+    right: -40rem;
+    display: none;
+    opacity: 0;
+    `};
   transition: all 300ms linear;
   overflow-y: scroll;
   margin-top: 12rem;

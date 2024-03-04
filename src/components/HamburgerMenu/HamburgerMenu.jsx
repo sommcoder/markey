@@ -16,6 +16,7 @@ export default function HamburgerMenu({ menuState, toggleMenuState }) {
 }
 const StyledHamburgerMenu = styled.span`
   display: flex;
+  align-self: center;
   flex-direction: column;
   justify-content: space-around;
   width: 30px;
@@ -23,9 +24,6 @@ const StyledHamburgerMenu = styled.span`
   background: transparent;
   border: none;
   cursor: pointer;
-  position: relative;
-
-  box-sizing: border-box;
 
   &:hover {
     filter: brightness(85%);
@@ -36,7 +34,6 @@ const StyledHamburgerMenu = styled.span`
   }
 
   span {
-    position: relative;
     height: 3px;
     background-color: black;
     border-radius: 5px;

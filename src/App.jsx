@@ -428,7 +428,7 @@ export default function App() {
         <KeySet data={data} />
       </StyledAppContainer>
       <StyledErrorContainer>
-        {/* <StyledErrorComponent>
+        <StyledErrorComponent>
           <h5
             style={{
               textAlign: "center",
@@ -448,7 +448,7 @@ export default function App() {
           >
             Your screen must be at least 775px wide
           </p>
-        </StyledErrorComponent> */}
+        </StyledErrorComponent>
       </StyledErrorContainer>
     </ThemeProvider>
   );
@@ -511,7 +511,6 @@ const StyledAppContainer = styled.div`
   height: 140rem; // look into svh and dvh for mobile
   width: 100%;
   background-color: white;
-  overflow: hidden;
 `;
 
 const StyledErrorContainer = styled.div`

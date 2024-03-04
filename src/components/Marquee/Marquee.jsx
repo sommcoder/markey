@@ -116,7 +116,7 @@ const StyledMarqueeRow = styled.div`
   flex-direction: row;
   justify-content: center;
   background-color: rgb(253, 243, 229);
-  height: 5rem;
+  min-height: 5rem; // should match the blocks
   margin: 0 auto;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08), 0 2px 2px rgba(0, 0, 0, 0.12),
     0 4px 4px rgba(0, 0, 0, 0.16), 0 8px 8px rgba(0, 0, 0, 0.2);
