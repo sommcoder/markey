@@ -35,7 +35,7 @@ const StyledSetContainer = styled.div`
   display: grid;
   padding-top: 2rem;
   padding-bottom: 2rem;
-  width: 100%;
+  width: auto;
   box-shadow: inset 0px 0px 5px #c1c1c1;
   overflow: hidden;
   z-index: 8;

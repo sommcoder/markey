@@ -55,8 +55,8 @@ export default function NavBar({
 
 const StyledNavBar = styled.nav`
   align-items: center;
-  position: relative;
-  display: block;
+  display: grid;
+  grid-template-columns: auto auto auto;
   width: 100%;
   font-size: 4rem;
   font-weight: 650;
@@ -69,30 +69,26 @@ const StyledNavBar = styled.nav`
 
 const StyledHeader = styled.img`
   height: 100%;
-`;
-
-const StyledRightNavArea = styled.span`
-  right: 2rem;
-  position: absolute;
-  display: flex;
-  flex-direction: row;
-  width: 40rem;
-  justify-content: end;
-  gap: 5rem;
-  top: 50%;
-  transform: translateY(-50%);
-  align-items: center;
+  width: 20rem;
+  justify-self: center;
 `;
 
 const StyledLeftNavArea = styled.span`
-  position: absolute;
   display: flex;
   margin-left: 4rem;
   flex-direction: row;
   gap: 4.5rem;
   width: 30rem;
-  left: 0%;
-  top: 30%;
   align-items: center;
   align-items: left;
+`;
+
+const StyledRightNavArea = styled.span`
+  right: 2rem;
+  display: flex;
+  flex-direction: row;
+  width: 40rem;
+  justify-content: end;
+  gap: 5rem;
+  align-items: right;
 `;

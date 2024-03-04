@@ -508,7 +508,7 @@ const StyledAppContainer = styled.div`
   grid-template-rows: repeat(3, auto);
   align-content: baseline;
   align-items: center;
-  height: 108rem; // look into svh and dvh for mobile
+  height: 140rem; // look into svh and dvh for mobile
   width: 100%;
   background-color: white;
   overflow: hidden;

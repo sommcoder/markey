@@ -23,6 +23,8 @@ export default forwardRef(function Marquee(
 ) {
   const marqWidth = marqSize + "rem";
 
+  // TODO: reset button doesn't clear the text fields, it should
+  // SHOULD WE TRY AND MAKE THIS APP MOBILE FRIENDLY????
   return (
     <StyledMarquee
       marqName={marqName}
@@ -36,6 +38,7 @@ export default forwardRef(function Marquee(
           switchSelectedMarq={switchSelectedMarq}
           onBlur={(ev) => ev.preventDefault()}
         />
+
         <ResetBtn marqName={marqName} />
       </StyledBtnWrapper>
       {keysArr.map((row) => (
@@ -109,7 +112,7 @@ const StyledBtnWrapper = styled.div`
 
 const StyledMarqueeRow = styled.div`
   display: flex;
-  width: ${({ marqWidth }) => (marqWidth ? marqWidth : "350px")};
+  max-width: ${({ marqWidth }) => (marqWidth ? marqWidth : "350px")};
   flex-direction: row;
   justify-content: center;
   background-color: rgb(253, 243, 229);
